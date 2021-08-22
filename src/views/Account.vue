@@ -1,17 +1,15 @@
 <template>
-  <h1 @click="testinguser">This is the Account Screen</h1>
+  <h1> Hi {{user.data.displayName}}!</h1>
 </template>
 
 <script>
-import firebase from 'firebase';
-
-const user = firebase.auth().currentUser;
+import { mapGetters } from 'vuex';
 
 export default {
-    methods: {
-        testinguser(){
-            console.log(user)
-        }
+    computed: {
+        ...mapGetters({
+            user: "user"
+        })
     }
 }
 </script>

@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import firebase from 'firebase'
+import store from './store/index'
 
 /* code from our Firebase console */
 var firebaseConfig = {
@@ -17,7 +18,11 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig)
 
-const app = createApp(App)
+firebase.auth().onAuthStateChanged(user => {
+  store.dispatch("fetchUser", user)
+})
+
+const app = createApp(App).use(store)
 
 app.use(router)
 
