@@ -5,12 +5,13 @@ import firebase from 'firebase'
 
 /* code from our Firebase console */
 var firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: 'AIzaSyAfJU3-Skg-oqBzwajTPXTvtPXuhi0WeEE',
+    authDomain: "abtesting-fb780.firebaseapp.com",
+    projectId: "abtesting-fb780",
+    storageBucket: "abtesting-fb780.appspot.com",
+    messagingSenderId: "887536811640",
+    appId: "1:887536811640:web:6c51efc186554b684e778d",
+    measurementId: "G-H0T67PB5YN"
   }
 
 // Initialize Firebase
