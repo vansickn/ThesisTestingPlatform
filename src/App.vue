@@ -2,9 +2,6 @@
   <div class="app-wrapper">
     <div class="app">
       <Navigation :logged-in="isLoggedIn" />
-      <span v-if="isLoggedIn"> 
-        <button @click="signOut"> Logout </button> 
-      </span>
       <router-view />
       <Footer/>
     </div>
