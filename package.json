@@ -6,10 +6,12 @@
     "dev": "vite"
   },
   "dependencies": {
+    "es6-promise": "^4.2.8",
     "firebase": "^8.6.5",
     "vue": "^3.2.2",
     "vue-router": "^4.0.8",
-    "vue-svg": "^1.0.1"
+    "vue-svg": "^1.0.1",
+    "vuex": "^4.0.0-0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.2.3",
