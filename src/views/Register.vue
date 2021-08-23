@@ -19,6 +19,38 @@ const password = ref('')
 
 var provider = new firebase.auth.GoogleAuthProvider();
 
+var db = firebase.firestore()
+
+async function checkIfUserExists(uid){
+  return await db.collection('users').doc(uid)
+  .get().then(
+  doc => {
+    return doc.exists;
+  })
+}
+
+async function addUserToFirestore(user){
+  checkIfUserExists(user.uid).then((res) => {
+    if(res == false){
+     db.collection("users").doc(user.uid).set({
+      coins: 100,
+      testsCreated: 0,
+      paidAccount: false,
+      email: user.email,
+      name: user.displayName
+      })
+      .then(() => {
+          console.log("Document successfully written!");
+      })
+      .catch((error) => {
+          console.error("Error writing document: ", error);
+      }); 
+    }else{
+      console.log("User Already Exists, welcome back!")
+    }
+  })
+}
+
 const router = useRouter() // get a reference to our vue router
 const register = () => {
   // firebase
@@ -43,7 +75,9 @@ const register = () => {
     // The signed-in user info.
     var user = result.user;
     // ...
+    addUserToFirestore(user)
     router.push('/account')
+
   }).catch((error) => {
     // Handle Errors here.
     var errorCode = error.code;
