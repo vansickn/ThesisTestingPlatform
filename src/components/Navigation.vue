@@ -9,7 +9,7 @@
                 <router-link class = "link" to="/">Home</router-link>
                 <router-link class = "link" to="#">About Thumbnail Testing</router-link>
                 <router-link v-if="!loggedIn" class = "link" to="/register">Login With Google </router-link> 
-                <router-link v-if="loggedIn" class = "link" to="#">Create Test</router-link>
+                <router-link v-if="loggedIn" class = "link" to="/createtest">Create Test</router-link>
                 <router-link v-if="loggedIn" class = "link" to="/account">Account</router-link>
             </ul>
         </div>
@@ -21,8 +21,8 @@
             <router-link @click="toggleMobileNav" class = "link" to="/">Home</router-link>
             <router-link @click="toggleMobileNav" class = "link" to="#">About Thumbnail Testing</router-link>
             <router-link v-if="!loggedIn" @click="toggleMobileNav" class = "link" to="/register">Login With Google </router-link> 
-            <router-link v-if="loggedIn" @click="toggleMobileNav" class = "link" to="#">Create Test</router-link>
-            <router-link v-if="loggedIn" class = "link" to="/account">Account</router-link>
+            <router-link v-if="loggedIn" @click="toggleMobileNav" class = "link" to="/createtest">Create Test</router-link>
+            <router-link @click="toggleMobileNav" v-if="loggedIn" class = "link" to="/account">Account</router-link>
         </ul>
     </transition>
 </header>
