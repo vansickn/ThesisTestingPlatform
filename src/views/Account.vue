@@ -1,6 +1,7 @@
 <template>
     <div class='info'>
         <h1> Hi {{user.data.displayName}}!</h1>
+        <h3 @click="testlog"> You currently have {{user.data.coins}} coins! </h3>
         <button class="btn" @click="signout">Sign Out</button>
     </div>
   
@@ -8,26 +9,27 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import firebase from 'firebase'
-import {useRouter} from 'vue-router'
+import firebase from 'firebase';
+import {useRouter} from 'vue-router';
 
 
 export default {
     data(){
         return {
-            router: useRouter()
+            router: useRouter(),
+            db: firebase.firestore(),
         }
     },
     computed: {
         ...mapGetters({
-            user: "user"
-        })
+            user: "user",
+        }),
     },
     methods: {
         signout() {
             firebase.auth().signOut()
             this.router.push('/')
-        }
+        },
     }
 
 }

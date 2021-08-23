@@ -21,6 +21,7 @@ var provider = new firebase.auth.GoogleAuthProvider();
 
 var db = firebase.firestore()
 
+// Have to return the whole promise here... Took forever to figure that out
 async function checkIfUserExists(uid){
   return await db.collection('users').doc(uid)
   .get().then(
@@ -29,11 +30,12 @@ async function checkIfUserExists(uid){
   })
 }
 
+// Adds user to the firestore, but first checks to see if the user already exits in the db, if not then it writes to the db
 async function addUserToFirestore(user){
   checkIfUserExists(user.uid).then((res) => {
     if(res == false){
      db.collection("users").doc(user.uid).set({
-      coins: 100,
+      coins: 0,
       testsCreated: 0,
       paidAccount: false,
       email: user.email,
@@ -46,7 +48,7 @@ async function addUserToFirestore(user){
           console.error("Error writing document: ", error);
       }); 
     }else{
-      console.log("User Already Exists, welcome back!")
+      console.log("User Already Exists, welcome back!") 
     }
   })
 }
