@@ -10,10 +10,14 @@
     </div>
     <h3>How large do you want your sample size?</h3>
     <div class="viewership">
-        <div class="option"> Option 1</div>
-        <div class="option"> Option 2</div>
-        <div class="option"> Option 3</div>
+        <SampleSizeOption :text="'Option 1'"/>
+        <SampleSizeOption :text="'Option 2'"/>
+        <SampleSizeOption :text="'Option 3'"/>
     </div>
+    <!-- Want to create a new component which only one of the sampleSizeOption components can be active at once 
+    todo this, maybe store the samplesizeoptions as a list, and then v-for them in the new component to display. Then, have a 
+    piece of data associated with each of the samplesizeoption components and then only allow one to be active
+    -->
 
     
     
@@ -21,10 +25,13 @@
 
 <script>
 import Dropzone from '../components/Dropzone.vue'
+import SampleSizeOption from '../components/SampleSizeOption.vue'
 import {reactive, ref} from 'vue'
+
+
 export default {
     name: 'CreateTest',
-    components: {Dropzone},
+    components: {Dropzone,SampleSizeOption},
     setup() {
         
     },
@@ -119,6 +126,8 @@ export default {
     h3{
         align-self: center;
     }
+
+    
 
     
 </style>
