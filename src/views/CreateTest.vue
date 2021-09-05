@@ -10,14 +10,14 @@
     </div>
     <h3>How large do you want your sample size?</h3>
     <div class="viewership">
-        <SampleSizeOption :text="'Option 1'"/>
-        <SampleSizeOption :text="'Option 2'"/>
-        <SampleSizeOption :text="'Option 3'"/>
+        <SampleSizeOption :text="'Option 1'" :activePlan="activePlan" @onUpdatePlan="setActive"/>
+        <SampleSizeOption :text="'Option 2'" :activePlan="activePlan" @onUpdatePlan="setActive"/>
+        <SampleSizeOption :text="'Option 3'" :activePlan="activePlan" @onUpdatePlan="setActive"/>
+        <!-- This is extremely, i mean extremely ugly code, and should be using v-model but cannot get it to work, this 
+        will have to work for now -->
     </div>
-    <!-- Want to create a new component which only one of the sampleSizeOption components can be active at once 
-    todo this, maybe store the samplesizeoptions as a list, and then v-for them in the new component to display. Then, have a 
-    piece of data associated with each of the samplesizeoption components and then only allow one to be active
-    -->
+    <button @click="submitToFirebase"> Create the Test! </button>
+    
 
     
     
@@ -37,7 +37,6 @@ export default {
     },
     methods: {
         verifyFileTest: function (file,order) {
-           console.log("Made it here")
            console.log(file)
             if(file.type != "image/png"){ //also need to deal with jpg,jpeg etc
                 console.log("This image is not the correct file type") //Display some sort of error message saying its not a png
@@ -66,6 +65,13 @@ export default {
         },
         select2: function () {
             this.verifyFileTest(document.querySelector(".dropzoneFile").files[0],false)
+        },
+        setActive: function(e) {
+            this.activePlan = e
+            console.log(this.activePlan)
+        },
+        submitToFirebase: function() {
+            console.log("Submitting")
         }
     },
     data() {
@@ -74,8 +80,9 @@ export default {
             fileURL2: null,
             verified1: false,
             verified2: false,
+            activePlan: 'Option 1',
         }
-    }
+    },
   
 }
 </script>
@@ -124,6 +131,14 @@ export default {
         }
     }
     h3{
+        align-self: center;
+    }
+    button {
+        width: 30%;
+        height: 30px;
+        border-radius: 20px;
+        align-content: center;
+        margin: 20px;
         align-self: center;
     }
 
