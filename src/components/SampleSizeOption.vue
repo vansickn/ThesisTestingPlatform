@@ -1,5 +1,5 @@
 <template>
-<div class="option" @click="selected = !selected" @mouseover="hover = true" @mouseleave="hover = false" :class="{'hover': hover, 'selected':selected}"> 
+<div class="option" @mouseover="hover = true" @mouseleave="hover = false" :class="{'hover': hover, 'active': activePlan == text}" @click="updateActivePlan" > 
     <h4> {{text}}</h4>
 </div>
 </template>
@@ -12,7 +12,18 @@ export default {
             selected: false,
         }
     },
-    props: ['text']
+    props: ['text','activePlan'],
+    methods: {
+        updateActivePlan(){
+            this.$emit('onUpdatePlan', this.text)
+            console.log("Function run")
+            console.log(this.activePlan)
+        }
+    },
+    model: {
+        prop: 'activePlan',
+        event: 'onUpdatePlan',
+    }
 }
 </script>
 
@@ -28,7 +39,7 @@ export default {
 .option.hover {
     border-color: green;
 }
-.option.selected {
+.option.active {
     background-color: green;
 }
 </style>
