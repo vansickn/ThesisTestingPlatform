@@ -27,13 +27,19 @@
 import Dropzone from '../components/Dropzone.vue'
 import SampleSizeOption from '../components/SampleSizeOption.vue'
 import {reactive, ref} from 'vue'
+import { mapGetters, Store } from 'vuex';
+import firebase from 'firebase'
 
+const db = firebase.firestore();
+var storageRef = firebase.storage().ref();
 
 export default {
     name: 'CreateTest',
     components: {Dropzone,SampleSizeOption},
-    setup() {
-        
+    computed: {
+        ...mapGetters({
+            user: "user",
+        }),
     },
     methods: {
         verifyFileTest: function (file,order) {
@@ -43,9 +49,11 @@ export default {
             }else{ //condition where it is the correct filetype
                 if(order){
                     this.fileURL1 = URL.createObjectURL(file)
+                    this.file1 = file
                     this.verified1 = true
                 }else{
                     this.fileURL2 = URL.createObjectURL(file)
+                    this.file2 = file
                     this.verified2 = true
                 }
                 console.log(this.fileURL1)
@@ -72,12 +80,40 @@ export default {
         },
         submitToFirebase: function() {
             console.log("Submitting")
+            var metadata = {
+                contentType: "png",
+                user: this.user.data.uid,
+            }
+            db.collection("CreatedTests").add({
+                plan: this.activePlan,
+                user: this.user.data.uid,
+            }).then(docRef => {
+                // this needs to be a for-loop for all of the files, neeeeed to make this extensible
+                // this is extraordinarily ugly code I am just getting it to work
+                console.log(docRef.id)
+                var ref1 = storageRef.child("/tests/" + docRef.id + "/" + this.file1.name)
+                ref1.put(this.file1,metadata).then(snapshot => {
+                    console.log(snapshot)
+                    console.log("uploaded a file")
+                })
+                var ref2 = storageRef.child("/tests/" + docRef.id + "/" + this.file2.name)
+                ref2.put(this.file2,metadata).then(snapshot => {
+                    console.log(snapshot)
+                    console.log("uploaded a file")
+                })
+
+                db.collection("users").doc(this.user.data.uid).update({
+                    testsCreated: firebase.firestore.FieldValue.arrayUnion(docRef.id)
+                })
+            })
         }
     },
     data() {
         return {
             fileURL1: null,
             fileURL2: null,
+            file1: null,
+            file2: null,
             verified1: false,
             verified2: false,
             activePlan: 'Option 1',
