@@ -4,7 +4,10 @@
 </template>
 
 <script>
-import Picker from '../components/Picker.vue'
+import Picker from '../components/Picker.vue';
+import firebase from 'firebase';
+
+const db = firebase.firestore();
 
 export default {
 name: "home",
