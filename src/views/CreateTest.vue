@@ -87,6 +87,9 @@ export default {
             db.collection("CreatedTests").add({
                 plan: this.activePlan,
                 user: this.user.data.uid,
+                img1votes: 0,
+                img2votes: 0,
+                seenBy: []
             }).then(docRef => {
                 // this needs to be a for-loop for all of the files, neeeeed to make this extensible
                 // this is extraordinarily ugly code I am just getting it to work

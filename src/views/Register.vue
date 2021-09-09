@@ -36,10 +36,11 @@ async function addUserToFirestore(user){
     if(res == false){
      db.collection("users").doc(user.uid).set({
       coins: 0,
-      testsCreated: 0,
+      testsCreated: [],
       paidAccount: false,
       email: user.email,
-      name: user.displayName
+      name: user.displayName,
+      seenTests: [],
       })
       .then(() => {
           console.log("Document successfully written!");
