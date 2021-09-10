@@ -1,6 +1,7 @@
+import firebase from 'firebase'
 import { createStore } from 'vuex';
 
-import firebase from 'firebase'
+
 
 
 
@@ -22,8 +23,8 @@ export default createStore({
     }
   },
   mutations: {
-    SET_LOGGED_IN(state, value) {
-      state.user.loggedIn = value;
+    async SET_LOGGED_IN(state, value) {
+      state.user.loggedIn = await value;
     },
     // Need to await the data here because the data is returning a promise from the getCoins function, which is an asynchronous function
     async SET_USER(state, data) {
@@ -38,7 +39,7 @@ export default createStore({
           displayName: user.displayName,
           email: user.email,
           uid: user.uid,
-          coins: await getCoins(user.uid)
+
         });
       } else {
         commit("SET_USER", null);

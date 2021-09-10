@@ -11,6 +11,7 @@
                 <router-link v-if="!loggedIn" class = "link" to="/register">Login With Google </router-link> 
                 <router-link v-if="loggedIn" class = "link" to="/createtest">Create Test</router-link>
                 <router-link v-if="loggedIn" class = "link" to="/account">Account</router-link>
+                <Coin v-if="user.data != null" :coins="coins"/> 
             </ul>
         </div>
     </nav>
@@ -29,34 +30,53 @@
 </template>
 
 <script>
-import { useRouter } from 'vue-router';
+
 // import { defineComponent } from '@vue/composition-api';
 import menuIcon from '../assets/Icons/bars-regular.svg';
+import Coin from '../components/Coin.vue'
+import firebase from 'firebase';
+import { mapGetters} from 'vuex';
+import { useRouter } from 'vue-router';
 
-const router = useRouter()
+
+const router = useRouter();
+
+// const db = firebase.firestore();
+// const db = firebase.firestore();
 
 export default {
     name: 'navigation',
     components: {
-        menuIcon
+        menuIcon,
+        Coin,
     },
     data() {
         return {
             mobile: null,
             mobileNav: null,
             windowWidth: null,
+            coins: 0,
         };
     },
+    // computed:{
+    //     ...mapGetters({
+    //         user: "user"
+    //     })
+    // },
     props: {
         loggedIn: Boolean,
+        user: Object
     },
-    created() {
+    async created() {
+        
+    },
+    async mounted(){
         window.addEventListener('resize',this.checkScreen);
         this.checkScreen();
+        this.listenForCoins();
     },
     methods: {
         checkScreen() {
-            console.log(this['logged-in'])
             this.windowWidth = window.innerWidth;
             if (this.windowWidth <= 1050){
                 this.mobile = true;
@@ -68,6 +88,20 @@ export default {
         },
         toggleMobileNav() {
             this.mobileNav = !this.mobileNav
+        },
+        listenForCoins(){
+            // console.log(firebase.auth().currentUser) 
+            // Prevents an error, but still the user is not being fetched in time for the components to be able to handle it. This is a site wide issue, but this is a prime example of it. Need to figure out how to accomplish this.
+            if(this.user.data != null){
+                firebase.firestore().collection("users").doc(this.user.data.uid).onSnapshot({}, doc => {
+                    this.coins = doc.data().coins
+                })
+            }else{
+                console.log("User is Null")
+            }
+        },
+        test(){
+            console.log(this.user.data)
         }
     }
 };

@@ -1,44 +1,27 @@
 <template>
   <div class="app-wrapper">
     <div class="app">
-      <Navigation :logged-in="isLoggedIn" />
+      <Navigation v-if="isLoggedIn != null" :logged-in="isLoggedIn" :user="user" />
       <router-view />
       <Footer/>
     </div>
   </div>
-
-
-  <!-- <div>
-    <Navigation/>
-    <nav>
-      <router-link to="/"> Home </router-link> |
-      <span> 
-        <router-link to="/feed"> Feed </router-link> |
-      </span>
-      
-      
-      <span v-else>
-        <router-link to="/register"> Register </router-link> |
-        <router-link to="/sign-in"> Login </router-link>
-      </span>
-      
-    </nav>
-    <router-view />
-  </div> -->
 </template>
 
 <script setup>
 import { ref, watchEffect } from 'vue' // used for conditional rendering
 import firebase from 'firebase'
 import { useRouter } from 'vue-router'
-// import store from './store'
+import store from './store/index'
+import {mapGetters} from 'vuex'
 
 const router = useRouter()
 
-const isLoggedIn = ref(true)
+const isLoggedIn = ref(null)
 
 // runs after firebase is initialized
 firebase.auth().onAuthStateChanged(function(user) {
+    store.dispatch("fetchUser", user)
     if (user) {
       isLoggedIn.value = true // if we have a user
     } else {
@@ -65,7 +48,14 @@ export default {
       loggedIn: false
     };
   },
-  created() {},
+  created() {
+
+  },
+  computed:{
+    ...mapGetters({
+        user: 'user'
+    })
+  },
   mounted() {},
   methods: {
     checkloggedIn(){

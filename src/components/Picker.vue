@@ -17,7 +17,7 @@ const db = firebase.firestore();
 var storageRef = firebase.storage().ref();
 
 export default {
-  components: { Thumbnail },
+    components: { Thumbnail },
     computed: {
         ...mapGetters ({
             user: "user"
@@ -31,12 +31,13 @@ export default {
             currentTest: -1,
         }
     },
-    created(){
+    mounted(){
         this.testList();
     },
     methods: {
         // Grabs all of the doc ID's of the Tests, then going to use this list to grab from storage
         async testList() {
+            // TODO : Restrict viewing tests for people who have already seen the test, look into new ways i can model the data to handle that functionality
             // Test for now
             await db.collection('CreatedTests').get().then(querySnapshot => {
                 querySnapshot.forEach((doc) => {
@@ -85,7 +86,8 @@ export default {
                 console.log(error)
             })
             db.collection("users").doc(this.user.data.uid).update({
-                seenTests: firebase.firestore.FieldValue.arrayUnion(this.testIDs[this.currentTest])
+                seenTests: firebase.firestore.FieldValue.arrayUnion(this.testIDs[this.currentTest]),
+                coins: firebase.firestore.FieldValue.increment(1)
             })
             this.setNextThumbnail()
         },
@@ -99,7 +101,8 @@ export default {
             })
             console.log(this.user.data.uid)
             db.collection("users").doc(this.user.data.uid).update({
-                seenTests: firebase.firestore.FieldValue.arrayUnion(this.testIDs[this.currentTest])
+                seenTests: firebase.firestore.FieldValue.arrayUnion(this.testIDs[this.currentTest]),
+                coins: firebase.firestore.FieldValue.increment(1)
             })
             this.setNextThumbnail()
         }
