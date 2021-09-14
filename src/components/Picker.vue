@@ -41,6 +41,7 @@ export default {
             // Test for now
             await db.collection('CreatedTests').get().then(querySnapshot => {
                 querySnapshot.forEach((doc) => {
+
                     // doc.data() is never undefined for query doc snapshots
                     console.log(doc.id, " => ", doc.data());
                     console.log("" + this.user.data.uid)
@@ -50,12 +51,15 @@ export default {
                     if("" + this.user.data.uid != doc.data().user){
                         this.testIDs.push(doc.id); 
                     }
+                    
                 });
             }).catch(err => {
                 console.log("Error: " + err)
             })
             this.setNextThumbnail();
         },
+
+
         setNextThumbnail: function() {
             this.setCurrentTest(this.currentTest +=1);
             // console.log("hey from here")
@@ -79,7 +83,8 @@ export default {
         },
         selectThumbnail1: function () {
             db.collection("CreatedTests").doc(this.testIDs[this.currentTest]).update({
-                img1votes: firebase.firestore.FieldValue.increment(1)
+                img1votes: firebase.firestore.FieldValue.increment(1),
+                seenBy: firebase.firestore.FieldValue.arrayUnion(this.user.data.uid),
             })
             .then( console.log("added one to img1 votes"))
             .catch(error => {
@@ -93,7 +98,8 @@ export default {
         },
         selectThumbnail2: function () {
             db.collection("CreatedTests").doc(this.testIDs[this.currentTest]).update({
-                img2votes: firebase.firestore.FieldValue.increment(1)
+                img2votes: firebase.firestore.FieldValue.increment(1),
+                seenBy: firebase.firestore.FieldValue.arrayUnion(this.user.data.uid),
             })
             .then( console.log("added one to img2 votes"))
             .catch(error => {
@@ -130,8 +136,8 @@ export default {
         min-width: 256px;
         min-width: 144px;
 
-        max-width: 640px;
         max-height: 360px;
+        max-width: 640px;
 
     }
 }

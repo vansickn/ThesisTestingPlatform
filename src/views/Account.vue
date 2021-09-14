@@ -3,22 +3,51 @@
         <h1> Hi {{user.data.displayName}}!</h1>
         <h3 @click="testlog"> You currently have {{coins}} coins! </h3>
         <button class="btn" @click="signout">Sign Out</button>
+        <button @click="testing"> ey </button>
     </div>
+    <h2> Here are the Tests you have created</h2>
+    <MyTestCard v-if="isLoggedIn != null"/>
   
 </template>
 
+<script setup>
+import { ref, watchEffect } from 'vue' // used for conditional rendering
+import firebase from 'firebase';
+import store from '../store/index.js'
+
+var isLoggedIn = ref(null)
+
+// runs after firebase is initialized
+firebase.auth().onAuthStateChanged(function(user) {
+    store.dispatch("fetchUser", user)
+    if (user) {
+      isLoggedIn.value = true // if we have a user
+    } else {
+      isLoggedIn.value = false // if we do not
+    }
+    console.log(isLoggedIn)
+})
+
+
+</script>
+
 <script>
 import { mapGetters } from 'vuex';
-import firebase from 'firebase';
+// import firebase from 'firebase';
 import {useRouter} from 'vue-router';
+import MyTestCard from '../components/MyTestCard.vue';
 
-const db = firebase.firestore()
+
+const db = firebase.firestore();
+
+
+
 
 export default {
+  components: { MyTestCard },
     data(){
         return {
             router: useRouter(),
-            db: firebase.firestore(),
             coins: null,
         }
     },
@@ -40,9 +69,6 @@ export default {
                 this.coins = doc.data().coins
             }).catch(err=> {console.log(err)})
         },
-        testing: function() {
-            console.log(this.user.data)
-        }
     }
 
 }

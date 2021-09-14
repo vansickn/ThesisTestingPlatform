@@ -11,7 +11,7 @@
                 <router-link v-if="!loggedIn" class = "link" to="/register">Login With Google </router-link> 
                 <router-link v-if="loggedIn" class = "link" to="/createtest">Create Test</router-link>
                 <router-link v-if="loggedIn" class = "link" to="/account">Account</router-link>
-                <Coin v-if="user.data != null" :coins="coins"/> 
+                <Coin v-if="user.data != null" :coins="coins" @change="listenForCoins"/> 
             </ul>
         </div>
     </nav>
