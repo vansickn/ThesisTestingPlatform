@@ -63,6 +63,7 @@ export default {
         signout() {
             firebase.auth().signOut()
             this.router.push('/')
+            console.log(this.user.data)
         },
         async fetchCoins() {
             await db.collection("users").doc(this.user.data.uid).get().then(doc => {
