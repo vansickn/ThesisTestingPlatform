@@ -8,12 +8,12 @@
         <div v-if="!mobile" class="container flex flex-row justify-end bg-white my-2 rounded-lg max-w-xl mr-8 shadow-sm max-h-lg">
             <ul v-show="!mobile" class="container flex flex-row justify-around items-center">
 
-                <router-link class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/">Home</router-link> 
-                <router-link class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="#">Why Test?</router-link>
-                <router-link v-if="loggedIn" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/createtest">Create Test</router-link>
+                <router-link @click="toggleActiveNav('Home')" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" :class="{'bg-red-500 text-white': activeNav == 'Home'}" to="/">Home</router-link> 
+                <router-link @click="toggleActiveNav('WhyTest')" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" :class="{'bg-red-500 text-white': activeNav == 'WhyTest'}" to="#">Why Test?</router-link>
+                <router-link @click="toggleActiveNav('CreateTest')" v-if="loggedIn" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" :class="{'bg-red-500 text-white': activeNav == 'CreateTest'}" to="/createtest">Create Test</router-link>
                 <button @click="signInWithGoogle" v-if="!loggedIn" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/register">Login With Google </button> 
-                <router-link v-if="loggedIn" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/register">My Tests</router-link>      
-                <router-link v-if="loggedIn" class = "container flex justify-around items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/account">
+                <router-link @click="toggleActiveNav('MyTests')" v-if="loggedIn" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" :class="{'bg-red-500 text-white': activeNav == 'MyTests'}" to="/register">My Tests</router-link>      
+                <router-link @click="toggleActiveNav('Account')" v-if="loggedIn" class = "container flex justify-around items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" :class="{'bg-red-500 text-white': activeNav == 'Account'}" to="/account">
                 <img v-if="profPic != null" :src="profPic" alt="" srcset="" class="rounded-full w-6 border-2">
                 <Coin v-if="user.data != null" :coins="coins" @change="listenForCoins"/>
                 </router-link> 
@@ -24,16 +24,16 @@
     <!-- <menuIcon @click="toggleMobileNav" class='menu-icon' v-show="mobile" /> -->
 </header>
     <transition name="slide-fade">
-       <ul class="container bg-gray-200 w-9/12 h-full absolute flex flex-col opacity-90 z-30 rounded-r-xl" v-show="mobileNav">
-                <router-link @click="toggleMobileNav" v-if="loggedIn" class = "container flex justify-around items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/account">
+       <ul class="container bg-gray-200 w-9/12 h-full absolute flex flex-col bg-opacity-90 z-30 rounded-r-xl" v-show="mobileNav">
+                <router-link @click="toggleMobileNav" v-if="loggedIn" class = "container w-2/3 flex justify-around items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/account">
                     <img v-if="profPic != null" :src="profPic" alt="" srcset="" class="rounded-full w-10 border-2">
                     <Coin v-if="user.data != null" :coins="coins" @change="listenForCoins"/>
                 </router-link>
-                <router-link @click="toggleMobileNav" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/">Home</router-link> 
-                <router-link @click="toggleMobileNav" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="#">Why Test?</router-link>
-                <router-link @click="toggleMobileNav" v-if="loggedIn" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/createtest">Create Test</router-link>
-                <button @click="signInWithGoogle" v-if="!loggedIn" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/register">Login With Google </button> 
-                <router-link @click="toggleMobileNav" v-if="loggedIn" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/register">My Tests</router-link>      
+                <router-link @click="toggleMobileNav" class = "container mb-2 mt-2 w-2/3 flex justify-center items-center p-3 bg-white opacity-100 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/">Home</router-link> 
+                <router-link @click="toggleMobileNav" class = "container mb-2 w-2/3 flex justify-center items-center p-3 bg-white hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="#">Why Test?</router-link>
+                <router-link @click="toggleMobileNav" v-if="loggedIn" class = "container mb-2 w-2/3 flex justify-center items-center p-3 bg-white hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/createtest">Create Test</router-link>
+                <button @click="signInWithGoogle" v-if="!loggedIn" class = "container mb-2 w-2/3 flex justify-center items-center p-3 bg-white hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/register">Login With Google </button> 
+                <router-link @click="toggleMobileNav" v-if="loggedIn" class = "container mb-2 w-2/3 flex justify-center items-center p-3 bg-white hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/register">My Tests</router-link>      
                 
         </ul>
     </transition>
@@ -69,6 +69,7 @@ export default {
             windowWidth: null,
             coins: 0,
             profPic: null,
+            activeNav: "Home",
         };
     },
     // computed:{
@@ -90,6 +91,9 @@ export default {
         this.getProfilePicture();
     },
     methods: {
+        toggleActiveNav(e){
+            this.activeNav = e
+        },
         checkScreen() {
             this.windowWidth = window.innerWidth;
             if (this.windowWidth < 1060){
