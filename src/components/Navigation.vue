@@ -98,6 +98,7 @@ export default {
         this.$nextTick(function () {
         // Code that will run only after the
         // entire view has been re-rendered
+            // checks for new updates to the coins after the dom has re rendered.
             this.listenForCoins();
         })
     },
