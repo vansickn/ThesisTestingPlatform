@@ -20,7 +20,8 @@ export default {
     components: { Thumbnail },
     computed: {
         ...mapGetters ({
-            user: "user"
+            user: "user",
+            userData: "userData"
         })
     },
     data () {
@@ -48,7 +49,7 @@ export default {
                     console.log(doc.data().user)
 
                     // Checks if the user created it, if they did they will not see it
-                    if("" + this.user.data.uid != doc.data().user){
+                    if("" + this.userData.uid != doc.data().user){
                         this.testIDs.push(doc.id); 
                     }
                     
@@ -84,13 +85,13 @@ export default {
         selectThumbnail1: function () {
             db.collection("CreatedTests").doc(this.testIDs[this.currentTest]).update({
                 img1votes: firebase.firestore.FieldValue.increment(1),
-                seenBy: firebase.firestore.FieldValue.arrayUnion(this.user.data.uid),
+                seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
             })
             .then( console.log("added one to img1 votes"))
             .catch(error => {
                 console.log(error)
             })
-            db.collection("users").doc(this.user.data.uid).update({
+            db.collection("users").doc(this.userData.uid).update({
                 seenTests: firebase.firestore.FieldValue.arrayUnion(this.testIDs[this.currentTest]),
                 coins: firebase.firestore.FieldValue.increment(1)
             })
@@ -99,14 +100,14 @@ export default {
         selectThumbnail2: function () {
             db.collection("CreatedTests").doc(this.testIDs[this.currentTest]).update({
                 img2votes: firebase.firestore.FieldValue.increment(1),
-                seenBy: firebase.firestore.FieldValue.arrayUnion(this.user.data.uid),
+                seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
             })
             .then( console.log("added one to img2 votes"))
             .catch(error => {
                 console.log(error)
             })
-            console.log(this.user.data.uid)
-            db.collection("users").doc(this.user.data.uid).update({
+            console.log(this.userData.uid)
+            db.collection("users").doc(this.userData.uid).update({
                 seenTests: firebase.firestore.FieldValue.arrayUnion(this.testIDs[this.currentTest]),
                 coins: firebase.firestore.FieldValue.increment(1)
             })

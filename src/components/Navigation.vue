@@ -1,4 +1,7 @@
 <template>
+<!-- <h1 v-if="loggedIn">{{userData.email}}</h1>
+<span v-if="loggedIn">{{userData.photo}}</span>
+<img v-if="loggedIn" :src="userData.photo" alt="hey"> -->
 <header class="shadow-md bg-gray-100">
     <nav class="container flex justify-between max-w-full">
         <div class="container justify-start flex-row my-2 ml-8 items-center sm:ml-1">
@@ -15,7 +18,7 @@
                 <router-link @click="toggleActiveNav('MyTests')" v-if="loggedIn" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" :class="{'bg-red-500 text-white': activeNav == 'MyTests'}" to="/register">My Tests</router-link>      
                 <router-link @click="toggleActiveNav('Account')" v-if="loggedIn" class = "container h-full flex justify-around items-around p-3 hover:bg-red-500  rounded-lg transition duration-500 ease-in-out transform" :class="{'bg-red-500': activeNav == 'Account'}" to="/account">
                 <Coin v-if="user.data != null" :coins="coins" @change="listenForCoins" class="z-10 fixed w-7 h-7 mt-2 ml-6"/>
-                <img v-if="profPic != null" :src="profPic" alt="" srcset="" class="rounded-full w-10 border-2 fixed -mt-2 mr-3">
+                <img :src="userData.photo" alt="" srcset="" class="rounded-full w-10 border-2 fixed -mt-2 mr-3">
                 
                 </router-link> 
             </ul>
@@ -27,7 +30,7 @@
     <transition name="slide-fade">
        <ul class="container bg-gray-200 w-9/12 h-full absolute flex flex-col bg-opacity-90 z-30 rounded-r-xl" v-show="mobileNav">
                 <router-link @click="toggleMobileNav" v-if="loggedIn" class = "container w-2/3 flex justify-around items-center mt-2 p-3 hover:bg-red-500 rounded-lg transition duration-500 ease-in-out transform" to="/account">
-                    <img v-if="profPic != null" :src="profPic" alt="" srcset="" class="rounded-full w-12 h-12 border-2">
+                    <img :src="userData.photo" alt="" srcset="" class="rounded-full w-12 h-12 border-2">
                     <Coin v-if="user.data != null" :coins="coins" @change="listenForCoins" class="w-12 h-12"/>
                 </router-link>
                 <router-link @click="toggleMobileNav('Home')" class = "container mb-2 mt-2 w-2/3 flex justify-center items-center p-3 bg-white opacity-100 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/" >Home</router-link> 
@@ -69,27 +72,34 @@ export default {
             mobileNav: null,
             windowWidth: null,
             coins: 0,
-            profPic: null,
+            // profPic: null,
             activeNav: "Home",
         };
     },
-    // computed:{
-    //     ...mapGetters({
-    //         user: "user"
-    //     })
-    // },
+    computed:{
+        ...mapGetters({
+            user: "user",
+            userData: "userData"
+        })
+    },
     props: {
         loggedIn: Boolean,
-        user: Object
+        // user: Object
     },
-    async created() {
-        
+    created() {
+        // this.listenForCoins();
     },
     async mounted(){
         window.addEventListener('resize',this.checkScreen);
         this.checkScreen();
         this.listenForCoins();
-        this.getProfilePicture();
+    },
+    updated(){
+        this.$nextTick(function () {
+        // Code that will run only after the
+        // entire view has been re-rendered
+            this.listenForCoins();
+        })
     },
     methods: {
         toggleActiveNav(e){
@@ -111,28 +121,24 @@ export default {
             this.toggleActiveNav(e);
         },
         listenForCoins(){
-            // console.log(firebase.auth().currentUser) 
-            // Prevents an error, but still the user is not being fetched in time for the components to be able to handle it. This is a site wide issue, but this is a prime example of it. Need to figure out how to accomplish this.
-            if(this.user.data != null){
-                firebase.firestore().collection("users").doc(this.user.data.uid).onSnapshot({}, doc => {
-                    this.coins = doc.data().coins
-                    console.log("Coin Update")
-                })
-            }else{
-                console.log("User is Null")
-            }
+            console.log("Firing")
+            firebase.firestore().collection("users").doc(this.userData.uid).onSnapshot({}, doc => {
+                this.coins = doc.data().coins
+                console.log("Coin Update")
+                console.log(doc.data())
+            })
         },
-        getProfilePicture(){
-            var user = firebase.auth().currentUser;
-            console.log(user)
+        // getProfilePicture(){
+        //     var user = firebase.auth().currentUser;
+        //     console.log(user)
 
-            if (user != null) {
-            user.providerData.forEach(profile => {
-                this.profPic = profile.photoURL;
-                console.log("Loaded Profile Picture")
-            }); //this will give you all the urls once there is user data
-            }
-        },
+        //     if (user != null) {
+        //     user.providerData.forEach(profile => {
+        //         this.profPic = profile.photoURL;
+        //         console.log("Loaded Profile Picture")
+        //     }); //this will give you all the urls once there is user data
+        //     }
+        // },
         signInWithGoogle(){
             firebase.auth()
             .signInWithPopup(provider)
@@ -146,9 +152,10 @@ export default {
                 var user = result.user;
                 // ...
                 this.addUserToFirestore(user)
-                router.push('/account')
+                router.push('/account');
+                console.log("Hello!!!!!")
                 this.listenForCoins();
-                this.getProfilePicture();  
+                this.activeNav = "Home";
 
             }).catch((error) => {
                 // Handle Errors here.
@@ -192,9 +199,6 @@ export default {
                 return doc.exists;
             })
         },       
-        test(){
-            console.log(this.user.data)
-        }
     }
 };
 </script>
