@@ -100,7 +100,7 @@ export default {
         // entire view has been re-rendered
             // checks for new updates to the coins after the dom has re rendered.
             this.listenForCoins();
-            this.activeNav = this.activeNav
+            // this.activeNav = this.activeNav
         })
     },
     methods: {
@@ -156,7 +156,7 @@ export default {
                 this.addUserToFirestore(user)
                 // router.push('/account');
                 // console.log("Hello!!!!!")
-                // this.listenForCoins();
+                this.listenForCoins(); //this is required for the update on next tick update lifecycle hook. Not sure why but need to leave this in.
                 this.activeNav = "Home";
 
             }).catch((error) => {
