@@ -73,14 +73,14 @@ export default {
             windowWidth: null,
             coins: 0,
             // profPic: null,
-            activeNav: "Home",
+            activeNav: this.$route.fullPath,
         };
     },
     computed:{
         ...mapGetters({
             user: "user",
             userData: "userData"
-        })
+        }),
     },
     props: {
         loggedIn: Boolean,
@@ -94,13 +94,18 @@ export default {
         this.checkScreen();
         this.listenForCoins();
     },
+    beforeUpdate(){
+        this.activeNav = this.activeNav;
+    },
     updated(){
         this.$nextTick(function () {
         // Code that will run only after the
         // entire view has been re-rendered
             // checks for new updates to the coins after the dom has re rendered.
             this.listenForCoins();
-            // this.activeNav = this.activeNav
+            this.activeNav = this.activeNav;
+            console.log("UPDATE");
+            console.log(this.activeNav);
         })
     },
     methods: {
@@ -154,7 +159,6 @@ export default {
                 var user = result.user;
                 // ...
                 this.addUserToFirestore(user)
-                // router.push('/account');
                 // console.log("Hello!!!!!")
                 this.listenForCoins(); //this is required for the update on next tick update lifecycle hook. Not sure why but need to leave this in.
                 this.activeNav = "Home";
