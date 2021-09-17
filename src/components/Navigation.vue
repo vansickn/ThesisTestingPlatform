@@ -5,7 +5,7 @@
 <header class="shadow-md bg-gray-100">
     <nav class="container flex justify-between max-w-full">
         <div class="container justify-start flex-row my-2 ml-8 items-center sm:ml-1">
-            <button class="rounded-full bg-red-400 px-6 py-2 mr-3 text-lg">A/B</button>
+            <button class="rounded-xl bg-red-400 px-6 py-2 mr-3 text-lg">A/B</button>
             <router-link class="header" to="/">ThumbnailTester</router-link>
         </div>
         <div v-if="!mobile" class="container flex flex-row justify-end bg-white my-2 rounded-lg max-w-xl mr-8 shadow-sm max-h-lg">
