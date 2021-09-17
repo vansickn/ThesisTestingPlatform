@@ -100,6 +100,7 @@ export default {
         // entire view has been re-rendered
             // checks for new updates to the coins after the dom has re rendered.
             this.listenForCoins();
+            this.activeNav = this.activeNav
         })
     },
     methods: {
@@ -153,9 +154,9 @@ export default {
                 var user = result.user;
                 // ...
                 this.addUserToFirestore(user)
-                router.push('/account');
-                console.log("Hello!!!!!")
-                this.listenForCoins();
+                // router.push('/account');
+                // console.log("Hello!!!!!")
+                // this.listenForCoins();
                 this.activeNav = "Home";
 
             }).catch((error) => {
