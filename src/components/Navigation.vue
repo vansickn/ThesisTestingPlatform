@@ -4,7 +4,7 @@
 <img v-if="loggedIn" :src="userData.photo" alt="hey"> -->
 <header class="shadow-md bg-gray-100">
     <nav class="container flex justify-between max-w-full">
-        <div class="container justify-start flex-row my-2 ml-8 items-center sm:ml-1">
+        <div class="container justify-start flex-row my-2 ml-8 items-center sm:ml-1 xs:ml-1">
             <button class="rounded-xl bg-red-400 px-6 py-2 mr-3 text-lg">A/B</button>
             <router-link class="header" to="/">ThumbnailTester</router-link>
         </div>
@@ -17,7 +17,7 @@
                 <button @click="signInWithGoogle" v-if="!loggedIn" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/register">Login With Google </button> 
                 <router-link @click="toggleActiveNav('MyTests')" v-if="loggedIn" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" :class="{'bg-red-500 text-white': activeNav == 'MyTests'}" to="/register">My Tests</router-link>      
                 <router-link @click="toggleActiveNav('Account')" v-if="loggedIn" class = "container h-full flex justify-around items-around p-3 hover:bg-red-500  rounded-lg transition duration-500 ease-in-out transform" :class="{'bg-red-500': activeNav == 'Account'}" to="/account">
-                <Coin v-if="user.data != null" :coins="coins" @change="listenForCoins" class="z-10 fixed w-7 h-7 mt-2 ml-6"/>
+                <Coin v-if="user.data != null" :coins="coins" @change="listenForCoins" class="z-10 fixed w-7 h-7 mt-1 ml-6"/>
                 <img :src="userData.photo" alt="" srcset="" class="rounded-full w-10 border-2 fixed -mt-2 mr-3">
                 
                 </router-link> 
@@ -115,7 +115,7 @@ export default {
         },
         checkScreen() {
             this.windowWidth = window.innerWidth;
-            if (this.windowWidth < 1060){
+            if (this.windowWidth < 1115){
                 this.mobile = true;
                 return;
             }
@@ -186,6 +186,7 @@ export default {
                     email: user.email,
                     name: user.displayName,
                     seenTests: [],
+                    photoURL: user.providerData[0].photoURL
                 })
                 .then(() => {
                     console.log("User Successfully Created!");

@@ -1,12 +1,15 @@
 <template>
-  <div class="thumbnail-picker">
+  <div class="w-full flex mx-auto justify-center items-center flex-wrap">
       <!-- <img class="img" :src="thumbnail1">
       <img class="img" :src="thumbnail2"> -->
       <!-- Want function to ultimately be selectedThumbnail -->
-      <Thumbnail @click="selectThumbnail1" :image="thumbnail1"/>
-      <Thumbnail @click="selectThumbnail2" :image="thumbnail2"/>
+      <Thumbnail v-if="user.data != null" @click="selectThumbnail1" :image="thumbnail1" :userCreated="userCreatedPhoto"/>
+      <Thumbnail v-if="user.data != null" @click="selectThumbnail2" :image="thumbnail2" :userCreated="userCreatedPhoto"/>
+      <!-- need to change click to image instead of whole thumbnail -->
   </div>
+<!-- going to pass in the user who created the test, and calculate the user photo from here. Could also just calculate that in the home.vue as well and just pass in the photo. Either works -->
 </template>
+
 
 <script>
 import Thumbnail from '../components/Thumbnail.vue';
@@ -30,6 +33,7 @@ export default {
             thumbnail2: null,
             testIDs: [],
             currentTest: -1,
+            userCreatedPhoto: null,
         }
     },
     mounted(){
@@ -50,7 +54,11 @@ export default {
 
                     // Checks if the user created it, if they did they will not see it
                     if("" + this.userData.uid != doc.data().user){
-                        this.testIDs.push(doc.id); 
+                        this.testIDs.push({
+                            id: doc.id,
+                            userCreated: doc.data().user,
+                            title: "Test Title which will eventually be populated"
+                        }); 
                     }
                     
                 });
@@ -68,7 +76,7 @@ export default {
 
             // need some sort of validation if the testIDs runs out, and then just displays a screen saying there are no more tests to vote on
            
-            storageRef.child('/tests/' + this.testIDs[this.currentTest]).listAll().then((res) => {
+            storageRef.child('/tests/' + this.testIDs[this.currentTest].id).listAll().then((res) => {
                 console.log(res)
                 res.items[0].getDownloadURL().then(url => {
                     this.thumbnail1 = url
@@ -77,13 +85,14 @@ export default {
                     this.thumbnail2 = url
                 })
             })
+            this.getUserCreatedProfilePhoto(this.testIDs[this.currentTest].userCreated);
         },
         setCurrentTest: async function (docID) {
             this.currentTest = docID;
             console.log(this.currentTest)
         },
         selectThumbnail1: function () {
-            db.collection("CreatedTests").doc(this.testIDs[this.currentTest]).update({
+            db.collection("CreatedTests").doc(this.testIDs[this.currentTest].id).update({
                 img1votes: firebase.firestore.FieldValue.increment(1),
                 seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
             })
@@ -92,13 +101,13 @@ export default {
                 console.log(error)
             })
             db.collection("users").doc(this.userData.uid).update({
-                seenTests: firebase.firestore.FieldValue.arrayUnion(this.testIDs[this.currentTest]),
+                seenTests: firebase.firestore.FieldValue.arrayUnion(this.testIDs[this.currentTest].id),
                 coins: firebase.firestore.FieldValue.increment(1)
             })
             this.setNextThumbnail()
         },
         selectThumbnail2: function () {
-            db.collection("CreatedTests").doc(this.testIDs[this.currentTest]).update({
+            db.collection("CreatedTests").doc(this.testIDs[this.currentTest].id).update({
                 img2votes: firebase.firestore.FieldValue.increment(1),
                 seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
             })
@@ -108,10 +117,18 @@ export default {
             })
             console.log(this.userData.uid)
             db.collection("users").doc(this.userData.uid).update({
-                seenTests: firebase.firestore.FieldValue.arrayUnion(this.testIDs[this.currentTest]),
+                seenTests: firebase.firestore.FieldValue.arrayUnion(this.testIDs[this.currentTest].id),
                 coins: firebase.firestore.FieldValue.increment(1)
             })
             this.setNextThumbnail()
+        },
+        async getUserCreatedProfilePhoto(userID){
+            console.log(userID)
+            db.collection("users").doc(userID).get().then(doc => {
+                console.log(doc.data())
+                this.userCreatedPhoto = doc.data().photoURL
+                console.log(this.userCreatedPhoto)
+            });
         }
 
     }
@@ -120,28 +137,28 @@ export default {
 
 <style lang='scss' scoped>
 
-.thumbnail-picker {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    align-content: center;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin: 20px;
-    background-color: #edf2f4;
-    border-radius: 20px;
+// .thumbnail-picker {
+//     display: flex;
+//     flex-wrap: wrap;
+//     justify-content: space-evenly;
+//     align-content: center;
+//     padding-left: 10px;
+//     padding-right: 10px;
+//     margin: 20px;
+//     background-color: #edf2f4;
+//     border-radius: 20px;
 
 
-    .img{
-        padding: 10px;
-        min-width: 256px;
-        min-width: 144px;
+//     .img{
+//         padding: 10px;
+//         min-width: 256px;
+//         min-width: 144px;
 
-        max-height: 360px;
-        max-width: 640px;
+//         max-height: 360px;
+//         max-width: 640px;
 
-    }
-}
+//     }
+// }
 
 
 </style>
