@@ -49,6 +49,7 @@ module.exports = {
       12: '3rem',
       14: '3.5rem',
       16: '4rem',
+      18: '4.25rem',
       20: '5rem',
       24: '6rem',
       28: '7rem',
@@ -431,6 +432,9 @@ module.exports = {
       '5/6': '83.333333%',
       full: '100%',
       screen: '100vh',
+      360: '360px',
+      240: '240px',
+      144: '144px',
     }),
     inset: (theme, { negative }) => ({
       auto: 'auto',
@@ -517,6 +521,7 @@ module.exports = {
       ...theme('spacing'),
       full: '100%',
       screen: '100vh',
+      360:'360px',
     }),
     maxWidth: (theme, { breakpoints }) => ({
       none: 'none',
@@ -526,6 +531,7 @@ module.exports = {
       md: '28rem',
       lg: '32rem',
       xl: '36rem',
+      640: '640px',
       '2xl': '42rem',
       '3xl': '48rem',
       '4xl': '56rem',
@@ -540,11 +546,13 @@ module.exports = {
     }),
     minHeight: {
       0: '0px',
+      144: '144px',
       full: '100%',
       screen: '100vh',
     },
     minWidth: {
       0: '0px',
+      256: '256px',
       full: '100%',
       min: 'min-content',
       max: 'max-content',
@@ -795,6 +803,9 @@ module.exports = {
       screen: '100vw',
       min: 'min-content',
       max: 'max-content',
+      640: '640px',
+      426: '426px',
+      256: '256px',
     }),
     zIndex: {
       auto: 'auto',
@@ -969,5 +980,7 @@ module.exports = {
     wordBreak: ['responsive'],
     zIndex: ['responsive', 'focus-within', 'focus'],
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/aspect-ratio'),
+  ],
 }

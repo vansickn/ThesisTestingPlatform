@@ -445,6 +445,11 @@
   "resolved" "https://registry.npmjs.org/@soda/get-current-script/-/get-current-script-1.0.2.tgz"
   "version" "1.0.2"
 
+"@tailwindcss/aspect-ratio@^0.2.1":
+  "integrity" "sha512-aDFi80aHQ3JM3symJ5iKU70lm151ugIGFCI0yRZGpyjgQSDS+Fbe93QwypC1tCEllQE8p0S7TUu20ih1b9IKLA=="
+  "resolved" "https://registry.npmjs.org/@tailwindcss/aspect-ratio/-/aspect-ratio-0.2.1.tgz"
+  "version" "0.2.1"
+
 "@types/body-parser@*":
   "integrity" "sha512-a6bTJ21vFOGIkwM0kzh9Yr89ziVxq4vYH2fQ6N8AeipEzai/cFK6aGMArIkUeIdRIgpwQa+2bXiLuUJCpSf2Cg=="
   "resolved" "https://registry.npmjs.org/@types/body-parser/-/body-parser-1.19.1.tgz"
@@ -7174,7 +7179,7 @@
     "unquote" "~1.1.1"
     "util.promisify" "~1.0.0"
 
-"tailwindcss@^2.2.15":
+"tailwindcss@^2.2.15", "tailwindcss@>=2.0.0":
   "integrity" "sha512-WgV41xTMbnSoTNMNnJvShQZ+8GmY86DmXTrCgnsveNZJdlybfwCItV8kAqjYmU49YiFr+ofzmT1JlAKajBZboQ=="
   "resolved" "https://registry.npmjs.org/tailwindcss/-/tailwindcss-2.2.15.tgz"
   "version" "2.2.15"
