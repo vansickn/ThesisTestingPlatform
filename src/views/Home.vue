@@ -1,5 +1,5 @@
 <template>
-  <h1> Which Thumbnail are you more likely to click on? </h1>
+  <h1 class="text-4xl mx-auto py-10 md:text-2xl sm:text-lg sm:pt-5 pb-3 xs:text-sm xs:pt-5"> Which Thumbnail are you more likely to click on? </h1>
   <Picker/>
 </template>
 
@@ -23,10 +23,6 @@ name: "home",
 </script>
 
 <style lang='scss' scoped>
-h1 {
-  align-self: center;
-  padding-top: 20px;
-  font-size: 4vw;
-}
+
 
 </style>

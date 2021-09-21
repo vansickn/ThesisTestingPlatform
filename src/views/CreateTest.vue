@@ -1,13 +1,16 @@
 <template>
-    <h1> Upload your files</h1>
-    <div class="dropContainer">
-    <Dropzone class="dropzone" v-if="!verified1" @drop.prevent="drop1" @change="select1"/>
-    <img v-if="verified1" class="timg" :src="fileURL1" alt="hi" srcset="">
-    <Dropzone class="dropzone" v-if="!verified2" @drop.prevent="drop2" @change="select2"/>
-    <img v-if="verified2" class="timg" :src="fileURL2" alt="" srcset="">
-    <!-- <span class="file-info">File1: {{ dropzoneFile1.name }}</span>
-    <span class="file-info">File2: {{ dropzoneFile2.name }}</span> -->
+    <h1 class="mx-auto py-5 text-2xl"> Upload your files</h1>
+
+
+    <div class="w-full flex mx-auto justify-center item-center flex-wrap">
+        <Dropzone class="dropzone" v-if="!verified1" @drop.prevent="drop1" @change="select1"/>
+        <img v-if="verified1" class="shadow-xl md:w-640 md:h-360 sm:w-11/12 w-11/12 mx-5 sm:mb-5 xs:mb-5" :src="fileURL1" alt="" srcset="">
+        <Dropzone class="dropzone" v-if="!verified2" @drop.prevent="drop2" @change="select2"/>
+        <img v-if="verified2" class="shadow-xl md:w-640 md:h-360 sm:w-11/12 w-11/12 mx-5 sm:mb-5 xs:mb-5" :src="fileURL2" alt="" srcset="">
     </div>
+
+
+
     <h3>How large do you want your sample size?</h3>
     <div class="viewership">
         <SampleSizeOption :text="'Option 1'" :activePlan="activePlan" @onUpdatePlan="setActive"/>
@@ -69,6 +72,7 @@ export default {
             this.verifyFileTest(e.dataTransfer.files[0],false)
         },
         select1: function () {
+            console.log(document.querySelector(".dropzoneFile").files)
             this.verifyFileTest(document.querySelector(".dropzoneFile").files[0],true)
         },
         select2: function () {
@@ -126,62 +130,62 @@ export default {
 }
 </script>
 
-<style lang='scss'>
-    h1{
-        margin: 10px;
-        align-self: center;
-    }
-    .dropContainer {
-        background-color: lightgray;
-        display: flex;
-        width: 95%;
-        align-self: center;
-        flex-direction: space;
-        justify-content: space-evenly;
-        align-items: center;
-        margin: 20px;
-        border-radius: 20px;
-        flex-wrap: wrap;
-        padding: 20px;
+// <style lang='scss'>
+//     h1{
+//         margin: 10px;
+//         align-self: center;
+//     }
+//     .dropContainer {
+//         background-color: lightgray;
+//         display: flex;
+//         width: 95%;
+//         align-self: center;
+//         flex-direction: space;
+//         justify-content: space-evenly;
+//         align-items: center;
+//         margin: 20px;
+//         border-radius: 20px;
+//         flex-wrap: wrap;
+//         padding: 20px;
 
-        .timg{
-            padding: 10px;
-            min-width: 256px;
-            min-width: 144px;
+//         .timg{
+//             padding: 10px;
+//             min-width: 256px;
+//             min-width: 144px;
 
-            max-width: 640px;
-            max-height: 360px;
-        }
-    }
-    .viewership{
-        width: 80%;
-        background-color: lightgrey;
-        align-self: center;
-        border-radius: 20px;
-        display: flex;
-        justify-content: space-evenly;
+//             max-width: 640px;
+//             max-height: 360px;
+//         }
+//     }
+//     .viewership{
+//         width: 80%;
+//         background-color: lightgrey;
+//         align-self: center;
+//         border-radius: 20px;
+//         display: flex;
+//         justify-content: space-evenly;
         
-        div{
-            margin: 10px;
-            width: 200px;
-            height: 200px;
-            background-color: white;
-            border-radius: 10px;
-        }
-    }
-    h3{
-        align-self: center;
-    }
-    button {
-        width: 30%;
-        height: 30px;
-        border-radius: 20px;
-        align-content: center;
-        margin: 20px;
-        align-self: center;
-    }
+//         div{
+//             margin: 10px;
+//             width: 200px;
+//             height: 200px;
+//             background-color: white;
+//             border-radius: 10px;
+//         }
+//     }
+//     h3{
+//         align-self: center;
+//     }
+//     button {
+//         width: 30%;
+//         height: 30px;
+//         border-radius: 20px;
+//         align-content: center;
+//         margin: 20px;
+//         align-self: center;
+//     }
 
     
 
     
-</style>
+// </style>

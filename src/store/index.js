@@ -1,4 +1,5 @@
 import firebase from 'firebase'
+import { isReactive } from 'vue';
 import { createStore } from 'vuex';
 
 
@@ -17,6 +18,9 @@ export default createStore({
   getters: {
     user(state){
       return state.user
+    },
+    userData(state) {
+      return state.user.data
     },
     numCoins(state) {
       return state.user.coins
@@ -39,7 +43,7 @@ export default createStore({
           displayName: user.displayName,
           email: user.email,
           uid: user.uid,
-
+          photo: user.providerData[0].photoURL
         });
       } else {
         commit("SET_USER", null);

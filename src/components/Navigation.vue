@@ -1,32 +1,46 @@
 <template>
-<header>
-    <nav class="container">
-        <div class="branding">
-            <router-link class="header" to="/">Youtube AB Testing</router-link>
+<!-- <h1 v-if="loggedIn">{{userData.email}}</h1>
+<span v-if="loggedIn">{{userData.photo}}</span>
+<img v-if="loggedIn" :src="userData.photo" alt="hey"> -->
+<header class="shadow-md bg-gray-100">
+    <nav class="container flex justify-between max-w-full">
+        <div class="container justify-start flex-row my-2 ml-8 items-center sm:ml-1 xs:ml-1">
+            <button class="rounded-xl bg-red-400 px-6 py-2 mr-3 text-lg md:ml-8">A/B</button>
+            <router-link class="header" to="/">ThumbnailTester</router-link>
         </div>
-        <div class="nav-links">
-            <ul v-show="!mobile">
-                <router-link class = "link" to="/">Home</router-link>
-                <router-link class = "link" to="#">About Thumbnail Testing</router-link>
-                <router-link v-if="!loggedIn" class = "link" to="/register">Login With Google </router-link> 
-                <router-link v-if="loggedIn" class = "link" to="/createtest">Create Test</router-link>
-                <router-link v-if="loggedIn" class = "link" to="/account">Account</router-link>
-                <Coin v-if="user.data != null" :coins="coins" @change="listenForCoins"/> 
+        <div v-if="!mobile" class="container flex flex-row justify-end bg-white my-2 rounded-lg max-w-xl mr-8 shadow-sm max-h-lg">
+            <ul v-show="!mobile" class="container flex flex-row justify-around items-center">
+
+                <router-link @click="toggleActiveNav('Home')" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" :class="{'bg-red-500 text-white': activeNav == 'Home'}" to="/">Home</router-link> 
+                <router-link @click="toggleActiveNav('WhyTest')" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" :class="{'bg-red-500 text-white': activeNav == 'WhyTest'}" to="#">Why Test?</router-link>
+                <router-link @click="toggleActiveNav('CreateTest')" v-if="loggedIn" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" :class="{'bg-red-500 text-white': activeNav == 'CreateTest'}" to="/createtest">Create Test</router-link>
+                <button @click="signInWithGoogle" v-if="!loggedIn" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/register">Login With Google </button> 
+                <router-link @click="toggleActiveNav('MyTests')" v-if="loggedIn" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" :class="{'bg-red-500 text-white': activeNav == 'MyTests'}" to="/register">My Tests</router-link>      
+                <router-link @click="toggleActiveNav('Account')" v-if="loggedIn" class = "container h-full flex justify-around items-around p-3 hover:bg-red-500  rounded-lg transition duration-500 ease-in-out transform" :class="{'bg-red-500': activeNav == 'Account'}" to="/account">
+                <Coin v-if="user.data != null" :coins="coins" @change="listenForCoins" class="z-10 fixed w-7 h-7 mt-1 ml-6"/>
+                <img :src="userData.photo" alt="" srcset="" class="rounded-full w-10 border-2 fixed -mt-2 mr-3">
+                
+                </router-link> 
             </ul>
         </div>
+        <svg class="w-6 h-6 mr-8 mt-5 focus:none" @click="toggleMobileNav" id='menu-icon' v-show="mobile" aria-hidden="true" focusable="false" data-prefix="far" data-icon="bars" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg>
     </nav>
-    <svg @click="toggleMobileNav" id='menu-icon' v-show="mobile" aria-hidden="true" focusable="false" data-prefix="far" data-icon="bars" class="svg-inline--fa fa-bars fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg>
     <!-- <menuIcon @click="toggleMobileNav" class='menu-icon' v-show="mobile" /> -->
-    <transition name='mobile-nav'>
-       <ul class="mobile-nav" v-show="mobileNav">
-            <router-link @click="toggleMobileNav" class = "link" to="/">Home</router-link>
-            <router-link @click="toggleMobileNav" class = "link" to="#">About Thumbnail Testing</router-link>
-            <router-link v-if="!loggedIn" @click="toggleMobileNav" class = "link" to="/register">Login With Google </router-link> 
-            <router-link v-if="loggedIn" @click="toggleMobileNav" class = "link" to="/createtest">Create Test</router-link>
-            <router-link @click="toggleMobileNav" v-if="loggedIn" class = "link" to="/account">Account</router-link>
+</header>
+    <transition name="slide-fade">
+       <ul class="container bg-gray-200 w-9/12 h-full absolute flex flex-col bg-opacity-90 z-30 rounded-r-xl" v-show="mobileNav">
+                <router-link @click="toggleMobileNav" v-if="loggedIn" class = "container w-2/3 flex justify-around items-center mt-2 p-3 hover:bg-red-500 rounded-lg transition duration-500 ease-in-out transform" to="/account">
+                    <img :src="userData.photo" alt="" srcset="" class="rounded-full w-12 h-12 border-2">
+                    <Coin v-if="user.data != null" :coins="coins" @change="listenForCoins" class="w-12 h-12"/>
+                </router-link>
+                <router-link @click="toggleMobileNav('Home')" class = "container mb-2 mt-2 w-2/3 flex justify-center items-center p-3 bg-white opacity-100 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/" >Home</router-link> 
+                <router-link @click="toggleMobileNav('WhyTest')" class = "container mb-2 w-2/3 flex justify-center items-center p-3 bg-white hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="#" >Why Test?</router-link>
+                <router-link @click="toggleMobileNav('CreateTest')" v-if="loggedIn" class = "container mb-2 w-2/3 flex justify-center items-center p-3 bg-white hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/createtest">Create Test</router-link>
+                <button @click="signInWithGoogle" v-if="!loggedIn" class = "container mb-2 w-2/3 flex justify-center items-center p-3 bg-white hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/register">Login With Google </button> 
+                <router-link @click="toggleMobileNav('MyTests')" v-if="loggedIn" class = "container mb-2 w-2/3 flex justify-center items-center p-3 bg-white hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/register">My Tests</router-link>      
+                
         </ul>
     </transition>
-</header>
 </template>
 
 <script>
@@ -37,9 +51,11 @@ import Coin from '../components/Coin.vue'
 import firebase from 'firebase';
 import { mapGetters} from 'vuex';
 import { useRouter } from 'vue-router';
+import {ref} from 'vue';
 
 
 const router = useRouter();
+var provider = new firebase.auth.GoogleAuthProvider();
 
 // const db = firebase.firestore();
 // const db = firebase.firestore();
@@ -56,29 +72,50 @@ export default {
             mobileNav: null,
             windowWidth: null,
             coins: 0,
+            // profPic: null,
+            activeNav: this.$route.fullPath,
         };
     },
-    // computed:{
-    //     ...mapGetters({
-    //         user: "user"
-    //     })
-    // },
+    computed:{
+        ...mapGetters({
+            user: "user",
+            userData: "userData"
+        }),
+    },
     props: {
         loggedIn: Boolean,
-        user: Object
+        // user: Object
     },
-    async created() {
-        
+    created() {
+        // this.listenForCoins();
     },
     async mounted(){
         window.addEventListener('resize',this.checkScreen);
         this.checkScreen();
         this.listenForCoins();
     },
+    beforeUpdate(){
+        this.activeNav = this.activeNav;
+    },
+    updated(){
+        this.$nextTick(function () {
+        // Code that will run only after the
+        // entire view has been re-rendered
+            // checks for new updates to the coins after the dom has re rendered.
+            this.listenForCoins();
+            this.activeNav = this.activeNav;
+            console.log("UPDATE");
+            console.log(this.activeNav);
+        })
+    },
     methods: {
+        toggleActiveNav(e){
+            this.activeNav = e
+            console.log(this.activeNav)
+        },
         checkScreen() {
             this.windowWidth = window.innerWidth;
-            if (this.windowWidth <= 1050){
+            if (this.windowWidth < 1115){
                 this.mobile = true;
                 return;
             }
@@ -86,123 +123,115 @@ export default {
             this.mobileNav = false
             return;
         },
-        toggleMobileNav() {
-            this.mobileNav = !this.mobileNav
+        toggleMobileNav(e) {
+            this.mobileNav = !this.mobileNav;
+            this.toggleActiveNav(e);
         },
         listenForCoins(){
-            // console.log(firebase.auth().currentUser) 
-            // Prevents an error, but still the user is not being fetched in time for the components to be able to handle it. This is a site wide issue, but this is a prime example of it. Need to figure out how to accomplish this.
-            if(this.user.data != null){
-                firebase.firestore().collection("users").doc(this.user.data.uid).onSnapshot({}, doc => {
-                    this.coins = doc.data().coins
-                })
-            }else{
-                console.log("User is Null")
-            }
+            console.log("Firing")
+            firebase.firestore().collection("users").doc(this.userData.uid).onSnapshot({}, doc => {
+                this.coins = doc.data().coins
+                console.log("Coin Update")
+                console.log(doc.data())
+            })
         },
-        test(){
-            console.log(this.user.data)
-        }
+        // getProfilePicture(){
+        //     var user = firebase.auth().currentUser;
+        //     console.log(user)
+
+        //     if (user != null) {
+        //     user.providerData.forEach(profile => {
+        //         this.profPic = profile.photoURL;
+        //         console.log("Loaded Profile Picture")
+        //     }); //this will give you all the urls once there is user data
+        //     }
+        // },
+        signInWithGoogle(){
+            firebase.auth()
+            .signInWithPopup(provider)
+            .then((result) => {
+                // /** @type {firebase.auth.OAuthCredential} */
+                var credential = result.credential;
+
+                // This gives you a Google Access Token. You can use it to access the Google API.
+                var token = credential.accessToken;
+                // The signed-in user info.
+                var user = result.user;
+                // ...
+                this.addUserToFirestore(user)
+                // console.log("Hello!!!!!")
+                this.listenForCoins(); //this is required for the update on next tick update lifecycle hook. Not sure why but need to leave this in.
+                this.activeNav = "Home";
+
+            }).catch((error) => {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // The email of the user's account used.
+                var email = error.email;
+                // The firebase.auth.AuthCredential type that was used.
+                var credential = error.credential;
+                // ...
+                console.log(errorCode)
+            })
+                 
+        },
+        async addUserToFirestore(user){
+            this.checkIfUserExists(user.uid).then((res) => {
+                if(res == false){
+                    firebase.firestore().collection("users").doc(user.uid).set({
+                    coins: 0,
+                    testsCreated: [],
+                    paidAccount: false,
+                    email: user.email,
+                    name: user.displayName,
+                    seenTests: [],
+                    photoURL: user.providerData[0].photoURL
+                })
+                .then(() => {
+                    console.log("User Successfully Created!");
+                })
+                .catch((error) => {
+                    console.error("Error Creating User: ", error);
+                }); 
+                }else{
+                console.log("User Already Exists, welcome back!") 
+                }
+            })
+        },
+        async checkIfUserExists(uid){
+            return await firebase.firestore().collection('users').doc(uid)
+            .get().then(
+            doc => {
+                return doc.exists;
+            })
+        },       
     }
 };
 </script>
 
-<style lang='scss' scoped>
-header {
-    background-color: #fff;
-    padding: 0 25px;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,1), 0 2px 4px -1px rgba(0,0,0,0.06);
-    z-index: 99;
+<style>
+/* Enter and leave animations can use different */
+/* durations and timing functions.              */
+.slide-fade-enter-active {
+  transition: all .3s ease-out;
+  /* transform: translateX(0); */
+  opacity: 100;
+  
+}
+.slide-fade-leave-active {
+  transition: all .3s ease-out;
+  opacity: 0;
+}
+.slide-fade-enter-from
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateX(-300px);
+  opacity: 0;
+}
 
-    .link {
-        font-weight: 500;
-        padding: 0 8px;
-        transition: .3s color ease;
-
-        &:hover {
-            color: #ef233c
-        }
-    }
-
-    nav {
-        display: flex;
-        padding: 25px 0;
-
-        .branding {
-            display: flex;
-
-            .header {
-                font-weight: 600;
-                font-size: 24px;
-                color: #000;
-                text-decoration: none;
-            }
-        }
-
-        .nav-links {
-            position: relative;
-            display: flex;
-            flex: 1;
-            align-items: center;
-            justify-content: flex-end;
-
-            ul {
-                margin-right: 32px;
-
-                .link {
-                    margin-right: 32px;
-                }
-
-                .link:last-child {
-                    margin-right: 0;
-                }
-            }
-        }
-    }
-
-    #menu-icon {
-        cursor: pointer;
-        position: absolute;
-        top: 32px;
-        right: 25px;
-        height: 25px;
-        width: auto;
-    }
-
-    .mobile-nav {
-        padding: 20px;
-        width: 70%;
-        max-width: 250px;
-        display: flex;
-        flex-direction: column;
-        position: fixed;
-        height: 100%;
-        background: #303030;
-        top: 0;
-        left: 0;
-
-        .link {
-        padding: 15px;
-        color: #fff;
-        }
-    }
-
-    .mobile-nav-enter-active {
-        transition: all 1s ease
-    }
-    .mobile-nav-leave-active {
-        transition: all 1s ease
-    }
-    .mobile-nav-enter {
-        transform: translateX(-250px);
-    }
-    .mobile-nav-enter-to {
-        transform: translateX(0px);
-    }
-    .mobile-nav-leave-to {
-        transform: translateX(-250px);
-    }
-    
+.slide-fade-leave-to {
+    transform: translateX(-300px);
+    opacity: 0;
 }
 
 </style>

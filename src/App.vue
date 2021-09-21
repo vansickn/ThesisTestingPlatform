@@ -1,9 +1,8 @@
 <template>
   <div class="app-wrapper">
     <div class="app">
-      <Navigation v-if="isLoggedIn != null" :logged-in="isLoggedIn" :user="user" />
+      <Navigation v-if="isLoggedIn != null" :logged-in="isLoggedIn"/>
       <router-view />
-      <Footer/>
     </div>
   </div>
 </template>
@@ -21,12 +20,16 @@ const isLoggedIn = ref(null)
 
 // runs after firebase is initialized
 firebase.auth().onAuthStateChanged(function(user) {
+    console.log("User Status has changed")
     store.dispatch("fetchUser", user)
     if (user) {
       isLoggedIn.value = true // if we have a user
     } else {
       isLoggedIn.value = false // if we do not
     }
+    console.log(isLoggedIn.value);
+    console.log(user);
+    
 })
 
 const signOut = () => {
@@ -53,7 +56,7 @@ export default {
   },
   computed:{
     ...mapGetters({
-        user: 'user'
+        user:'user'
     })
   },
   mounted() {},
