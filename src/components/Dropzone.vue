@@ -7,7 +7,7 @@
     :class="{ 'active-dropzone': active }"
     class="container flex flex-col gap-10 bg-gray-200 justify-center items-center border-4 border-red-400 md:w-640 md:h-360 sm:w-426 sm:h-240 xs:w-426 xs:h-240 mx-5 mb-5 "
   >
-    <span class="text-red-400 font-bold text-xl sm:hidden xs:hidden md:inline">Drag or Drop Thumbnail</span>
+    <span class="text-red-400 font-bold text-xl sm:hidden xs:hidden md:inline">Drag and Drop Thumbnail</span>
     <span class="text-bold text-3xl sm:hidden xs:hidden md:inline">OR</span>
     <label for="dropzoneFile" class="bg-red-400 rounded-lg px-10 py-6">Select Thumbnail from files</label>
     <input type="file" name="dropzoneFile" id="dropzoneFile" class="dropzoneFile hidden"/>
