@@ -2,12 +2,16 @@
     <h1 class="mx-auto py-5 text-2xl"> Upload your files</h1>
 
 
-    <div class="w-full flex mx-auto justify-center item-center flex-wrap">
+    <div class="w-full flex mx-auto justify-center items-center flex-wrap">
         <Dropzone class="dropzone" v-if="!verified1" @drop.prevent="drop1" @change="select1"/>
         <img v-if="verified1" class="shadow-xl md:w-640 md:h-360 sm:w-11/12 w-11/12 mx-5 sm:mb-5 xs:mb-5" :src="fileURL1" alt="" srcset="">
+        <input type="text" placeholder="Enter the title of your Youtube Video" name="title" id="title2" class="pl-3 mb-5 md:w-640 sm:w-426 w-426 border-gray-200  rounded-lg focus:border-red-500 focus:outline-none shadow-md h-10 mx-5 transition duration 500">
+
+
         <Dropzone class="dropzone" v-if="!verified2" @drop.prevent="drop2" @change="select2"/>
         <img v-if="verified2" class="shadow-xl md:w-640 md:h-360 sm:w-11/12 w-11/12 mx-5 sm:mb-5 xs:mb-5" :src="fileURL2" alt="" srcset="">
-    </div>
+        <input type="text" placeholder="Enter the Title of your Youtube Video" name="title" id="title2" class="pl-3 md:w-640 sm:w-426 w-426 border-gray-200  rounded-lg focus:border-red-500 focus:outline-none shadow-md h-10 mx-5 transition duration 500">
+</div>
 
 
 
