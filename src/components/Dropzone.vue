@@ -9,7 +9,7 @@
   >
     <span class="text-red-500 font-bold text-xl sm:hidden xs:hidden md:inline">Drag and Drop Thumbnail</span>
     <span class="text-bold text-3xl sm:hidden xs:hidden md:inline">OR</span>
-    <label for="dropzoneFile" class="bg-red-500 rounded-lg px-10 py-6">Select Thumbnail from files</label>
+    <label for="dropzoneFile" class="bg-red-500 rounded-lg px-10 py-6 transition duration-500 transform hover:scale-110 text-white">Select Thumbnail from files</label>
     <input type="file" name="dropzoneFile" id="dropzoneFile" class="dropzoneFile hidden"/>
     <!-- <label for="dropzoneFile" class="bg-black">Select File</label>
     <input type="file" name="dropzoneFile" id="dropzoneFile" class=""> -->
