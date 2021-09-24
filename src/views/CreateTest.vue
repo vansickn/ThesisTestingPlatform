@@ -13,10 +13,10 @@
 
     <h3 class="text-xl mx-auto mb-10 mt-5">How large do you want your sample size?</h3>
     <div class="grid lg:grid-cols-4 grid-cols-2 gap-10 gap-y-10 mb-20 mx-4">
-        <SampleSizeOption :text="'Option 1'" :activePlan="activePlan" @onUpdatePlan="setActive"/>
-        <SampleSizeOption :text="'Option 2'" :activePlan="activePlan" @onUpdatePlan="setActive"/>
-        <SampleSizeOption :text="'Option 3'" :activePlan="activePlan" @onUpdatePlan="setActive"/>
-        <SampleSizeOption :text="'Option 3'" :activePlan="activePlan" @onUpdatePlan="setActive"/>
+        <SampleSizeOption v-for="sample in sampleOptions" :key="sample" :input="sample" :text="'Option 1'" :activePlan="activePlan" @onUpdatePlan="setActive"/>
+        <!-- <SampleSizeOption :data="this.sampleOptions[0]" :text="'Option 2'" :activePlan="activePlan" @onUpdatePlan="setActive"/>
+        <SampleSizeOption :data="this.sampleOptions[0]" :text="'Option 3'" :activePlan="activePlan" @onUpdatePlan="setActive"/>
+        <SampleSizeOption :data="this.sampleOptions[0]" :text="'Option 3'" :activePlan="activePlan" @onUpdatePlan="setActive"/> -->
  
         <!-- This is extremely, i mean extremely ugly code, and should be using v-model but cannot get it to work, this 
         will have to work for now -->
@@ -36,6 +36,30 @@ import SampleSizeOption from '../components/SampleSizeOption.vue'
 import {reactive, ref} from 'vue'
 import { mapGetters, Store } from 'vuex';
 import firebase from 'firebase'
+
+
+// const sampleOptions = [
+//     {
+//         size: "Small",
+//         coin_amount: 10,
+//         sample_size: 25
+//     },
+//     {
+//         size: "Medium",
+//         coin_amount: 30,
+//         sample_size: 100
+//     },
+//     {
+//         size: "Large",
+//         coin_amount: 100,
+//         sample_size: 500 
+//     },
+//     {
+//         size: "XL",
+//         coin_amount: 300,
+//         sample_size: 2000  
+//     }
+// ]
 
 const db = firebase.firestore();
 var storageRef = firebase.storage().ref();
@@ -128,6 +152,28 @@ export default {
             verified1: false,
             verified2: false,
             activePlan: 'Option 1',
+            sampleOptions: [
+                    {
+                        size: "Small",
+                        coin_amount: 10,
+                        sample_size: 25
+                    },
+                    {
+                        size: "Medium",
+                        coin_amount: 30,
+                        sample_size: 100
+                    },
+                    {
+                        size: "Large",
+                        coin_amount: 100,
+                        sample_size: 500 
+                    },
+                    {
+                        size: "XL",
+                        coin_amount: 300,
+                        sample_size: 2000  
+                    }
+                ]
         }
     },
   

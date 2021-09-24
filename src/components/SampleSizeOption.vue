@@ -3,16 +3,15 @@
     <h4> {{text}}</h4>
 </div> -->
 
-<div class="container bg-gray-200 rounded-xl sm:w-44 w-40 border-4 border-red-500 flex flex-col gap-8 shadow-lg">
+<div class="container bg-gray-200 rounded-xl sm:w-44 w-40 border-4 border-red-500 flex flex-col gap-5 shadow-lg">
     <div class="container flex flex-row justify-between items-center mx-2 mt-2">
-        <Coin :coins="coins" class="z-10 w-10 h-10 text-lg shadow-md"/>
-        <h3 class="text-2xl mr-5">Medium</h3>
+        <Coin :coins="input.coin_amount" class="z-10 w-10 h-10 text-lg shadow-md"/>
+        <h3 class="text-2xl mr-5">{{input.size}}</h3>
     </div>
-    <div class="container flex flex-row mx-2 items-baseline">
-        <h1 class="text-6xl">25</h1>
+    <div class="container flex flex-row items-baseline justify-around">
+        <h1 class="text-5xl sm:text-6xl">{{truncateNumber(input.sample_size)}}</h1>
         <span class="text-lg"> results</span>
     </div>
-    
 </div>
 </template>
 
@@ -28,17 +27,27 @@ export default {
         }
     },
     components: {Coin},
-    props: ['text','activePlan'],
+    props: ['text','activePlan','input'],
     methods: {
         updateActivePlan(){
             this.$emit('onUpdatePlan', this.text)
             console.log("Function run")
             console.log(this.activePlan)
+        },
+        truncateNumber(num){
+            if((num+"") >= 1000){
+                return ((num+"").charAt(0) + 'k')
+            }else{
+                return num
+            }
         }
     },
     model: {
         prop: 'activePlan',
         event: 'onUpdatePlan',
+    },
+    created() {
+        console.log(this.input)
     }
 }
 </script>
