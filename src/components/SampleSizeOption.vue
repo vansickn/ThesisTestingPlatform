@@ -3,10 +3,12 @@
     <h4> {{text}}</h4>
 </div> -->
 
-<div class="container bg-gray-200 rounded-xl sm:w-44 w-40 border-4 border-red-500 flex flex-col gap-5 shadow-lg">
+<div class="container bg-gray-200 rounded-xl sm:w-44 w-40 border-4 border-red-500 flex flex-col gap-5 shadow-lg transition duration-500 ease-in-out transform hover:scale-110" @click="updateActivePlan()" :class="{'bg-red-500 border-yellow-300 text-white transition ease-in-out duration-300':activePlan == input.size}">
     <div class="container flex flex-row justify-between items-center mx-2 mt-2">
-        <Coin :coins="input.coin_amount" class="z-10 w-10 h-10 text-lg shadow-md"/>
-        <h3 class="text-2xl mr-5">{{input.size}}</h3>
+        <Coin :coins="input.coin_amount" class="z-10 w-10 h-10 text-lg shadow-md px-4" :class="{'text-black':activePlan == input.size}"/>
+        <div class="container flex flex-row mx-auto justify-center items-center">
+            <h3 class="text-2xl mr-3">{{input.size}}</h3>
+        </div>
     </div>
     <div class="container flex flex-row items-baseline justify-around">
         <h1 class="text-5xl sm:text-6xl">{{truncateNumber(input.sample_size)}}</h1>
@@ -27,10 +29,10 @@ export default {
         }
     },
     components: {Coin},
-    props: ['text','activePlan','input'],
+    props: ['activePlan','input'],
     methods: {
         updateActivePlan(){
-            this.$emit('onUpdatePlan', this.text)
+            this.$emit('onUpdatePlan', this.input.size)
             console.log("Function run")
             console.log(this.activePlan)
         },
