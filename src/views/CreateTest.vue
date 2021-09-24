@@ -11,15 +11,19 @@
 
 
 
-    <h3>How large do you want your sample size?</h3>
-    <div class="viewership">
+    <h3 class="text-xl mx-auto mb-10 mt-5">How large do you want your sample size?</h3>
+    <div class="grid lg:grid-cols-4 grid-cols-2 gap-10 gap-y-10 mb-20 mx-4">
         <SampleSizeOption :text="'Option 1'" :activePlan="activePlan" @onUpdatePlan="setActive"/>
         <SampleSizeOption :text="'Option 2'" :activePlan="activePlan" @onUpdatePlan="setActive"/>
         <SampleSizeOption :text="'Option 3'" :activePlan="activePlan" @onUpdatePlan="setActive"/>
+        <SampleSizeOption :text="'Option 3'" :activePlan="activePlan" @onUpdatePlan="setActive"/>
+ 
         <!-- This is extremely, i mean extremely ugly code, and should be using v-model but cannot get it to work, this 
         will have to work for now -->
+        <!-- Going to pass an object into each sample size option with number of coins, size text, number of samples -->
     </div>
-    <button @click="submitToFirebase"> Create the Test! </button>
+
+    <button class="rounded-lg bg-red-500 w-60 mx-auto p-4 text-white shadow-lg transition duration-500 ease-in-out transform hover:scale-110" @click="submitToFirebase"> Create Test! </button>
     
 
     
