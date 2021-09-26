@@ -3,8 +3,8 @@
       <!-- <img class="img" :src="thumbnail1">
       <img class="img" :src="thumbnail2"> -->
       <!-- Want function to ultimately be selectedThumbnail -->
-      <Thumbnail v-if="user.data != null" @onClickedThumbnail="selectThumbnail1" :image="thumbnail1" :userCreated="userCreatedPhoto"/>
-      <Thumbnail v-if="user.data != null" @onClickedThumbnail="selectThumbnail2" :image="thumbnail2" :userCreated="userCreatedPhoto"/>
+      <Thumbnail v-if="user.data != null" @onClickedThumbnail="selectThumbnail1" :image="thumbnail1" :userCreated="userCreatedPhoto" :title="title1"/>
+      <Thumbnail v-if="user.data != null" @onClickedThumbnail="selectThumbnail2" :image="thumbnail2" :userCreated="userCreatedPhoto" :title="title2"/>
       <!-- need to change click to image instead of whole thumbnail -->
   </div>
 <!-- going to pass in the user who created the test, and calculate the user photo from here. Could also just calculate that in the home.vue as well and just pass in the photo. Either works -->
@@ -19,6 +19,7 @@ import { mapGetters} from 'vuex';
 const db = firebase.firestore();
 var storageRef = firebase.storage().ref();
 
+// Eventually want to send the data about the thumbnail (photo, title, profImage as an object into the thumbnail)
 export default {
     components: { Thumbnail },
     computed: {
@@ -34,6 +35,8 @@ export default {
             testIDs: [],
             currentTest: -1,
             userCreatedPhoto: null,
+            title1: null,
+            title2: null
         }
     },
     mounted(){
@@ -57,7 +60,8 @@ export default {
                         this.testIDs.push({
                             id: doc.id,
                             userCreated: doc.data().user,
-                            title: "Test Title which will eventually be populated"
+                            title1: doc.data().title1,
+                            title2: doc.data().title2,
                         }); 
                     }
                     
@@ -86,6 +90,8 @@ export default {
                 })
             })
             this.getUserCreatedProfilePhoto(this.testIDs[this.currentTest].userCreated);
+            this.title1 = this.testIDs[this.currentTest].title1;
+            this.title2 = this.testIDs[this.currentTest].title2;
         },
         setCurrentTest: async function (docID) {
             this.currentTest = docID;

@@ -6,13 +6,13 @@
         <div class="container inline-flex flex-col justify-center items-center w-full md:w-640 sm:mb-5 xs:mb-5 md:mx-10">
             <Dropzone class="" v-if="!verified1" @drop.prevent="drop1" @change="select1"/>
             <img v-if="verified1" class="shadow-xl md:w-640 md:h-360 sm:w-11/12 w-11/12 mx-5 sm:mb-5 xs:mb-5" :src="fileURL1" alt="" srcset="">
-            <input type="text" placeholder="Enter the Title of your Youtube Video" name="title" id="title1" class="pl-3 md:w-640 sm:w-11/12 w-11/12 border-gray-100 border-2  rounded-lg focus:border-red-500 focus:outline-none shadow-md h-10 mx-5 transition duration 500">
+            <input required type="text" placeholder="Enter the Title of your Youtube Video" name="title" id="title1" class="pl-3 md:w-640 sm:w-11/12 w-11/12 border-gray-100 border-2  rounded-lg focus:border-red-500 focus:outline-none shadow-md h-10 mx-5 transition duration 500">
         </div>
         <!-- Eventually turn either of these things into a component, so can dynamically add more to support more than 2 thumbnails at a time -->
         <div class="container inline-flex flex-col justify-center items-center w-full md:w-640 sm:mb-5 xs:mb-5 md:mx-10">
             <Dropzone class="" v-if="!verified2" @drop.prevent="drop2" @change="select2"/>
             <img v-if="verified2" class="shadow-xl md:w-640 md:h-360 sm:w-11/12 w-11/12 mx-5 sm:mb-5 xs:mb-5" :src="fileURL2" alt="" srcset="">
-            <input type="text" placeholder="Enter the Title of your Youtube Video" name="title" id="title2" class="pl-3 md:w-640 sm:w-11/12 xs:w-11/12 border-gray-100 border-2  rounded-lg focus:border-red-500 focus:outline-none shadow-md h-10 mx-5 transition duration 500">
+            <input required type="text" placeholder="Enter the Title of your Youtube Video" name="title" id="title2" class="pl-3 md:w-640 sm:w-11/12 xs:w-11/12 border-gray-100 border-2  rounded-lg focus:border-red-500 focus:outline-none shadow-md h-10 mx-5 transition duration 500">
         </div>
 </div>
 
@@ -102,7 +102,9 @@ export default {
                 user: this.user.data.uid,
                 img1votes: 0,
                 img2votes: 0,
-                seenBy: []
+                seenBy: [],
+                title1: document.getElementById("title1").value,
+                title2: document.getElementById("title2").value
             }).then(docRef => {
                 // this needs to be a for-loop for all of the files, neeeeed to make this extensible
                 // this is extraordinarily ugly code I am just getting it to work
