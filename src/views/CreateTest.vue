@@ -88,6 +88,11 @@ export default {
             console.log(this.activePlan)
         },
         submitToFirebase: function() {
+            // need to add regex here for the title
+            if(document.getElementById("title1").value === "" || document.getElementById("title2").value === ""){
+                console.log("Error in Title")
+                return
+            }
             console.log("Submitting")
             var metadata = {
                 contentType: "png",
