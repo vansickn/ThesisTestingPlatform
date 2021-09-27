@@ -21,10 +21,6 @@
     <h3 class="sm:text-xl text-lg mx-auto mb-10 mt-5">How large do you want your sample size?</h3>
     <div class="grid lg:grid-cols-4 grid-cols-2 gap-10 gap-y-10 mb-20 sm:mx-auto sm:w-9/12 mx-3">
         <SampleSizeOption v-for="sample in sampleOptions" :key="sample" :input="sample" :activePlan="activePlan" @onUpdatePlan="setActive"/>
- 
-        <!-- This is extremely, i mean extremely ugly code, and should be using v-model but cannot get it to work, this 
-        will have to work for now -->
-        <!-- Going to pass an object into each sample size option with number of coins, size text, number of samples -->
     </div>
 
     <button class="rounded-lg bg-red-500 w-60 mx-auto p-4 text-white shadow-lg transition duration-500 ease-in-out transform hover:scale-110" @click="submitToFirebase"> Create Test! </button>
@@ -38,7 +34,7 @@
 import Dropzone from '../components/Dropzone.vue'
 import SampleSizeOption from '../components/SampleSizeOption.vue'
 import {reactive, ref} from 'vue'
-import { mapGetters, Store } from 'vuex';
+import { mapGetters, Store } from 'vuex'
 import firebase from 'firebase'
 
 const db = firebase.firestore();
@@ -119,11 +115,16 @@ export default {
                     console.log(snapshot)
                     console.log("uploaded a file")
                 })
-
                 db.collection("users").doc(this.user.data.uid).update({
                     testsCreated: firebase.firestore.FieldValue.arrayUnion(docRef.id)
+                }).then(() => {
+                    this.$router.push('/account')
                 })
             })
+            // this.$router.push('/account')
+        },
+        sendToAccountRoute(){
+            this.$router.push('/account')
         }
     },
     data() {
