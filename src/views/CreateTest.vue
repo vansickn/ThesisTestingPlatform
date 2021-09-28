@@ -140,7 +140,7 @@ export default {
             file2: null,
             verified1: false,
             verified2: false,
-            activePlan: 'Option 1',
+            activePlan: 'Small',
             sampleOptions: [
                     {
                         size: "Small",
