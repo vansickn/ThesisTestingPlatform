@@ -16,6 +16,7 @@
         <UpgradeCard text="Want more coins?" :unlimited="false"/>
     </div>
 
+    <button class="mx-auto my-10 rounded-lg bg-red-500 shadow-md px-3 py-1 text-white" @click="signout">Sign Out</button>
 
 
 
