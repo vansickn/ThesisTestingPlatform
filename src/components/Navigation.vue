@@ -95,7 +95,7 @@ export default {
         this.listenForCoins();
     },
     beforeUpdate(){
-        this.activeNav = this.activeNav;
+        // this.activeNav = this.activeNav;
     },
     updated(){
         this.$nextTick(function () {
@@ -161,7 +161,7 @@ export default {
                 this.addUserToFirestore(user)
                 // console.log("Hello!!!!!")
                 this.listenForCoins(); //this is required for the update on next tick update lifecycle hook. Not sure why but need to leave this in.
-                this.activeNav = "Home";
+                this.activeNav = 'Home';
 
             }).catch((error) => {
                 // Handle Errors here.

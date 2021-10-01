@@ -1,12 +1,12 @@
 <template>
-  <div class="w-full flex mx-auto justify-center items-center flex-wrap">
-      <!-- <img class="img" :src="thumbnail1">
-      <img class="img" :src="thumbnail2"> -->
-      <!-- Want function to ultimately be selectedThumbnail -->
-      <Thumbnail v-if="user.data != null" @onClickedThumbnail="selectThumbnail1" :image="thumbnail1" :userCreated="userCreatedPhoto" :title="title1"/>
-      <Thumbnail v-if="user.data != null" @onClickedThumbnail="selectThumbnail2" :image="thumbnail2" :userCreated="userCreatedPhoto" :title="title2"/>
-      <!-- need to change click to image instead of whole thumbnail -->
-  </div>
+    <div class="w-full flex mx-auto justify-center items-center flex-wrap">
+        <!-- <img class="img" :src="thumbnail1">
+        <img class="img" :src="thumbnail2"> -->
+        <!-- Want function to ultimately be selectedThumbnail -->
+        <Thumbnail v-if="user.data != null" @onClickedThumbnail="selectThumbnail1" :image="thumbnail1" :userCreated="userCreatedPhoto" :title="title1"/>
+        <Thumbnail v-if="user.data != null" @onClickedThumbnail="selectThumbnail2" :image="thumbnail2" :userCreated="userCreatedPhoto" :title="title2"/>
+        <!-- need to change click to image instead of whole thumbnail -->
+    </div>
 <!-- going to pass in the user who created the test, and calculate the user photo from here. Could also just calculate that in the home.vue as well and just pass in the photo. Either works -->
 </template>
 
