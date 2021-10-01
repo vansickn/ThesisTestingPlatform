@@ -1,12 +1,32 @@
 <template>
-    <div class='info'>
+
+    <div class="container flex flex-row md:mx-10 md:my-10 mx-5 my-5 items-center">
+        <img :src="userData.photo" alt="Hey?" srcset="" class="rounded-full lg:w-20 lg:h-20 md:w-16 md:h-16 w-10 h-10  border-2 border-black md:mr-10 mr-5 select-none">
+        <h1 class="lg:text-6xl md:text-4xl sm:text-2xl text-lg">{{userData.displayName}}'s Account</h1>
+    </div>
+
+    <div class="grid grid-cols-2 max-w-7xl gap-5 md:grid-cols-4">
+        <ActiveTestCard number="5" :text="correctS(5,'total test')"/>
+        <ActiveTestCard number="1" :text="correctS(1,'active test')" color="green" />
+        <ActiveTestCard :number="truncateNumber(1700)" :text="correctS(289,'vote')+' cast'" color="blue"/>
+        <ActiveTestCard :number="truncateNumber(1200)" :text="correctS(1200,'coin')" color="yellow"/>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 max-w-7xl gap-5 mt-10">
+        <UpgradeCard text="Want unlimited active tests?" :unlimited="true"/>
+        <UpgradeCard text="Want more coins?" :unlimited="false"/>
+    </div>
+
+
+
+
+    <!-- <div class='info'>
         <h1> Hi {{user.data.displayName}}!</h1>
         <h3 @click="testlog"> You currently have {{coins}} coins! </h3>
         <button class="btn" @click="signout">Sign Out</button>
         <button @click="testing"> ey </button>
     </div>
     <h2> Here are the Tests you have created</h2>
-    <MyTestCard v-if="isLoggedIn != null"/>
+    <MyTestCard v-if="isLoggedIn != null"/> -->
   
 </template>
 
@@ -36,6 +56,10 @@ import { mapGetters } from 'vuex';
 // import firebase from 'firebase';
 import {useRouter} from 'vue-router';
 import MyTestCard from '../components/MyTestCard.vue';
+import ActiveTestCard from '../components/ActiveTestCard.vue'
+import UpgradeCard from '../components/UpgradeCard.vue'
+
+
 
 
 const db = firebase.firestore();
@@ -44,7 +68,7 @@ const db = firebase.firestore();
 
 
 export default {
-  components: { MyTestCard },
+  components: { ActiveTestCard, UpgradeCard},
     data(){
         return {
             router: useRouter(),
@@ -54,6 +78,7 @@ export default {
     computed: {
         ...mapGetters({
             user: "user",
+            userData: "userData"
         }),
     },
     mounted(){
@@ -70,6 +95,22 @@ export default {
                 this.coins = doc.data().coins
             }).catch(err=> {console.log(err)})
         },
+        correctS(number,string){
+            if(number == 0 || number > 1){
+                return string+"s"
+            }else{
+                return string
+            }
+        },
+        truncateNumber(number){
+            if(number > 1000){
+                return (number/1000).toFixed(1) + 'k'
+            }
+        },
+        round(value, precision) {
+            var multiplier = Math.pow(10, precision || 0);
+            return Math.round(value * multiplier) / multiplier;
+        }
     }
 
 }
