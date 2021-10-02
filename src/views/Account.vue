@@ -1,22 +1,23 @@
 <template>
 
-    <div class="container flex flex-row md:mx-10 md:my-10 mx-5 my-5 items-center">
+    <div class="container flex flex-row md:ml-10 md:my-10 ml-5 my-5 items-center max-w-full">
         <img :src="userData.photo" alt="Hey?" srcset="" class="rounded-full lg:w-20 lg:h-20 md:w-16 md:h-16 w-10 h-10  border-2 border-black md:mr-10 mr-5 select-none">
         <h1 class="lg:text-6xl md:text-4xl sm:text-2xl text-lg">{{userData.displayName}}'s Account</h1>
+        <button class="mx-10 sm:text-lg text-sm rounded-lg bg-red-500 shadow-md px-3 py-1 text-white md:-mb-3" @click="signout">Sign Out</button>
     </div>
 
-    <div class="grid grid-cols-2 max-w-7xl gap-5 md:grid-cols-4">
+    <div class="grid grid-cols-2 lg:max-w-7xl max-w-full gap-5 md:grid-cols-4">
         <ActiveTestCard number="5" :text="correctS(5,'total test')"/>
         <ActiveTestCard number="1" :text="correctS(1,'active test')" color="green" />
         <ActiveTestCard :number="truncateNumber(1700)" :text="correctS(289,'vote')+' cast'" color="blue"/>
         <ActiveTestCard :number="truncateNumber(1200)" :text="correctS(1200,'coin')" color="yellow"/>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 max-w-7xl gap-5 mt-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:max-w-7xl max-w-full gap-5 mt-10">
         <UpgradeCard text="Want unlimited active tests?" :unlimited="true"/>
         <UpgradeCard text="Want more coins?" :unlimited="false"/>
     </div>
 
-    <button class="mx-auto my-10 rounded-lg bg-red-500 shadow-md px-3 py-1 text-white" @click="signout">Sign Out</button>
+    
 
 
 
