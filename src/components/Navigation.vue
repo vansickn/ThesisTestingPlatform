@@ -186,7 +186,8 @@ export default {
                     email: user.email,
                     name: user.displayName,
                     seenTests: [],
-                    photoURL: user.providerData[0].photoURL
+                    photoURL: user.providerData[0].photoURL,
+                    votesCast: 0,
                 })
                 .then(() => {
                     console.log("User Successfully Created!");
