@@ -3,21 +3,19 @@
     <div class="container flex flex-row md:ml-10 md:my-10 ml-5 my-5 items-center max-w-full">
         <img :src="userData.photo" alt="Hey?" srcset="" class="rounded-full lg:w-20 lg:h-20 md:w-16 md:h-16 w-10 h-10  border-2 border-black md:mr-10 mr-5 select-none">
         <h1 class="lg:text-6xl md:text-4xl sm:text-2xl text-lg">{{userData.displayName}}'s Account</h1>
-        <button class="mx-10 sm:text-lg text-sm rounded-lg bg-red-500 shadow-md px-3 py-1 text-white md:-mb-3" @click="signout">Sign Out</button>
+        <button class="mx-10 sm:text-lg text-xs rounded-lg bg-red-500 shadow-md px-3 py-1 text-white md:-mb-3" @click="signout">Sign Out</button>
     </div>
 
     <div class="grid grid-cols-2 lg:max-w-7xl max-w-full gap-5 md:grid-cols-4">
-        <ActiveTestCard number="5" :text="correctS(5,'total test')"/>
+        <ActiveTestCard :number="testsCreatedNumber" :text="correctS(testsCreatedNumber,'total test')"/>
         <ActiveTestCard number="1" :text="correctS(1,'active test')" color="green" />
-        <ActiveTestCard :number="truncateNumber(1700)" :text="correctS(289,'vote')+' cast'" color="blue"/>
-        <ActiveTestCard :number="truncateNumber(1200)" :text="correctS(1200,'coin')" color="yellow"/>
+        <ActiveTestCard :number="truncateNumber(votesCast)" :text="correctS(votesCast,'vote')+' cast'" color="blue"/>
+        <ActiveTestCard :number="truncateNumber(coins)" :text="correctS(coins,'coin')" color="yellow"/>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:max-w-7xl max-w-full gap-5 mt-10">
         <UpgradeCard text="Want unlimited active tests?" :unlimited="true"/>
         <UpgradeCard text="Want more coins?" :unlimited="false"/>
     </div>
-
-    
 
 
 
@@ -75,6 +73,9 @@ export default {
         return {
             router: useRouter(),
             coins: null,
+            votesCast: null,
+            testsCreatedNumber: null,
+            activeTests: 1 //this will eventually be something that is queried, but for right now I have no system in place to determine active tests vs completed tests
         }
     },
     computed: {
@@ -84,7 +85,7 @@ export default {
         }),
     },
     mounted(){
-        this.fetchCoins();
+        this.fetchData();
     },
     methods: {
         signout() {
@@ -92,9 +93,12 @@ export default {
             this.router.push('/')
             console.log(this.user.data)
         },
-        async fetchCoins() {
+        async fetchData() {
             await db.collection("users").doc(this.user.data.uid).get().then(doc => {
                 this.coins = doc.data().coins
+                this.votesCast = doc.data().votesCast
+                this.testsCreatedNumber = doc.data().testsCreated.length
+                console.log(doc.data().testsCreated)
             }).catch(err=> {console.log(err)})
         },
         correctS(number,string){
@@ -107,6 +111,8 @@ export default {
         truncateNumber(number){
             if(number > 1000){
                 return (number/1000).toFixed(1) + 'k'
+            }else{
+                return number
             }
         },
         round(value, precision) {
