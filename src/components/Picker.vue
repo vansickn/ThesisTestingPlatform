@@ -108,7 +108,8 @@ export default {
             })
             db.collection("users").doc(this.userData.uid).update({
                 seenTests: firebase.firestore.FieldValue.arrayUnion(this.testIDs[this.currentTest].id),
-                coins: firebase.firestore.FieldValue.increment(1)
+                coins: firebase.firestore.FieldValue.increment(1),
+                votesCast: firebase.firestore.FieldValue.increment(1)
             })
             this.setNextThumbnail()
         },
@@ -124,7 +125,8 @@ export default {
             console.log(this.userData.uid)
             db.collection("users").doc(this.userData.uid).update({
                 seenTests: firebase.firestore.FieldValue.arrayUnion(this.testIDs[this.currentTest].id),
-                coins: firebase.firestore.FieldValue.increment(1)
+                coins: firebase.firestore.FieldValue.increment(1),
+                votesCast: firebase.firestore.FieldValue.increment(1)
             })
             this.setNextThumbnail()
         },
