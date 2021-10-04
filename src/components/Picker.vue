@@ -1,6 +1,7 @@
 <template>
+
     <div class="w-full flex mx-auto justify-center items-center flex-wrap">
-        <!-- <img class="img" :src="thumbnail1">
+            <!-- <img class="img" :src="thumbnail1">
         <img class="img" :src="thumbnail2"> -->
         <!-- Want function to ultimately be selectedThumbnail -->
         <Thumbnail v-if="user.data != null" @onClickedThumbnail="selectThumbnail1" :image="thumbnail1" :userCreated="userCreatedPhoto" :title="title1"/>
@@ -36,14 +37,14 @@ export default {
             currentTest: -1,
             userCreatedPhoto: null,
             title1: null,
-            title2: null
+            title2: null,
         }
     },
     mounted(){
         this.testList();
     },
     methods: {
-        // Grabs all of the doc ID's of the Tests, then going to use this list to grab from storage
+        // Grabs all of the doc ID's of the Tests, then going to use this list to grab from storage //this is a test and I have no idea what i'm doing <3
         async testList() {
             // TODO : Restrict viewing tests for people who have already seen the test, look into new ways i can model the data to handle that functionality
             // Test for now
@@ -102,7 +103,7 @@ export default {
                 img1votes: firebase.firestore.FieldValue.increment(1),
                 seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
             })
-            .then( console.log("added one to img1 votes"))
+            .then(this.onChangingThumbnails())
             .catch(error => {
                 console.log(error)
             })
@@ -118,7 +119,7 @@ export default {
                 img2votes: firebase.firestore.FieldValue.increment(1),
                 seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
             })
-            .then( console.log("added one to img2 votes"))
+            .then( console.log(this.onChangingThumbnails()))
             .catch(error => {
                 console.log(error)
             })
@@ -137,36 +138,35 @@ export default {
                 this.userCreatedPhoto = doc.data().photoURL
                 console.log(this.userCreatedPhoto)
             });
+        },
+        onChangingThumbnails() {
+            this.$emit('onChangingThumbnails')
         }
 
     }
 }
 </script>
 
-<style lang='scss' scoped>
+<style scoped>
+.picker-slide-enter-active {
+  transition: all .3s ease-out;
+  /* transform: translateX(0); */
+  opacity: 100;
+  
+}
+.picker-slide-leave-active {
+  transition: all .3s ease-out;
+  opacity: 0;
+}
+.picker-slide-enter-from
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateX(-300px);
+  opacity: 0;
+}
 
-// .thumbnail-picker {
-//     display: flex;
-//     flex-wrap: wrap;
-//     justify-content: space-evenly;
-//     align-content: center;
-//     padding-left: 10px;
-//     padding-right: 10px;
-//     margin: 20px;
-//     background-color: #edf2f4;
-//     border-radius: 20px;
-
-
-//     .img{
-//         padding: 10px;
-//         min-width: 256px;
-//         min-width: 144px;
-
-//         max-height: 360px;
-//         max-width: 640px;
-
-//     }
-// }
-
+.picker-slide-leave-to {
+    transform: translateX(-300px);
+    opacity: 0;
+}
 
 </style>
