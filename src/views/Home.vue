@@ -1,8 +1,8 @@
 <template>
   <h1 class="text-4xl mx-auto py-10 md:text-2xl sm:text-lg sm:pt-5 pb-3 xs:text-sm xs:pt-5"> Which video are you more likely to click on? </h1>
-  <Picker v-if="user.data != null" :class="{'transition duration-100 opacity-0': animate}" @onChangingThumbnails="setAnimation" />
+  <Picker v-if="user.data != null" @onChangingThumbnails="setAnimation" />
+<!-- // :class="{'transition duration-100 opacity-0': animate}" -->
 </template>
-
 <script>
 import Picker from '../components/Picker.vue';
 import firebase from 'firebase';
@@ -41,6 +41,13 @@ name: "home",
     setAnimationFalse(){
       this.animate = false
       console.log(this.animate)
+    },
+    callTestFirebase(){
+      //get function reference from firebase
+      const sayHello = firebase.functions().httpsCallable("sayHello");
+      sayHello().then((result)=>{
+          console.log(result.data)
+      });
     }
   },
   watch: {},
