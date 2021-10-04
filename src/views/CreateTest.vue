@@ -82,9 +82,11 @@ export default {
         select2: function () {
             this.verifyFileTest(document.querySelector(".dropzoneFile").files[0],false)
         },
-        setActive: function(e) {
-            console.log(e)
-            this.activePlan = e
+        setActive: function(size,coin_amount) {
+            console.log(size)
+            console.log(coin_amount)
+            this.activePlan = size
+            this.sampleSize = coin_amount
             console.log(this.activePlan)
         },
         submitToFirebase: function() {
@@ -100,6 +102,7 @@ export default {
             }
             db.collection("CreatedTests").add({
                 plan: this.activePlan,
+                sampleSize: this.sampleSize,
                 user: this.user.data.uid,
                 img1votes: 0,
                 img2votes: 0,
@@ -141,26 +144,27 @@ export default {
             verified1: false,
             verified2: false,
             activePlan: 'Small',
+            sampleSize: 25,
             sampleOptions: [
                     {
                         size: "Small",
-                        coin_amount: 10,
+                        coin_amount: 25,
                         sample_size: 25
                     },
                     {
                         size: "Medium",
-                        coin_amount: 30,
+                        coin_amount: 90,
                         sample_size: 100
                     },
                     {
                         size: "Large",
-                        coin_amount: 100,
+                        coin_amount: 420,
                         sample_size: 500 
                     },
                     {
                         size: "XL",
-                        coin_amount: 300,
-                        sample_size: 2000  
+                        coin_amount: 800,
+                        sample_size: 1000  
                     }
                 ]
         }
