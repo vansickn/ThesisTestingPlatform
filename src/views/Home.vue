@@ -1,6 +1,6 @@
 <template>
   <h1 class="text-4xl mx-auto py-10 md:text-2xl sm:text-lg sm:pt-5 pb-3 xs:text-sm xs:pt-5"> Which video are you more likely to click on? </h1>
-  <Picker v-if="user.data != null" @onChangingThumbnails="setAnimation" />
+  <Picker @onChangingThumbnails="setAnimation" />
 <!-- // :class="{'transition duration-100 opacity-0': animate}" -->
 </template>
 <script>

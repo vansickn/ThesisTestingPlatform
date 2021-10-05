@@ -4,8 +4,8 @@
             <!-- <img class="img" :src="thumbnail1">
         <img class="img" :src="thumbnail2"> -->
         <!-- Want function to ultimately be selectedThumbnail -->
-        <Thumbnail v-if="user.data != null" @onClickedThumbnail="selectThumbnail1" :image="thumbnail1" :userCreated="userCreatedPhoto" :title="title1"/>
-        <Thumbnail v-if="user.data != null" @onClickedThumbnail="selectThumbnail2" :image="thumbnail2" :userCreated="userCreatedPhoto" :title="title2"/>
+        <Thumbnail @onClickedThumbnail="selectThumbnail1" :image="thumbnail1" :userCreated="userCreatedPhoto" :title="title1"/>
+        <Thumbnail @onClickedThumbnail="selectThumbnail2" :image="thumbnail2" :userCreated="userCreatedPhoto" :title="title2"/>
         <!-- need to change click to image instead of whole thumbnail -->
     </div>
 <!-- going to pass in the user who created the test, and calculate the user photo from here. Could also just calculate that in the home.vue as well and just pass in the photo. Either works -->
@@ -53,22 +53,35 @@ export default {
 
                     // doc.data() is never undefined for query doc snapshots
                     console.log(doc.id, " => ", doc.data());
-                    console.log("" + this.user.data.uid)
-                    console.log(doc.data().user)
+                    // console.log("" + this.user.data.uid)
+                    // console.log(doc.data().user)
 
+                    
                     // Checks if the user created it, if they did they will not see it
-                    if("" + this.userData.uid != doc.data().user){
+                    // only if theyre logged in though, if not they can see it
+                    if(this.userData != null){
+                        if("" + this.userData.uid != doc.data().user){
+                            this.testIDs.push({
+                                id: doc.id,
+                                userCreated: doc.data().user,
+                                title1: doc.data().title1,
+                                title2: doc.data().title2,
+                            }); 
+                        }
+                    }else{
+                        console.log(doc.id)
                         this.testIDs.push({
                             id: doc.id,
                             userCreated: doc.data().user,
                             title1: doc.data().title1,
                             title2: doc.data().title2,
-                        }); 
+                        });  
                     }
                     
                 });
             }).catch(err => {
                 console.log("Error: " + err)
+                console.log(this.testIDs)
             })
             this.setNextThumbnail();
         },
