@@ -25,9 +25,7 @@ exports.onTestWrite = functions.firestore
             const data = doc.data();
             if ((data.img1votes+data.img2votes)<data.sampleSize) {
               admin.firestore().collection("ActiveTests")
-                  .doc(context.params.ID).set({
-                    active: true,
-                  });
+                  .doc(context.params.ID).set(data);
             } else {
               admin.firestore().collection("ActiveTests")
                   .doc(context.params.ID).delete();
