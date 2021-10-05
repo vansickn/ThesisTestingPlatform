@@ -48,7 +48,7 @@ export default {
         async testList() {
             // TODO : Restrict viewing tests for people who have already seen the test, look into new ways i can model the data to handle that functionality
             // Test for now
-            await db.collection('CreatedTests').get().then(querySnapshot => {
+            await db.collection('ActiveTests').get().then(querySnapshot => {
                 querySnapshot.forEach((doc) => {
 
                     // doc.data() is never undefined for query doc snapshots
