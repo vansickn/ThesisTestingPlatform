@@ -148,8 +148,8 @@ export default {
             console.log(userID)
             db.collection("users").doc(userID).get().then(doc => {
                 console.log(doc.data())
-                this.userCreatedPhoto = doc.data().photoURL
-                console.log(this.userCreatedPhoto)
+                this.userCreatedPhoto = doc.data().photoURL;
+                console.log(this.userCreatedPhoto);
             });
         },
         onChangingThumbnails() {
