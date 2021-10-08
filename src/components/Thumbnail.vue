@@ -30,6 +30,7 @@ export default {
         return {
             hover: false,
             isLoaded: false,
+            userPhotoLoaded: false,
         } 
     },
     created(){
@@ -42,7 +43,7 @@ export default {
         },
         loadImage(){
             this.isLoaded = true;
-        }
+        },
     }
 }
 </script>
