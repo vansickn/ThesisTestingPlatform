@@ -7,6 +7,10 @@
         <Thumbnail :image="thumbnail2" :userCreated="userData.photo" :title="title2" class="md:pt-10"/>
         <!-- need to change click to image instead of whole thumbnail -->
     </div>
+    <div>
+        <span>{{img1votes}}</span> <br>
+        <span>{{img2votes}}</span>
+    </div>
 </template>
 
 <script>
@@ -38,7 +42,7 @@ export default {
     props: ['testID'],
     methods: {
         generateTestData(){
-            db.collection('CreatedTests').doc(this.testID).get().then((doc) => {
+            db.collection('CreatedTests').doc(this.testID).onSnapshot((doc) => {
                 this.img1votes = doc.data().img1votes;
                 this.img2votes = doc.data().img2votes;
                 this.sampleSize = doc.data().sampleSize;

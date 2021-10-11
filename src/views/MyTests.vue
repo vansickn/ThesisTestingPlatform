@@ -4,8 +4,11 @@
         <h1 class="lg:text-6xl md:text-4xl sm:text-2xl text-lg">{{userData.displayName}}'s Tests</h1>
     </div>
 
-    <div class="mb-20">
+    <!-- <div class="mb-20">
         <TestCard v-for="id in testList" :testID="id" :key="id"/>        
+    </div> -->
+    <div class="mb-20">
+        <TestBarChart v-for="t in testIDList" :key="t" :id="t"/>
     </div>
 
 </template>
@@ -14,8 +17,14 @@
 import { mapGetters } from 'vuex';
 import firebase from 'firebase';
 import TestCard from '../components/TestCard.vue';
+import TestBarChart from '../components/TestBarChart.vue';
 
 const db = firebase.firestore();
+
+// Heres the plan:
+// Create an array of objects with the root of each object as the test ID
+// Create a separate function which handles the imgvotes snapshot which directly mutates the object
+// that way the graph functions in real time
 
 export default {
     computed: {
@@ -23,22 +32,47 @@ export default {
             userData: 'userData'
         })
     },
-    components: {TestCard},
+    components: {TestCard,TestBarChart},
     data(){
         return {
-            testList: null,
+            testIDList: null,
+            testList: [],
         }
     },
     methods: {
         async generateTestList(){
             await db.collection('users').doc(this.userData.uid).get().then((doc) => {
-                this.testList = doc.data().testsCreated;
+                this.testIDList = doc.data().testsCreated
+                // doc.data().testsCreated.forEach((id)=>{
+                //     this.generateBarObjects(id);
+                // })
             });
-            console.log(this.testList);
-        }
+            console.log(this.testIDList);
+        },
+        // async generateBarObjects(testid){
+        //     await db.collection('CreatedTests').doc(testid).get().then((doc) => {
+        //         console.log(doc.data())
+        //         this.testList.push(this.createBarObject(doc.data(),testid));
+        //     })
+        // },
+        // createBarObject(docdata,idNumber){
+        //     // console.log(docdata)
+        //     return {
+        //         id: idNumber,
+        //         dataForBar: {
+        //             labels: [docdata.title1,docdata.title2],
+        //             datasets: [
+        //                 {
+        //                     label: "Sample Test",
+        //                     backgroundColor: ["#1abc9c", "#f1c40f", "#2980b9", "#34495e"],
+        //                     data: [docdata.img1votes,docdata.img2votes] 
+        //                 }
+        //             ]
+        //         }
+        //     }
+        // }
     },
     mounted(){
-        console.log(this.userData.uid)
         this.generateTestList();
     }
 }
