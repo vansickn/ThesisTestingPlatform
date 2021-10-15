@@ -3,6 +3,9 @@
     <Thumbnail :image="img1"/>
     <Thumbnail :image="img2"/>
   </div>
+  <div>
+    
+  </div>
 </template>
 
 <script>

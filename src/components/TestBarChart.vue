@@ -1,16 +1,16 @@
 <template>
   <div class="w-11/12 max-w-3xl mx-auto">
-    <vue3-chart-js v-if="barObject != null" :id="barChart.id" :type="barChart.type" :data="barObject.dataForBar"/>
+    <vue3-chart-js ref="chart" v-if="barObject != null" :id="barChart.id" :type="barChart.type" :data="barObject.dataForBar" :options="barChart.options"/>
   </div>
 </template>
 
 <script>
 import Vue3ChartJs from "@j-t-mcc/vue3-chartjs";
 import firebase from 'firebase';
+import {defineExpose, ref, onMounted} from 'vue';
 const db = firebase.firestore();
 
 export default {
-  name: "App",
   props: ['id'],
   components: {
     Vue3ChartJs,
@@ -40,16 +40,16 @@ export default {
           },
         },
       },
-      data: {
-        labels: ["VueJs", "EmberJs"],
-        datasets: [
-          {
-            label: "My First Dataset",
-            backgroundColor: ["#1abc9c", "#f1c40f", "#2980b9", "#34495e"],
-            data: [40, 20],
-          },
-        ],
-      },
+      // data: {
+      //   labels: ["VueJs", "EmberJs"],
+      //   datasets: [
+      //     {
+      //       label: "My First Dataset",
+      //       backgroundColor: ["#1abc9c", "#f1c40f", "#2980b9", "#34495e"],
+      //       data: [40, 20],
+      //     },
+      //   ],
+      // },
     };
 
     return {
@@ -59,8 +59,12 @@ export default {
   methods: {
       async generateBarObject(){
             db.collection('CreatedTests').doc(this.id).onSnapshot((doc) => {
-                this.barObject = this.createBarObject(doc.data());
+                console.log("OLD BAR")
                 console.log(this.barObject)
+                this.barObject = this.createBarObject(doc.data());
+                console.log("NEW BAR")
+                console.log(this.barObject)
+                this.updateChart();
             })
         },
         createBarObject(docdata){
@@ -79,8 +83,23 @@ export default {
             }
         },
         convertToPercentage(first,second){
-            return (first/(first+second));
-        }
+            return ((first/(first+second)) * 100);
+        },
+        updateChart(){
+          // this.chartRef.value.update(250)
+          // console.log(this.$refs[Vue3ChartJs])
+          console.log(this.barObject)
+          this.$nextTick(function(){
+            console.log(this.$refs)
+            console.log(this.$refs.chart)
+
+            this.$refs.chart.$forceUpdate()
+            // console.log(this.$refs.chart)
+            this.$refs.chart.update(250);
+
+            // this.$refs.chart.chartRef.update(250)
+          })
+        },
   },
   data(){
       return {
@@ -91,7 +110,11 @@ export default {
       console.log("Created");
       console.log(this.id)
       console.log(this.loaded)
-      this.generateBarObject();
-  }
+      // this.generateBarObject();
+  },
+  mounted(){
+    this.generateBarObject();
+    console.log(this.$root.$refs['Vue3ChartJs'])
+  },
 }
 </script>
