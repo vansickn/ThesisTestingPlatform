@@ -7,8 +7,8 @@
     <!-- <div class="mb-20">
         <TestCard v-for="id in testList" :testID="id" :key="id"/>        
     </div> -->
-    <div class="mb-20 grid grid-cols-2">
-        <BarChartTest v-for="t in testIDList" :key="t" :id="t"/>
+    <div class="mb-20 grid lg:grid-cols-2 grid-cols-1">
+        <TestCard v-for="t in testIDList" :key="t" :testID="t"/>
     </div>
 
 

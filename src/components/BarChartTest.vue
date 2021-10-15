@@ -1,5 +1,8 @@
 <template>
+<!-- make div resize -->
+<div class="mx-auto w-full h-full">
   <BarChart v-if="barObject != null" :chartData="barObject.dataForBar" :options="options" />
+</div>
 </template>
 
 <script lang="ts">
@@ -8,6 +11,7 @@ import { BarChart } from 'vue-chart-3';
 import firebase from 'firebase';
 
 const db = firebase.firestore();
+
 
 export default defineComponent({
   name: 'Home',
@@ -27,10 +31,19 @@ export default defineComponent({
         min: 0,
         max: 100,
         responsive: true,
+        onResize: function(){
+          console.log("resized")
+        },
+        maintainAspectRatio: true,
         plugins: {
           legend: {
             display: false,
           },
+        },
+        labels: {
+          font: {
+            size: 5
+          }
         },
         scales: {
           y: {
@@ -43,6 +56,9 @@ export default defineComponent({
             },
           },
         },
+        font: {
+          size: 20
+        }
     };
 
     return { testData, options };
