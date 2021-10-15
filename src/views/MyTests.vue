@@ -7,9 +7,10 @@
     <!-- <div class="mb-20">
         <TestCard v-for="id in testList" :testID="id" :key="id"/>        
     </div> -->
-    <div class="mb-20">
-        <TestBarChart v-for="t in testIDList" :key="t" :id="t"/>
+    <div class="mb-20 grid grid-cols-2">
+        <BarChartTest v-for="t in testIDList" :key="t" :id="t"/>
     </div>
+
 
 </template>
 
@@ -18,6 +19,7 @@ import { mapGetters } from 'vuex';
 import firebase from 'firebase';
 import TestCard from '../components/TestCard.vue';
 import TestBarChart from '../components/TestBarChart.vue';
+import BarChartTest from '../components/BarChartTest.vue';
 
 const db = firebase.firestore();
 
@@ -32,7 +34,7 @@ export default {
             userData: 'userData'
         })
     },
-    components: {TestCard,TestBarChart},
+    components: {TestCard,TestBarChart,BarChartTest},
     data(){
         return {
             testIDList: null,
