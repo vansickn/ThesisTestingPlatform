@@ -19,7 +19,7 @@ import {mapGetters} from 'vuex';
 
 export default {
     name: 'thumbnail',
-    props: ['image','userCreated','title'],
+    props: ['image','userCreated','title', 'border'],
     computed: {
         ...mapGetters({
             userData: 'userData',
@@ -35,6 +35,7 @@ export default {
     },
     created(){
         console.log(this.title)
+        console.log(this.border)
     },
     methods: {
         clickedThumbnail(){

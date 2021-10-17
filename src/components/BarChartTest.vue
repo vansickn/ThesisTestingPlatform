@@ -12,6 +12,10 @@ import firebase from 'firebase';
 
 const db = firebase.firestore();
 
+const red_inside = "#FEE2E2"
+const red_outside = "#EF4444"
+const blue_inside = "#DBEAFE"
+const blue_outside = "#3B82F6"
 
 export default defineComponent({
   name: 'Home',
@@ -40,11 +44,6 @@ export default defineComponent({
             display: false,
           },
         },
-        labels: {
-          font: {
-            size: 5
-          }
-        },
         scales: {
           y: {
             min: 0,
@@ -53,12 +52,13 @@ export default defineComponent({
               callback: function (value) {
                 return `${value}%`;
               },
+              font:{
+                size: 12,
+                family: 'Helvetica' //figure out the same font
+              }
             },
           },
         },
-        font: {
-          size: 20
-        }
     };
 
     return { testData, options };
@@ -83,8 +83,11 @@ export default defineComponent({
                     datasets: [
                         {
                             label: "Sample Test",
-                            backgroundColor: ["#1abc9c", "#f1c40f", "#2980b9", "#34495e"],
-                            data: [this.convertToPercentage(docdata.img1votes,docdata.img2votes), this.convertToPercentage(docdata.img2votes,docdata.img1votes)] 
+                            backgroundColor: [red_inside, blue_inside], // pick better colors and border colors
+                            data: [this.convertToPercentage(docdata.img1votes,docdata.img2votes), this.convertToPercentage(docdata.img2votes,docdata.img1votes)], 
+                            borderColor: [red_outside,blue_outside],
+                            borderWidth: 2,
+                            borderRadius: 10,
                         }
                     ]
                 }
@@ -98,6 +101,12 @@ export default defineComponent({
       console.log("Created");
       console.log(this.id)
       this.generateBarObject();
+      console.log(BarChart)
+      // BarChart.plugins.default = {
+      //   global: {
+      //     defaultFont:'Georigia'
+      //   }
+      // }
   },
 });
 </script>

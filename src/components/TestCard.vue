@@ -7,8 +7,8 @@
             <BarChartTest :id="testID"/>
         </div>
         <div class="w-11/12 flex mx-auto">
-        <Thumbnail :image="thumbnail1" :userCreated="userData.photo" :title="title1" class="mt-10"/>
-        <Thumbnail :image="thumbnail2" :userCreated="userData.photo" :title="title2" class="mt-10"/>
+        <Thumbnail :image="thumbnail1" :userCreated="userData.photo" :title="title1" :border="'red'" class="mt-10"/>
+        <Thumbnail :image="thumbnail2" :userCreated="userData.photo" :title="title2" :border="'blue'" class="mt-10"/>
         </div>
         <!-- need to change click to image instead of whole thumbnail -->
     </div>
