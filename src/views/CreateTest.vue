@@ -49,6 +49,7 @@ export default {
         }),
     },
     methods: {
+        // THIS IS SO UGLY: TODO: MAKE THIS BETTER
         verifyFileTest: function (file,order) {
            console.log(file)
             if(file.type != "image/png"){ //also need to deal with jpg,jpeg etc
@@ -108,7 +109,8 @@ export default {
                 img2votes: 0,
                 seenBy: [],
                 title1: document.getElementById("title1").value,
-                title2: document.getElementById("title2").value
+                title2: document.getElementById("title2").value,
+                imageNames: [this.file1.name, this.file2.name]
             }).then(docRef => {
                 // this needs to be a for-loop for all of the files, neeeeed to make this extensible
                 // this is extraordinarily ugly code I am just getting it to work
@@ -126,7 +128,7 @@ export default {
                 db.collection("users").doc(this.user.data.uid).update({
                     testsCreated: firebase.firestore.FieldValue.arrayUnion(docRef.id)
                 }).then(() => {
-                    this.$router.push('/account')
+                    this.$router.push('/mytests')
                 })
             })
             // this.$router.push('/account')
