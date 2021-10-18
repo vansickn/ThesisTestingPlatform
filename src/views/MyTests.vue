@@ -7,7 +7,7 @@
     <!-- <div class="mb-20">
         <TestCard v-for="id in testList" :testID="id" :key="id"/>        
     </div> -->
-    <div class="mb-20 grid lg:grid-cols-2 grid-cols-1">
+    <div class="mb-20 grid lg:grid-cols-2 grid-cols-1 gap-y-4">
         <TestCard v-for="t in testIDList" :key="t" :testID="t"/>
     </div>
 

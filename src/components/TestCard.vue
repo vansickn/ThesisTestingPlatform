@@ -3,12 +3,12 @@
             <!-- <img class="img" :src="thumbnail1">
         <img class="img" :src="thumbnail2"> -->
         <!-- Want function to ultimately be selectedThumbnail -->
-        <div class="pt-10 w-full px-10">
+        <div class="pt-8 w-full pr-10 pl-8">
             <BarChartTest :id="testID"/>
         </div>
-        <div class="w-11/12 flex mx-auto flex-wrap">
-        <Thumbnail :image="thumbnail1" :userCreated="userData.photo" :title="title1" :border="'red'" class="mt-10"/>
-        <Thumbnail :image="thumbnail2" :userCreated="userData.photo" :title="title2" :border="'blue'" class="mt-10"/>
+        <div class="w-11/12 flex mx-auto gap-2">
+        <Thumbnail :image="thumbnail1" :userCreated="userData.photo" :title="title1" :border="'red'" class="mt-2"/>
+        <Thumbnail :image="thumbnail2" :userCreated="userData.photo" :title="title2" :border="'blue'" class="mt-2"/>
         </div>
         <!-- need to change click to image instead of whole thumbnail -->
     </div>
