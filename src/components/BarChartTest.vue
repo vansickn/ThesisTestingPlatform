@@ -1,7 +1,7 @@
 <template>
 <!-- make div resize -->
 <div class="mx-auto w-full h-full">
-  <BarChart v-if="barObject != null" :chartData="barObject.dataForBar" :options="options"/>
+  <BarChart v-if="barObject != null" :chartData="barObject.dataForBar" :options="options" class="h-52"/>
 </div>
 </template>
 
@@ -38,7 +38,7 @@ export default defineComponent({
         onResize: function(){
           console.log("resized")
         },
-        maintainAspectRatio: true,
+        maintainAspectRatio: false,
         plugins: {
           legend: {
             display: false,
