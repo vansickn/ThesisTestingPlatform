@@ -3,17 +3,20 @@
 
 
     <div class="w-full flex mx-auto justify-center items-center flex-wrap">
-        <div class="container inline-flex flex-col justify-center items-center w-full md:w-640 sm:mb-5 xs:mb-5 md:mx-10">
+        <!-- <div class="container inline-flex flex-col justify-center items-center w-full md:w-640 sm:mb-5 xs:mb-5 md:mx-10">
             <Dropzone class="" v-if="!verified1" @drop.prevent="drop1" @change="select1"/>
             <img v-if="verified1" class="shadow-xl md:w-640 md:h-360 sm:w-11/12 w-11/12 mx-5 sm:mb-5 xs:mb-5" :src="fileURL1" alt="" srcset="">
             <input required type="text" placeholder="Enter the Title of your Youtube Video" name="title" id="title1" class="pl-3 md:w-640 sm:w-11/12 w-11/12 border-gray-100 border-2  rounded-lg focus:border-red-500 focus:outline-none shadow-md h-10 mx-5 transition duration 500">
         </div>
-        <!-- Eventually turn either of these things into a component, so can dynamically add more to support more than 2 thumbnails at a time -->
-        <div class="container inline-flex flex-col justify-center items-center w-full md:w-640 sm:mb-5 xs:mb-5 md:mx-10">
+         Eventually turn either of these things into a component, so can dynamically add more to support more than 2 thumbnails at a time -->
+        <!-- <div class="container inline-flex flex-col justify-center items-center w-full md:w-640 sm:mb-5 xs:mb-5 md:mx-10">
             <Dropzone class="" v-if="!verified2" @drop.prevent="drop2" @change="select2"/>
             <img v-if="verified2" class="shadow-xl md:w-640 md:h-360 sm:w-11/12 w-11/12 mx-5 sm:mb-5 xs:mb-5" :src="fileURL2" alt="" srcset="">
             <input required type="text" placeholder="Enter the Title of your Youtube Video" name="title" id="title2" class="pl-3 md:w-640 sm:w-11/12 xs:w-11/12 border-gray-100 border-2  rounded-lg focus:border-red-500 focus:outline-none shadow-md h-10 mx-5 transition duration 500">
-        </div>
+        </div> -->
+        <ImageSelector v-for="n in numberOfSelectors" :key="n"/>
+
+
 </div>
 
 
@@ -31,18 +34,19 @@
 </template>
 
 <script>
-import Dropzone from '../components/Dropzone.vue'
-import SampleSizeOption from '../components/SampleSizeOption.vue'
-import {reactive, ref} from 'vue'
-import { mapGetters, Store } from 'vuex'
-import firebase from 'firebase'
+import Dropzone from '../components/Dropzone.vue';
+import SampleSizeOption from '../components/SampleSizeOption.vue';
+import {reactive, ref} from 'vue';
+import { mapGetters, Store } from 'vuex';
+import firebase from 'firebase';
+import ImageSelector from '../components/ImageSelector.vue'
 
 const db = firebase.firestore();
 var storageRef = firebase.storage().ref();
 
 export default {
     name: 'CreateTest',
-    components: {Dropzone,SampleSizeOption},
+    components: {Dropzone,SampleSizeOption,ImageSelector},
     computed: {
         ...mapGetters({
             user: "user",
@@ -70,19 +74,19 @@ export default {
                 console.log(this.verified2)
             } 
         },
-        drop1: function (e) {
-            this.verifyFileTest(e.dataTransfer.files[0],true);
-        },
-        drop2: function (e) {
-            this.verifyFileTest(e.dataTransfer.files[0],false)
-        },
-        select1: function () {
-            console.log(document.querySelector(".dropzoneFile").files)
-            this.verifyFileTest(document.querySelector(".dropzoneFile").files[0],true)
-        },
-        select2: function () {
-            this.verifyFileTest(document.querySelector(".dropzoneFile").files[0],false)
-        },
+        // drop1: function (e) {
+        //     this.verifyFileTest(e.dataTransfer.files[0],true);
+        // },
+        // drop2: function (e) {
+        //     this.verifyFileTest(e.dataTransfer.files[0],false)
+        // },
+        // select1: function () {
+        //     console.log(document.querySelector(".dropzoneFile").files)
+        //     this.verifyFileTest(document.querySelector(".dropzoneFile").files[0],true)
+        // },
+        // select2: function () {
+        //     this.verifyFileTest(document.querySelector(".dropzoneFile").files[0],false)
+        // },
         setActive: function(size,coin_amount) {
             console.log(size)
             console.log(coin_amount)
@@ -139,6 +143,7 @@ export default {
     },
     data() {
         return {
+            numberOfSelectors: 2,
             fileURL1: null,
             fileURL2: null,
             file1: null,
