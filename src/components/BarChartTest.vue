@@ -1,7 +1,7 @@
 <template>
 <!-- make div resize -->
 <div class="mx-auto w-full h-full">
-  <BarChart v-if="barObject != null" :chartData="barObject.dataForBar" :options="options" />
+  <BarChart v-if="barObject != null" :chartData="barObject.dataForBar" :options="options"/>
 </div>
 </template>
 
@@ -43,6 +43,17 @@ export default defineComponent({
           legend: {
             display: false,
           },
+          label: {
+            display: false,
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context){
+                var percentage = context.formattedValue || '';
+                return percentage + '%';
+              }
+            }
+          }
         },
         scales: {
           y: {
@@ -53,11 +64,14 @@ export default defineComponent({
                 return `${value}%`;
               },
               font:{
-                size: 12,
+                size: 9,
                 family: 'Helvetica' //figure out the same font
               }
             },
           },
+          x: {
+            display: false,
+          }
         },
     };
 
