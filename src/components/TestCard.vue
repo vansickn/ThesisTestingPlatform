@@ -6,7 +6,7 @@
         <div class="pt-10 w-full px-10">
             <BarChartTest :id="testID"/>
         </div>
-        <div class="w-11/12 flex mx-auto">
+        <div class="w-11/12 flex mx-auto flex-wrap">
         <Thumbnail :image="thumbnail1" :userCreated="userData.photo" :title="title1" :border="'red'" class="mt-10"/>
         <Thumbnail :image="thumbnail2" :userCreated="userData.photo" :title="title2" :border="'blue'" class="mt-10"/>
         </div>
