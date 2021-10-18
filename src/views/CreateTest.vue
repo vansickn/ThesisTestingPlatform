@@ -14,7 +14,7 @@
             <img v-if="verified2" class="shadow-xl md:w-640 md:h-360 sm:w-11/12 w-11/12 mx-5 sm:mb-5 xs:mb-5" :src="fileURL2" alt="" srcset="">
             <input required type="text" placeholder="Enter the Title of your Youtube Video" name="title" id="title2" class="pl-3 md:w-640 sm:w-11/12 xs:w-11/12 border-gray-100 border-2  rounded-lg focus:border-red-500 focus:outline-none shadow-md h-10 mx-5 transition duration 500">
         </div> -->
-        <ImageSelector v-for="n in numberOfSelectors" :key="n"/>
+        <ImageSelector v-for="n in numberOfSelectors" :key="n" :image_no="n" @onImageVerification="onVerifiedImage" @onTitleChange="updateTitle"/>
 
 
 </div>
@@ -54,26 +54,26 @@ export default {
     },
     methods: {
         // THIS IS SO UGLY: TODO: MAKE THIS BETTER
-        verifyFileTest: function (file,order) {
-           console.log(file)
-            if(file.type != "image/png"){ //also need to deal with jpg,jpeg etc
-                console.log("This image is not the correct file type") //Display some sort of error message saying its not a png
-            }else{ //condition where it is the correct filetype
-                if(order){
-                    this.fileURL1 = URL.createObjectURL(file)
-                    this.file1 = file
-                    this.verified1 = true
-                }else{
-                    this.fileURL2 = URL.createObjectURL(file)
-                    this.file2 = file
-                    this.verified2 = true
-                }
-                console.log(this.fileURL1)
-                console.log(this.fileURL2)
-                console.log(this.verified1)
-                console.log(this.verified2)
-            } 
-        },
+        // verifyFileTest: function (file,order) {
+        //    console.log(file)
+        //     if(file.type != "image/png"){ //also need to deal with jpg,jpeg etc
+        //         console.log("This image is not the correct file type") //Display some sort of error message saying its not a png
+        //     }else{ //condition where it is the correct filetype
+        //         if(order){
+        //             this.fileURL1 = URL.createObjectURL(file)
+        //             this.file1 = file
+        //             this.verified1 = true
+        //         }else{
+        //             this.fileURL2 = URL.createObjectURL(file)
+        //             this.file2 = file
+        //             this.verified2 = true
+        //         }
+        //         console.log(this.fileURL1)
+        //         console.log(this.fileURL2)
+        //         console.log(this.verified1)
+        //         console.log(this.verified2)
+        //     } 
+        // },
         // drop1: function (e) {
         //     this.verifyFileTest(e.dataTransfer.files[0],true);
         // },
@@ -87,6 +87,20 @@ export default {
         // select2: function () {
         //     this.verifyFileTest(document.querySelector(".dropzoneFile").files[0],false)
         // },
+        onVerifiedImage(file,image_no){
+            console.log(file)
+            console.log(image_no)
+            // image_no -1 because image numbers start at 1
+            this.img_array[image_no-1] = file
+        },
+        updateTitle(textValue, image_no){
+            console.log(textValue);
+            console.log(image_no);
+            // image_no -1 because image numbers start at 1
+            this.title_array[image_no-1] = textValue
+            console.log(this.img_array)
+            console.log(this.title_array)
+        },
         setActive: function(size,coin_amount) {
             console.log(size)
             console.log(coin_amount)
@@ -143,6 +157,8 @@ export default {
     },
     data() {
         return {
+            img_array: [],
+            title_array: [],
             numberOfSelectors: 2,
             fileURL1: null,
             fileURL2: null,
