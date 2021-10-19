@@ -119,6 +119,7 @@ export default {
                 return
             }
             db.collection("CreatedTests").add({
+                totalVotes: 0,
                 numberOfImages: this.numberOfSelectors,
                 plan: this.activePlan,
                 sampleSize: this.sampleSize,

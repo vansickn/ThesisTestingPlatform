@@ -15,7 +15,7 @@
         </div>
         <!-- Eventually will change this to grid-cols-2 in order to have a button to extend the sample size -->
         <div class="w-11/12 grid grid-cols-1 my-2 gap-4 text-sm sm:text-base">
-            <h1 class="bg-gray-100 rounded-xl border-2 border-red-500 text-center px-10 container flex flex-row w-auto"> {{this.img1votes + this.img2votes}} / {{this.sampleSize}} votes cast</h1>
+            <h1 class="bg-gray-100 rounded-xl border-2 border-red-500 text-center px-10 container flex flex-row w-auto"> {{total_votes}} / {{this.sampleSize}} votes cast</h1>
         </div>
         <!-- need to change click to image instead of whole thumbnail -->
     </div>
@@ -34,16 +34,12 @@ const storageRef = firebase.storage().ref();
 export default {
     data(){
         return {
-            img1votes: null,
-            img2votes: null,
-            title1: null,
-            title2: null,
-            thumbnail1: null,
-            thumbnail2: null,
             sampleSize: null,
             numberOfImages: null,
             image_array: [],
             title_array: [],
+            vote_array: [],
+            total_votes: 0,
         }
     },
     computed: {
@@ -57,11 +53,12 @@ export default {
         async generateTestData(){
             db.collection('CreatedTests').doc(this.testID).onSnapshot((doc) => {
                 this.sampleSize = doc.data().sampleSize;
-                this.title1 = doc.data().title1;
-                this.title2 = doc.data().title2;
                 this.numberOfImages = doc.data().numberOfImages;
                 this.title_array = doc.data().title_array;
+                this.vote_array = doc.data().imgVotesArray;
+                console.log(this.vote_array)
                 this.generateThumbnailsFromTestID();
+                this.calculateTotalVotes();
             })
         },
         generateThumbnailsFromTestID(){
@@ -77,6 +74,14 @@ export default {
                     })
                 })                
             }
+        },
+        calculateTotalVotes(){
+            var total = 0;
+            for (let i = 0; i < this.vote_array.length; i++) {
+                total += this.vote_array[i]
+            };
+            this.total_votes = total;
+            console.log(this.total_votes)
         }
     },
     created(){
