@@ -119,15 +119,12 @@ export default {
                 return
             }
             db.collection("CreatedTests").add({
+                numberOfImages: this.numberOfSelectors,
                 plan: this.activePlan,
                 sampleSize: this.sampleSize,
                 user: this.user.data.uid,
-                img1votes: 0,
-                img2votes: 0,
+                imgVotesArray: Array(this.numberOfSelectors).fill(0),
                 seenBy: [],
-                // title1: document.getElementById("title1").value,
-                // title2: document.getElementById("title2").value,
-                // imageNames: [this.file1.name, this.file2.name],
                 title_array: this.title_array,
             }).then(docRef => {
                 for (let i = 0; i < this.img_array.length; i++) {
