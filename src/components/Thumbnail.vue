@@ -41,6 +41,17 @@ export default {
     created(){
         console.log(this.title)
         console.log(this.border)
+        console.log(this.image)
+    },
+    mounted(){
+        console.log("mounted")
+        console.log(this.image)
+    },
+    watch: {
+        image: function(){
+            console.log("changed")
+            console.log(this.image)
+        }
     },
     methods: {
         clickedThumbnail(){

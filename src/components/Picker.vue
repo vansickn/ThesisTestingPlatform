@@ -1,12 +1,23 @@
 <template>
 
-    <div class="w-full flex mx-auto justify-center items-center flex-wrap">
+    <div v-if="test_array.length != 0" class="w-full flex mx-auto justify-center items-center flex-wrap">
             <!-- <img class="img" :src="thumbnail1">
         <img class="img" :src="thumbnail2"> -->
         <!-- Want function to ultimately be selectedThumbnail -->
-        <Thumbnail @onClickedThumbnail="selectThumbnail1" :image="thumbnail1" :userCreated="userCreatedPhoto" :title="title1" class="mx-5"/>
-        <Thumbnail @onClickedThumbnail="selectThumbnail2" :image="thumbnail2" :userCreated="userCreatedPhoto" :title="title2" class="mx-5"/>
+        <!-- <Thumbnail @onClickedThumbnail="selectThumbnail1" :image="thumbnail1" :userCreated="userCreatedPhoto" :title="title1" class="mx-5"/>
+        <Thumbnail @onClickedThumbnail="selectThumbnail2" :image="thumbnail2" :userCreated="userCreatedPhoto" :title="title2" class="mx-5"/> -->
         <!-- need to change click to image instead of whole thumbnail -->
+
+        <!-- New system for the thumbnails -->
+        <!-- v-for on thumbnail, data given by array similar to how it works in mytests -->
+        <!-- need the img_array to be reactive since it takes so long -->
+        <div v-if="true" class="w-full">
+            <span>{{test_array.length}}</span>
+            <span>{{test_array[currentTest].img_array}}</span>
+            <Thumbnail v-for="n in test_array[currentTest].imageCount" :key="n" :image="test_array[currentTest].img_array[n-1] " :title="test_array[currentTest].title_array[n-1]" class="mx-5" @click="currentTest += 1"/>
+        </div>
+
+
     </div>
 <!-- going to pass in the user who created the test, and calculate the user photo from here. Could also just calculate that in the home.vue as well and just pass in the photo. Either works -->
 </template>
@@ -16,6 +27,7 @@
 import Thumbnail from '../components/Thumbnail.vue';
 import firebase from 'firebase';
 import { mapGetters} from 'vuex';
+import {reactive} from 'vue';
 
 const db = firebase.firestore();
 var storageRef = firebase.storage().ref();
@@ -26,28 +38,32 @@ export default {
     computed: {
         ...mapGetters ({
             user: "user",
-            userData: "userData"
+            userData: "userData",
         })
     },
     data () {
         return {
-            thumbnail1: null,
-            thumbnail2: null,
-            testIDs: [],
-            currentTest: -1,
+            currentTest: 0,
             userCreatedPhoto: null,
-            title1: null,
+            title0: null,
             title2: null,
+            test_array: [], //array of objects
+            image_array: [],
+            showTests: false,
         }
     },
-    mounted(){
+    created(){
         this.testList();
+    },
+    mounted(){
+        // this.testList();
+        this.verifyTests();
     },
     methods: {
         // Grabs all of the doc ID's of the Tests, then going to use this list to grab from storage //this is a test and I have no idea what i'm doing <3
         async testList() {
             // TODO : Restrict viewing tests for people who have already seen the test, look into new ways i can model the data to handle that functionality
-            // Test for now
+            // TODO : paginate respoonses, only take like the first 5, and then when some threshold is met, load the next 5
             await db.collection('ActiveTests').get().then(querySnapshot => {
                 querySnapshot.forEach((doc) => {
 
@@ -55,35 +71,85 @@ export default {
                     console.log(doc.id, " => ", doc.data());
                     // console.log("" + this.user.data.uid)
                     // console.log(doc.data().user)
+                    const numberOfImages = doc.data().numberOfImages;
+                    const title_array = doc.data().title_array;
+                    const sampleSize = doc.data().sampleSize;
+                    const img_array = []
 
-                    
                     // Checks if the user created it, if they did they will not see it
                     // only if theyre logged in though, if not they can see it
                     if(this.userData != null){
+                        console.log("Userdata is not null")
                         if("" + this.userData.uid != doc.data().user){
-                            this.testIDs.push({
-                                id: doc.id,
-                                userCreated: doc.data().user,
-                                title1: doc.data().title1,
-                                title2: doc.data().title2,
-                            }); 
+                            console.log("Logged in")
+                            this.fetchImages(doc.id, numberOfImages).then((img_array) => {
+                                if(img_array.length < numberOfImages){
+                                    // This is a very very very shitty hack to allow for the array to populate before loading, probably wont work on shitty connections
+                                    // NEEED TO figure out a way to wait for the data to populate before showing it
+                                    setTimeout(()=>{
+                                        const obj = {
+                                            // added to the test_array list as this object
+                                            imageCount: numberOfImages,
+                                            title_array: title_array,
+                                            sampleSize: sampleSize,
+                                            img_array: img_array,
+                                        }
+                                        this.test_array.push(obj);
+                                    },300)
+                                }
+                                // this.image_array.push(img_array)
+                                // console.log(this.image_array)
+                                // this.$set(this.test_array[this.test_array.length-1],img_array,img_array)
+                            })
                         }
                     }else{
+                        console.log("Not logged in")
                         console.log(doc.id)
-                        this.testIDs.push({
-                            id: doc.id,
-                            userCreated: doc.data().user,
-                            title1: doc.data().title1,
-                            title2: doc.data().title2,
-                        });  
+                        this.fetchImages(doc.id,numberOfImages).then((img_array) => {
+                            this.test_array.push({
+                                // id: doc.id,
+                                // userCreated: doc.data().user,
+                                // title1: doc.data().title1,
+                                // title2: doc.data().title2,
+                                imageCount: numberOfImages,
+                                title_array: title_array,
+                                sampleSize: sampleSize,
+                                img_array: img_array,
+                            });  
+                        })
                     }
-                    
                 });
             }).catch(err => {
                 console.log("Error: " + err)
                 console.log(this.testIDs)
             })
-            this.setNextThumbnail();
+            console.log(this.test_array)
+            // this.setNextThumbnail();
+            // this.fetchImages();
+        },
+
+        async fetchImages(testid, numberOfImages){
+            console.log(testid)
+            console.log(numberOfImages)
+            var img_array = []
+            for (let i = 0; i < numberOfImages; i++) {
+                // for each image in test
+                const image_no = i+1
+                await storageRef.child('/tests/'+ testid + '/img_' + image_no + "/").listAll().then((res) => {
+                    // console.log(res);
+                    res.items[0].getDownloadURL().then(url => {
+                        img_array[i] = url
+                        // console.log(url)
+                    })
+                })
+            }
+            console.log(img_array)
+            return img_array;
+        },
+        verifyTests(){
+            for (let i = 0; i < this.test_array.length; i++) {
+                console.log(this.test_array[i])
+            }
         },
 
 
