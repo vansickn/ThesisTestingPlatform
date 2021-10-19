@@ -11,10 +11,6 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
 // triggers = db events, auth event, storage events, analytics events
 // http triggers = endpoint request, callable : call functions directly
 
-// http callable function - in order to send response do return
-exports.sayHello = functions.https.onCall((data, context) => {
-  return "hello";
-});
 // if the votes > sample size, deleted from Active Tests
 // if not, ActiveTest included
 exports.onTestWrite = functions.firestore
@@ -23,7 +19,7 @@ exports.onTestWrite = functions.firestore
       admin.firestore().collection("CreatedTests").doc(context.params.ID)
           .get().then((doc) => {
             const data = doc.data();
-            if ((data.img1votes+data.img2votes)<data.sampleSize) {
+            if (data.totalVotes<data.sampleSize) {
               admin.firestore().collection("ActiveTests")
                   .doc(context.params.ID).set(data);
             } else {
