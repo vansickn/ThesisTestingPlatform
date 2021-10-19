@@ -1,6 +1,6 @@
 <template>
 
-    <div v-if="test_array.length != 0" class="w-full flex mx-auto justify-center items-center flex-wrap">
+    <div v-if="showTests" class="w-full flex mx-auto justify-center items-center flex-wrap">
             <!-- <img class="img" :src="thumbnail1">
         <img class="img" :src="thumbnail2"> -->
         <!-- Want function to ultimately be selectedThumbnail -->
@@ -11,11 +11,7 @@
         <!-- New system for the thumbnails -->
         <!-- v-for on thumbnail, data given by array similar to how it works in mytests -->
         <!-- need the img_array to be reactive since it takes so long -->
-        <div v-if="true" class="w-full">
-            <span>{{test_array.length}}</span>
-            <span>{{test_array[currentTest].img_array}}</span>
             <Thumbnail v-for="n in test_array[currentTest].imageCount" :key="n" :image="test_array[currentTest].img_array[n-1] " :title="test_array[currentTest].title_array[n-1]" class="mx-5" @click="currentTest += 1"/>
-        </div>
 
 
     </div>
@@ -57,7 +53,7 @@ export default {
     },
     mounted(){
         // this.testList();
-        this.verifyTests();
+        // this.verifyTests();
     },
     methods: {
         // Grabs all of the doc ID's of the Tests, then going to use this list to grab from storage //this is a test and I have no idea what i'm doing <3
@@ -82,41 +78,33 @@ export default {
                         console.log("Userdata is not null")
                         if("" + this.userData.uid != doc.data().user){
                             console.log("Logged in")
+                            // This solution works for now, kinda still shitty but works for now
                             this.fetchImages(doc.id, numberOfImages).then((img_array) => {
-                                if(img_array.length < numberOfImages){
-                                    // This is a very very very shitty hack to allow for the array to populate before loading, probably wont work on shitty connections
-                                    // NEEED TO figure out a way to wait for the data to populate before showing it
-                                    setTimeout(()=>{
-                                        const obj = {
-                                            // added to the test_array list as this object
-                                            imageCount: numberOfImages,
-                                            title_array: title_array,
-                                            sampleSize: sampleSize,
-                                            img_array: img_array,
-                                        }
-                                        this.test_array.push(obj);
-                                    },300)
+                                this.verifyArray(img_array,numberOfImages);
+                                const obj = {
+                                    // added to the test_array list as this object
+                                    imageCount: numberOfImages,
+                                    title_array: title_array,
+                                    sampleSize: sampleSize,
+                                    img_array: img_array,
                                 }
-                                // this.image_array.push(img_array)
-                                // console.log(this.image_array)
-                                // this.$set(this.test_array[this.test_array.length-1],img_array,img_array)
+                                this.test_array.push(obj);
                             })
                         }
                     }else{
                         console.log("Not logged in")
                         console.log(doc.id)
-                        this.fetchImages(doc.id,numberOfImages).then((img_array) => {
-                            this.test_array.push({
-                                // id: doc.id,
-                                // userCreated: doc.data().user,
-                                // title1: doc.data().title1,
-                                // title2: doc.data().title2,
-                                imageCount: numberOfImages,
-                                title_array: title_array,
-                                sampleSize: sampleSize,
-                                img_array: img_array,
-                            });  
-                        })
+                        this.fetchImages(doc.id, numberOfImages).then((img_array) => {
+                                this.verifyArray(img_array,numberOfImages);
+                                const obj = {
+                                    // added to the test_array list as this object
+                                    imageCount: numberOfImages,
+                                    title_array: title_array,
+                                    sampleSize: sampleSize,
+                                    img_array: img_array,
+                                }
+                                this.test_array.push(obj);
+                            })
                     }
                 });
             }).catch(err => {
@@ -146,9 +134,16 @@ export default {
             console.log(img_array)
             return img_array;
         },
-        verifyTests(){
-            for (let i = 0; i < this.test_array.length; i++) {
-                console.log(this.test_array[i])
+        async verifyArray(img_array,number){
+            if(img_array.length == number){
+                console.log("verified")
+                console.log(img_array)
+                this.showTests = true;
+            }else{
+                setTimeout(()=>{
+                    console.log("not verified")
+                    return this.verifyArray(img_array,number)
+                },50)
             }
         },
 
