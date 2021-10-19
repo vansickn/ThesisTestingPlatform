@@ -90,15 +90,17 @@ export default defineComponent({
         },
         createBarObject(docdata){
             // console.log(docdata)
-            console.log(docdata)
+            console.log(docdata);
+            console.log(docdata.imgVotesArray);
+            var votesArray = this.convertToPercentage(docdata.imgVotesArray);
             return {
                 dataForBar: {
-                    labels: [docdata.title1,docdata.title2],
+                    labels: docdata.title_array,
                     datasets: [
                         {
                             label: "Sample Test",
                             backgroundColor: [red_inside, blue_inside], // pick better colors and border colors
-                            data: [this.convertToPercentage(docdata.img1votes,docdata.img2votes), this.convertToPercentage(docdata.img2votes,docdata.img1votes)], 
+                            data: votesArray, 
                             borderColor: [red_outside,blue_outside],
                             borderWidth: 2,
                             borderRadius: 10,
@@ -107,8 +109,17 @@ export default defineComponent({
                 }
             }
         },
-        convertToPercentage(first,second){
-            return ((first/(first+second)) * 100);
+        convertToPercentage(votesArray){
+          var total = 0
+          for (let i = 0; i < votesArray.length; i++) {
+              total += votesArray[i]
+          };
+          var returnable = []
+          for (let i = 0; i < votesArray.length; i++) {
+            returnable[i] = (votesArray[i]/total)*100;
+          }
+          console.log(returnable)
+          return returnable;
         },
   },
   created(){
