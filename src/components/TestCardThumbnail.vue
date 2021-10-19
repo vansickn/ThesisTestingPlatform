@@ -6,6 +6,8 @@
             'hover': hover,
             'border-4 border-red-500 rounded-md': index == 0,
             'border-4 border-blue-500 rounded-md': index == 1,
+            'border-4 border-yellow-300 rounded-md': index == 2,
+            'border-4 border-purple-500 rounded-md': index == 3,
             }">
         <div class="container mx-auto"> 
             <span class=" mt-3 text-xs md:text-base"> {{title}}</span>

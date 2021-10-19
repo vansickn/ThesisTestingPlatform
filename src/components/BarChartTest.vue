@@ -12,10 +12,14 @@ import firebase from 'firebase';
 
 const db = firebase.firestore();
 
-const red_inside = "#FEE2E2"
-const red_outside = "#EF4444"
-const blue_inside = "#DBEAFE"
-const blue_outside = "#3B82F6"
+const red_inside = "#FEE2E2";
+const red_outside = "#EF4444";
+const blue_inside = "#DBEAFE";
+const blue_outside = "#3B82F6";
+const yellow_inside = "#FEF3C7";
+const yellow_outside = "#FCD34D";
+const purple_inside = "#E0E7FF";
+const purple_outside = "#8B5CF6";
 
 export default defineComponent({
   name: 'Home',
@@ -99,9 +103,9 @@ export default defineComponent({
                     datasets: [
                         {
                             label: "Sample Test",
-                            backgroundColor: [red_inside, blue_inside], // pick better colors and border colors
+                            backgroundColor: [red_inside, blue_inside,yellow_inside,purple_inside], // pick better colors and border colors
                             data: votesArray, 
-                            borderColor: [red_outside,blue_outside],
+                            borderColor: [red_outside,blue_outside,yellow_outside,purple_outside],
                             borderWidth: 2,
                             borderRadius: 10,
                         }
