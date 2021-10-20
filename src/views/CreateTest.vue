@@ -3,21 +3,8 @@
 
 
     <div class="w-full flex mx-auto justify-center items-center flex-wrap">
-        <!-- <div class="container inline-flex flex-col justify-center items-center w-full md:w-640 sm:mb-5 xs:mb-5 md:mx-10">
-            <Dropzone class="" v-if="!verified1" @drop.prevent="drop1" @change="select1"/>
-            <img v-if="verified1" class="shadow-xl md:w-640 md:h-360 sm:w-11/12 w-11/12 mx-5 sm:mb-5 xs:mb-5" :src="fileURL1" alt="" srcset="">
-            <input required type="text" placeholder="Enter the Title of your Youtube Video" name="title" id="title1" class="pl-3 md:w-640 sm:w-11/12 w-11/12 border-gray-100 border-2  rounded-lg focus:border-red-500 focus:outline-none shadow-md h-10 mx-5 transition duration 500">
-        </div>
-         Eventually turn either of these things into a component, so can dynamically add more to support more than 2 thumbnails at a time -->
-        <!-- <div class="container inline-flex flex-col justify-center items-center w-full md:w-640 sm:mb-5 xs:mb-5 md:mx-10">
-            <Dropzone class="" v-if="!verified2" @drop.prevent="drop2" @change="select2"/>
-            <img v-if="verified2" class="shadow-xl md:w-640 md:h-360 sm:w-11/12 w-11/12 mx-5 sm:mb-5 xs:mb-5" :src="fileURL2" alt="" srcset="">
-            <input required type="text" placeholder="Enter the Title of your Youtube Video" name="title" id="title2" class="pl-3 md:w-640 sm:w-11/12 xs:w-11/12 border-gray-100 border-2  rounded-lg focus:border-red-500 focus:outline-none shadow-md h-10 mx-5 transition duration 500">
-        </div> -->
         <ImageSelector v-for="n in numberOfSelectors" :key="n" :image_no="n" @onImageVerification="onVerifiedImage" @onTitleChange="updateTitle"/>
-
-
-</div>
+    </div>
 
 
 
@@ -53,40 +40,6 @@ export default {
         }),
     },
     methods: {
-        // THIS IS SO UGLY: TODO: MAKE THIS BETTER
-        // verifyFileTest: function (file,order) {
-        //    console.log(file)
-        //     if(file.type != "image/png"){ //also need to deal with jpg,jpeg etc
-        //         console.log("This image is not the correct file type") //Display some sort of error message saying its not a png
-        //     }else{ //condition where it is the correct filetype
-        //         if(order){
-        //             this.fileURL1 = URL.createObjectURL(file)
-        //             this.file1 = file
-        //             this.verified1 = true
-        //         }else{
-        //             this.fileURL2 = URL.createObjectURL(file)
-        //             this.file2 = file
-        //             this.verified2 = true
-        //         }
-        //         console.log(this.fileURL1)
-        //         console.log(this.fileURL2)
-        //         console.log(this.verified1)
-        //         console.log(this.verified2)
-        //     } 
-        // },
-        // drop1: function (e) {
-        //     this.verifyFileTest(e.dataTransfer.files[0],true);
-        // },
-        // drop2: function (e) {
-        //     this.verifyFileTest(e.dataTransfer.files[0],false)
-        // },
-        // select1: function () {
-        //     console.log(document.querySelector(".dropzoneFile").files)
-        //     this.verifyFileTest(document.querySelector(".dropzoneFile").files[0],true)
-        // },
-        // select2: function () {
-        //     this.verifyFileTest(document.querySelector(".dropzoneFile").files[0],false)
-        // },
         onVerifiedImage(file,image_no){
             console.log(file)
             console.log(image_no)
@@ -136,12 +89,13 @@ export default {
                     ref.put(this.img_array[i]).then(snapshot => {
                         console.log(snapshot)
                         console.log("Uploaded file " + this.img_array[i].name)
+                        ready_to_reroute += 1
                     })
                 }
                 db.collection("users").doc(this.user.data.uid).update({
                     testsCreated: firebase.firestore.FieldValue.arrayUnion(docRef.id)}).then(() => {
-                    this.$router.push('/mytests')
-                })
+                        this.$router.push('/mytests')
+                    })
 
             })
             // create test in firestore
