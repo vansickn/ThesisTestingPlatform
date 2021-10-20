@@ -3,18 +3,8 @@
 
 
     <div class="w-full flex mx-auto justify-center items-center flex-wrap">
-        <div class="container inline-flex flex-col justify-center items-center w-full md:w-640 sm:mb-5 xs:mb-5 md:mx-10">
-            <Dropzone class="" v-if="!verified1" @drop.prevent="drop1" @change="select1"/>
-            <img v-if="verified1" class="shadow-xl md:w-640 md:h-360 sm:w-11/12 w-11/12 mx-5 sm:mb-5 xs:mb-5" :src="fileURL1" alt="" srcset="">
-            <input required type="text" placeholder="Enter the Title of your Youtube Video" name="title" id="title1" class="pl-3 md:w-640 sm:w-11/12 w-11/12 border-gray-100 border-2  rounded-lg focus:border-red-500 focus:outline-none shadow-md h-10 mx-5 transition duration 500">
-        </div>
-        <!-- Eventually turn either of these things into a component, so can dynamically add more to support more than 2 thumbnails at a time -->
-        <div class="container inline-flex flex-col justify-center items-center w-full md:w-640 sm:mb-5 xs:mb-5 md:mx-10">
-            <Dropzone class="" v-if="!verified2" @drop.prevent="drop2" @change="select2"/>
-            <img v-if="verified2" class="shadow-xl md:w-640 md:h-360 sm:w-11/12 w-11/12 mx-5 sm:mb-5 xs:mb-5" :src="fileURL2" alt="" srcset="">
-            <input required type="text" placeholder="Enter the Title of your Youtube Video" name="title" id="title2" class="pl-3 md:w-640 sm:w-11/12 xs:w-11/12 border-gray-100 border-2  rounded-lg focus:border-red-500 focus:outline-none shadow-md h-10 mx-5 transition duration 500">
-        </div>
-</div>
+        <ImageSelector v-for="n in numberOfSelectors" :key="n" :image_no="n" @onImageVerification="onVerifiedImage" @onTitleChange="updateTitle"/>
+    </div>
 
 
 
@@ -31,57 +21,38 @@
 </template>
 
 <script>
-import Dropzone from '../components/Dropzone.vue'
-import SampleSizeOption from '../components/SampleSizeOption.vue'
-import {reactive, ref} from 'vue'
-import { mapGetters, Store } from 'vuex'
-import firebase from 'firebase'
+import Dropzone from '../components/Dropzone.vue';
+import SampleSizeOption from '../components/SampleSizeOption.vue';
+import {reactive, ref} from 'vue';
+import { mapGetters, Store } from 'vuex';
+import firebase from 'firebase';
+import ImageSelector from '../components/ImageSelector.vue'
 
 const db = firebase.firestore();
 var storageRef = firebase.storage().ref();
 
 export default {
     name: 'CreateTest',
-    components: {Dropzone,SampleSizeOption},
+    components: {Dropzone,SampleSizeOption,ImageSelector},
     computed: {
         ...mapGetters({
             user: "user",
         }),
     },
     methods: {
-        // THIS IS SO UGLY: TODO: MAKE THIS BETTER
-        verifyFileTest: function (file,order) {
-           console.log(file)
-            if(file.type != "image/png"){ //also need to deal with jpg,jpeg etc
-                console.log("This image is not the correct file type") //Display some sort of error message saying its not a png
-            }else{ //condition where it is the correct filetype
-                if(order){
-                    this.fileURL1 = URL.createObjectURL(file)
-                    this.file1 = file
-                    this.verified1 = true
-                }else{
-                    this.fileURL2 = URL.createObjectURL(file)
-                    this.file2 = file
-                    this.verified2 = true
-                }
-                console.log(this.fileURL1)
-                console.log(this.fileURL2)
-                console.log(this.verified1)
-                console.log(this.verified2)
-            } 
+        onVerifiedImage(file,image_no){
+            console.log(file)
+            console.log(image_no)
+            // image_no -1 because image numbers start at 1
+            this.img_array[image_no-1] = file
         },
-        drop1: function (e) {
-            this.verifyFileTest(e.dataTransfer.files[0],true);
-        },
-        drop2: function (e) {
-            this.verifyFileTest(e.dataTransfer.files[0],false)
-        },
-        select1: function () {
-            console.log(document.querySelector(".dropzoneFile").files)
-            this.verifyFileTest(document.querySelector(".dropzoneFile").files[0],true)
-        },
-        select2: function () {
-            this.verifyFileTest(document.querySelector(".dropzoneFile").files[0],false)
+        updateTitle(textValue, image_no){
+            console.log(textValue);
+            console.log(image_no);
+            // image_no -1 because image numbers start at 1
+            this.title_array[image_no-1] = textValue
+            console.log(this.img_array)
+            console.log(this.title_array)
         },
         setActive: function(size,coin_amount) {
             console.log(size)
@@ -91,46 +62,91 @@ export default {
             console.log(this.activePlan)
         },
         submitToFirebase: function() {
-            // need to add regex here for the title
-            if(document.getElementById("title1").value === "" || document.getElementById("title2").value === ""){
-                console.log("Error in Title")
+
+            if(this.img_array.length < 2){
+                console.log("Not enough images")
                 return
             }
-            console.log("Submitting")
-            var metadata = {
-                contentType: "png",
-                user: this.user.data.uid,
+            if(this.title_array.length < 2){
+                console.log("Not enough titles")
+                return
             }
             db.collection("CreatedTests").add({
+                totalVotes: 0,
+                numberOfImages: this.numberOfSelectors,
                 plan: this.activePlan,
                 sampleSize: this.sampleSize,
                 user: this.user.data.uid,
-                img1votes: 0,
-                img2votes: 0,
+                imgVotesArray: Array(this.numberOfSelectors).fill(0),
                 seenBy: [],
-                title1: document.getElementById("title1").value,
-                title2: document.getElementById("title2").value,
-                imageNames: [this.file1.name, this.file2.name]
+                title_array: this.title_array,
             }).then(docRef => {
-                // this needs to be a for-loop for all of the files, neeeeed to make this extensible
-                // this is extraordinarily ugly code I am just getting it to work
-                console.log(docRef.id)
-                var ref1 = storageRef.child("/tests/" + docRef.id + "/" + this.file1.name)
-                ref1.put(this.file1,metadata).then(snapshot => {
-                    console.log(snapshot)
-                    console.log("uploaded a file")
-                })
-                var ref2 = storageRef.child("/tests/" + docRef.id + "/" + this.file2.name)
-                ref2.put(this.file2,metadata).then(snapshot => {
-                    console.log(snapshot)
-                    console.log("uploaded a file")
-                })
+                for (let i = 0; i < this.img_array.length; i++) {
+                    console.log(this.img_array[i])
+                    console.log(this.title_array[i])
+                    const i_no = i+1
+                    var ref = storageRef.child("/tests/" + docRef.id + "/img_" + i_no + "/" + this.img_array[i].name)
+                    ref.put(this.img_array[i]).then(snapshot => {
+                        console.log(snapshot)
+                        console.log("Uploaded file " + this.img_array[i].name)
+                        ready_to_reroute += 1
+                    })
+                }
                 db.collection("users").doc(this.user.data.uid).update({
-                    testsCreated: firebase.firestore.FieldValue.arrayUnion(docRef.id)
-                }).then(() => {
-                    this.$router.push('/mytests')
-                })
+                    testsCreated: firebase.firestore.FieldValue.arrayUnion(docRef.id)}).then(() => {
+                        this.$router.push('/mytests')
+                    })
+
             })
+            // create test in firestore
+            // loop through the img array and create 
+
+
+
+
+
+
+
+            // need to add regex here for the title
+            // if(document.getElementById("title1").value === "" || document.getElementById("title2").value === ""){
+            //     console.log("Error in Title")
+            //     return
+            // }
+            // console.log("Submitting")
+            // var metadata = {
+            //     contentType: "png",
+            //     user: this.user.data.uid,
+            // }
+            // db.collection("CreatedTests").add({
+            //     plan: this.activePlan,
+            //     sampleSize: this.sampleSize,
+            //     user: this.user.data.uid,
+            //     img1votes: 0,
+            //     img2votes: 0,
+            //     seenBy: [],
+            //     title1: document.getElementById("title1").value,
+            //     title2: document.getElementById("title2").value,
+            //     imageNames: [this.file1.name, this.file2.name]
+            // }).then(docRef => {
+            //     // this needs to be a for-loop for all of the files, neeeeed to make this extensible
+            //     // this is extraordinarily ugly code I am just getting it to work
+            //     console.log(docRef.id)
+            //     var ref1 = storageRef.child("/tests/" + docRef.id + "/" + this.file1.name)
+            //     ref1.put(this.file1,metadata).then(snapshot => {
+            //         console.log(snapshot)
+            //         console.log("uploaded a file")
+            //     })
+            //     var ref2 = storageRef.child("/tests/" + docRef.id + "/" + this.file2.name)
+            //     ref2.put(this.file2,metadata).then(snapshot => {
+            //         console.log(snapshot)
+            //         console.log("uploaded a file")
+            //     })
+            //     db.collection("users").doc(this.user.data.uid).update({
+            //         testsCreated: firebase.firestore.FieldValue.arrayUnion(docRef.id)
+            //     }).then(() => {
+            //         this.$router.push('/mytests')
+            //     })
+            // })
             // this.$router.push('/account')
         },
         sendToAccountRoute(){
@@ -139,6 +155,9 @@ export default {
     },
     data() {
         return {
+            img_array: [],
+            title_array: [],
+            numberOfSelectors: 2,
             fileURL1: null,
             fileURL2: null,
             file1: null,

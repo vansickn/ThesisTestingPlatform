@@ -4,8 +4,10 @@
         <img class= 'shadow-xl transition duration-300 ease-in-out transform md:hover:scale-105 filter md:hover:brightness-105 select-none' @click="clickedThumbnail" @mouseover="hover = true" @mouseleave="hover = false" :src="image" @load="loadImage" 
         :class="{
             'hover': hover,
-            'border-4 border-red-500 rounded-md': border == 'red',
-            'border-4 border-blue-500 rounded-md': border == 'blue',
+            'border-4 border-red-500 rounded-md': index == 0,
+            'border-4 border-blue-500 rounded-md': index == 1,
+            'border-4 border-yellow-300 rounded-md': index == 2,
+            'border-4 border-purple-500 rounded-md': index == 3,
             }">
         <div class="container mx-auto"> 
             <span class=" mt-3 text-xs md:text-base"> {{title}}</span>
@@ -23,7 +25,7 @@ import {mapGetters} from 'vuex';
 
 export default {
     name: 'thumbnail',
-    props: ['image','userCreated','title', 'border'],
+    props: ['image','title', 'index'],
     computed: {
         ...mapGetters({
             userData: 'userData',

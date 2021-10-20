@@ -1,6 +1,6 @@
 <template>
 <!-- Div container, flex column, first item is image, second item is another div with flex row, aligned to left -->
-    <div class="md:w-5/12 sm:w-100 sm:mb-5 xs:w-100 xs:mb-5 container flex-col">
+    <div class="w-auto h-auto container mb-5 flex-col">
         <img class= 'shadow-xl transition duration-300 ease-in-out transform md:hover:scale-105 filter md:hover:brightness-105 select-none' @click="clickedThumbnail" @mouseover="hover = true" @mouseleave="hover = false" :src="image" @load="loadImage" 
         :class="{
             'hover': hover,
@@ -41,6 +41,17 @@ export default {
     created(){
         console.log(this.title)
         console.log(this.border)
+        console.log(this.image)
+    },
+    mounted(){
+        console.log("mounted")
+        console.log(this.image)
+    },
+    watch: {
+        image: function(){
+            console.log("changed")
+            console.log(this.image)
+        }
     },
     methods: {
         clickedThumbnail(){

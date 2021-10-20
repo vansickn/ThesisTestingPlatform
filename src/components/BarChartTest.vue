@@ -12,10 +12,14 @@ import firebase from 'firebase';
 
 const db = firebase.firestore();
 
-const red_inside = "#FEE2E2"
-const red_outside = "#EF4444"
-const blue_inside = "#DBEAFE"
-const blue_outside = "#3B82F6"
+const red_inside = "#FEE2E2";
+const red_outside = "#EF4444";
+const blue_inside = "#DBEAFE";
+const blue_outside = "#3B82F6";
+const yellow_inside = "#FEF3C7";
+const yellow_outside = "#FCD34D";
+const purple_inside = "#E0E7FF";
+const purple_outside = "#8B5CF6";
 
 export default defineComponent({
   name: 'Home',
@@ -90,16 +94,18 @@ export default defineComponent({
         },
         createBarObject(docdata){
             // console.log(docdata)
-            console.log(docdata)
+            console.log(docdata);
+            console.log(docdata.imgVotesArray);
+            var votesArray = this.convertToPercentage(docdata.imgVotesArray);
             return {
                 dataForBar: {
-                    labels: [docdata.title1,docdata.title2],
+                    labels: docdata.title_array,
                     datasets: [
                         {
                             label: "Sample Test",
-                            backgroundColor: [red_inside, blue_inside], // pick better colors and border colors
-                            data: [this.convertToPercentage(docdata.img1votes,docdata.img2votes), this.convertToPercentage(docdata.img2votes,docdata.img1votes)], 
-                            borderColor: [red_outside,blue_outside],
+                            backgroundColor: [red_inside, blue_inside,yellow_inside,purple_inside], // pick better colors and border colors
+                            data: votesArray, 
+                            borderColor: [red_outside,blue_outside,yellow_outside,purple_outside],
                             borderWidth: 2,
                             borderRadius: 10,
                         }
@@ -107,8 +113,17 @@ export default defineComponent({
                 }
             }
         },
-        convertToPercentage(first,second){
-            return ((first/(first+second)) * 100);
+        convertToPercentage(votesArray){
+          var total = 0
+          for (let i = 0; i < votesArray.length; i++) {
+              total += votesArray[i]
+          };
+          var returnable = []
+          for (let i = 0; i < votesArray.length; i++) {
+            returnable[i] = (votesArray[i]/total)*100;
+          }
+          console.log(returnable)
+          return returnable;
         },
   },
   created(){
