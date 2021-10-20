@@ -1,6 +1,6 @@
 <template>
 
-    <div v-if="showTests" class="w-full flex mx-auto justify-center items-center flex-wrap">
+    <div v-if="showTests" class="sm:w-6/12 w-full grid md:grid-cols-2 grid-cols-1 xs:px-5 mx-auto md:gap-4">
             <!-- <img class="img" :src="thumbnail1">
         <img class="img" :src="thumbnail2"> -->
         <!-- Want function to ultimately be selectedThumbnail -->
@@ -11,7 +11,7 @@
         <!-- New system for the thumbnails -->
         <!-- v-for on thumbnail, data given by array similar to how it works in mytests -->
         <!-- need the img_array to be reactive since it takes so long -->
-            <Thumbnail v-for="n in test_array[currentTest].imageCount" :key="n" :image="test_array[currentTest].img_array[n-1] " :title="test_array[currentTest].title_array[n-1]" class="mx-5" @click="currentTest += 1"/>
+        <Thumbnail v-for="n in test_array[currentTest].imageCount" :key="n" :image="test_array[currentTest].img_array[n-1] " :title="test_array[currentTest].title_array[n-1]" @click="currentTest += 1"/>
 
 
     </div>
