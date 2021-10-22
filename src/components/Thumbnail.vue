@@ -45,7 +45,7 @@ export default {
     },
     mounted(){
         console.log("mounted")
-        console.log(this.image)
+        console.log(this.userCreated)
     },
     watch: {
         image: function(){

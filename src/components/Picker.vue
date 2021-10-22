@@ -11,8 +11,10 @@
         <!-- New system for the thumbnails -->
         <!-- v-for on thumbnail, data given by array similar to how it works in mytests -->
         <!-- need the img_array to be reactive since it takes so long -->
-        <Thumbnail v-for="n in test_array[currentTest].imageCount" :key="n" :image="test_array[currentTest].img_array[n-1] " :title="test_array[currentTest].title_array[n-1]" @click="currentTest += 1"/>
-
+        <Thumbnail v-for="n in test_array[currentTest].imageCount" :key="n" :image="test_array[currentTest].img_array[n-1] " :title="test_array[currentTest].title_array[n-1]" :userCreated="user_profile_images_array[currentTest]" @click="currentTest += 1"/>
+        <span> {{user_profile_images_array[currentTest]}}</span> <br>
+        <span>{{currentTest}}</span>
+        <img :src="user_profile_images_array[currentTest]" alt="">
 
     </div>
 <!-- going to pass in the user who created the test, and calculate the user photo from here. Could also just calculate that in the home.vue as well and just pass in the photo. Either works -->
@@ -46,6 +48,7 @@ export default {
             test_array: [], //array of objects
             image_array: [],
             showTests: false,
+            user_profile_images_array: [],
         }
     },
     created(){
@@ -80,6 +83,7 @@ export default {
                             console.log("Logged in")
                             // This solution works for now, kinda still shitty but works for now
                             this.fetchImages(doc.id, numberOfImages).then((img_array) => {
+                                this.getUserCreatedProfilePhoto(doc.data().user);
                                 this.verifyArray(img_array,numberOfImages);
                                 const obj = {
                                     // added to the test_array list as this object
@@ -89,13 +93,14 @@ export default {
                                     img_array: img_array,
                                 }
                                 this.test_array.push(obj);
-                            })
+                            });
                         }
                     }else{
                         console.log("Not logged in")
                         console.log(doc.id)
                         this.fetchImages(doc.id, numberOfImages).then((img_array) => {
                                 this.verifyArray(img_array,numberOfImages);
+                                this.getUserCreatedProfilePhoto(doc.data().user)
                                 const obj = {
                                     // added to the test_array list as this object
                                     imageCount: numberOfImages,
@@ -207,10 +212,9 @@ export default {
         },
         async getUserCreatedProfilePhoto(userID){
             console.log(userID)
-            db.collection("users").doc(userID).get().then(doc => {
-                console.log(doc.data())
-                this.userCreatedPhoto = doc.data().photoURL;
-                console.log(this.userCreatedPhoto);
+            await db.collection("users").doc(userID).get().then(doc => {
+                console.log(doc.data().photoURL);
+                this.user_profile_images_array.push(doc.data().photoURL);
             });
         },
         onChangingThumbnails() {
