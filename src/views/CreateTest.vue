@@ -72,6 +72,11 @@ export default {
                 return
             }
             db.collection("CreatedTests").add({
+                // Have to do it this way because cant increment a vote inside an array
+                img_1_votes: 0,
+                img_2_votes: 0,
+                img_3_votes: 0,
+                img_4_votes: 0,
                 totalVotes: 0,
                 numberOfImages: this.numberOfSelectors,
                 plan: this.activePlan,

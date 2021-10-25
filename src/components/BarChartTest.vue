@@ -96,7 +96,18 @@ export default defineComponent({
             // console.log(docdata)
             console.log(docdata);
             console.log(docdata.imgVotesArray);
-            var votesArray = this.convertToPercentage(docdata.imgVotesArray);
+            // var votesArray = this.convertToPercentage(docdata.imgVotesArray);
+            var votesArray = []
+            // Very ugly function but works
+            for (let i = 0; i < docdata.title_array.length; i++) {
+              console.log(docdata.title_array[i])
+              if(i==0){votesArray.push(docdata.img_1_votes)};
+              if(i==1){votesArray.push(docdata.img_2_votes)};
+              if(i==2){votesArray.push(docdata.img_3_votes)};
+              if(i==3){votesArray.push(docdata.img_4_votes)};
+            }
+            console.log(votesArray)
+            votesArray = this.convertToPercentage(votesArray)
             return {
                 dataForBar: {
                     labels: docdata.title_array,
