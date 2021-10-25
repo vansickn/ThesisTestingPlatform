@@ -11,10 +11,10 @@
         <!-- New system for the thumbnails -->
         <!-- v-for on thumbnail, data given by array similar to how it works in mytests -->
         <!-- need the img_array to be reactive since it takes so long -->
-        <Thumbnail v-for="n in test_array[currentTest].imageCount" :key="n" :image="test_array[currentTest].img_array[n-1] " :title="test_array[currentTest].title_array[n-1]" :userCreated="user_profile_images_array[currentTest]" @click="currentTest += 1"/>
-        <span> {{user_profile_images_array[currentTest]}}</span> <br>
-        <span>{{currentTest}}</span>
-        <img :src="user_profile_images_array[currentTest]" alt="">
+
+        <!-- Might create a seperate component for the actual tester aspect of this, because the reliability of the images loading is very suspect -->
+
+        <Thumbnail v-for="n in test_array[currentTest].imageCount" :key="n" :image="test_array[currentTest].img_array[n-1] " :title="test_array[currentTest].title_array[n-1]" :userCreated="user_profile_images_array[currentTest]" @onClickedThumbnail="currentTest += 1"/>
 
     </div>
 <!-- going to pass in the user who created the test, and calculate the user photo from here. Could also just calculate that in the home.vue as well and just pass in the photo. Either works -->
@@ -87,6 +87,7 @@ export default {
                                 this.verifyArray(img_array,numberOfImages);
                                 const obj = {
                                     // added to the test_array list as this object
+                                    id: doc.id,
                                     imageCount: numberOfImages,
                                     title_array: title_array,
                                     sampleSize: sampleSize,
@@ -103,6 +104,7 @@ export default {
                                 this.getUserCreatedProfilePhoto(doc.data().user)
                                 const obj = {
                                     // added to the test_array list as this object
+                                    id: doc.id,
                                     imageCount: numberOfImages,
                                     title_array: title_array,
                                     sampleSize: sampleSize,
@@ -152,34 +154,10 @@ export default {
             }
         },
 
-
-        setNextThumbnail: function() {
-            this.setCurrentTest(this.currentTest +=1);
-            // console.log("hey from here")
-            // console.log(this.currentTest)
-
-            // need some sort of validation if the testIDs runs out, and then just displays a screen saying there are no more tests to vote on
-           
-            storageRef.child('/tests/' + this.testIDs[this.currentTest].id).listAll().then((res) => {
-                console.log(res)
-                res.items[0].getDownloadURL().then(url => {
-                    this.thumbnail1 = url
-                })
-                res.items[1].getDownloadURL().then(url => {
-                    this.thumbnail2 = url
-                })
-            })
-            this.getUserCreatedProfilePhoto(this.testIDs[this.currentTest].userCreated);
-            this.title1 = this.testIDs[this.currentTest].title1;
-            this.title2 = this.testIDs[this.currentTest].title2;
-        },
-        setCurrentTest: async function (docID) {
-            this.currentTest = docID;
-            console.log(this.currentTest)
-        },
-        selectThumbnail1: function () {
+        selectThumbnail: function (n) {
             db.collection("CreatedTests").doc(this.testIDs[this.currentTest].id).update({
-                img1votes: firebase.firestore.FieldValue.increment(1),
+                
+                imgVotesArray: firebase.firestore.FieldValue.increment(1),
                 seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
             })
             .then(this.onChangingThumbnails())
