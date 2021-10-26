@@ -198,7 +198,7 @@ export default {
                 coins: firebase.firestore.FieldValue.increment(1),
                 votesCast: firebase.firestore.FieldValue.increment(1)
             })
-            
+
             this.currentTest += 1
 
         },
