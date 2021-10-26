@@ -7,4 +7,11 @@ service cloud.firestore {
           request.auth != null;
     }
   }
+  match /databases/{database}/documents/CreatedTests/{test} {
+    // Allow to increment img_x_votes only by 1
+    match /_counter_shards_/{shardId} {
+      allow get;
+      allow write: if request.resource.data.keys().hasAny(["img_1_votes","img_2_votes","img_3_votes","img_4_votes"])
+    }
+  }
 }
