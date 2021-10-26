@@ -14,7 +14,7 @@
 
         <!-- Might create a seperate component for the actual tester aspect of this, because the reliability of the images loading is very suspect -->
 
-        <Thumbnail v-for="n in test_array[currentTest].imageCount" :key="n" :image="test_array[currentTest].img_array[n-1] " :title="test_array[currentTest].title_array[n-1]" :userCreated="user_profile_images_array[currentTest]" @onClickedThumbnail="currentTest += 1"/>
+        <Thumbnail v-for="n in test_array[currentTest].imageCount" :key="n" :image="test_array[currentTest].img_array[n-1] " :title="test_array[currentTest].title_array[n-1]" :userCreated="user_profile_images_array[currentTest]" :index="n" @onClickedThumbnail="selectThumbnail"/>
 
     </div>
 <!-- going to pass in the user who created the test, and calculate the user photo from here. Could also just calculate that in the home.vue as well and just pass in the photo. Either works -->
@@ -154,22 +154,53 @@ export default {
             }
         },
 
+        // This thumbnail is pretty ugly and hardcoded, can't really find a better way to do this
         selectThumbnail: function (n) {
-            db.collection("CreatedTests").doc(this.testIDs[this.currentTest].id).update({
-                
-                imgVotesArray: firebase.firestore.FieldValue.increment(1),
-                seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
-            })
-            .then(this.onChangingThumbnails())
-            .catch(error => {
-                console.log(error)
-            })
+            if(n==1){
+                db.collection("CreatedTests").doc(this.test_array[this.currentTest].id).update({
+                    img_1_votes : firebase.firestore.FieldValue.increment(1),
+                    seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            }
+            if(n==2){
+                db.collection("CreatedTests").doc(this.test_array[this.currentTest].id).update({
+                    img_2_votes : firebase.firestore.FieldValue.increment(1),
+                    seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            }
+            if(n==3){
+                db.collection("CreatedTests").doc(this.test_array[this.currentTest].id).update({
+                    img_3_votes : firebase.firestore.FieldValue.increment(1),
+                    seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            }
+            if(n==4){
+                db.collection("CreatedTests").doc(this.test_array[this.currentTest].id).update({
+                    img_4_votes : firebase.firestore.FieldValue.increment(1),
+                    seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            }
+            
             db.collection("users").doc(this.userData.uid).update({
-                seenTests: firebase.firestore.FieldValue.arrayUnion(this.testIDs[this.currentTest].id),
+                seenTests: firebase.firestore.FieldValue.arrayUnion(this.test_array[this.currentTest].id),
                 coins: firebase.firestore.FieldValue.increment(1),
                 votesCast: firebase.firestore.FieldValue.increment(1)
             })
-            this.setNextThumbnail()
+            
+            this.currentTest += 1
+
         },
         selectThumbnail2: function () {
             db.collection("CreatedTests").doc(this.testIDs[this.currentTest].id).update({

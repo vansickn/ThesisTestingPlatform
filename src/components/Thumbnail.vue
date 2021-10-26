@@ -24,7 +24,7 @@ import {mapGetters} from 'vuex';
 
 export default {
     name: 'thumbnail',
-    props: ['image','userCreated','title', 'border'],
+    props: ['image','userCreated','title', 'border','index'],
     computed: {
         ...mapGetters({
             userData: 'userData',
@@ -55,7 +55,7 @@ export default {
     },
     methods: {
         clickedThumbnail(){
-            this.$emit('onClickedThumbnail')
+            this.$emit('onClickedThumbnail',this.index)
             this.isLoaded = false;
         },
         loadImage(){

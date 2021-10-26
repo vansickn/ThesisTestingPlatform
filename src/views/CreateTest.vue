@@ -82,7 +82,6 @@ export default {
                 plan: this.activePlan,
                 sampleSize: this.sampleSize,
                 user: this.user.data.uid,
-                imgVotesArray: Array(this.numberOfSelectors).fill(0),
                 seenBy: [],
                 title_array: this.title_array,
             }).then(docRef => {
