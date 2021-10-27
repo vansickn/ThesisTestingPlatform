@@ -44,35 +44,11 @@ export default {
     methods: {
         async generateTestList(){
             await db.collection('users').doc(this.userData.uid).get().then((doc) => {
-                this.testIDList = doc.data().testsCreated
-                // doc.data().testsCreated.forEach((id)=>{
-                //     this.generateBarObjects(id);
-                // })
+                // reverse test list so newest ones are on top
+                this.testIDList = doc.data().testsCreated.reverse()
             });
             console.log(this.testIDList);
         },
-        // async generateBarObjects(testid){
-        //     await db.collection('CreatedTests').doc(testid).get().then((doc) => {
-        //         console.log(doc.data())
-        //         this.testList.push(this.createBarObject(doc.data(),testid));
-        //     })
-        // },
-        // createBarObject(docdata,idNumber){
-        //     // console.log(docdata)
-        //     return {
-        //         id: idNumber,
-        //         dataForBar: {
-        //             labels: [docdata.title1,docdata.title2],
-        //             datasets: [
-        //                 {
-        //                     label: "Sample Test",
-        //                     backgroundColor: ["#1abc9c", "#f1c40f", "#2980b9", "#34495e"],
-        //                     data: [docdata.img1votes,docdata.img2votes] 
-        //                 }
-        //             ]
-        //         }
-        //     }
-        // }
     },
     mounted(){
         this.generateTestList();
