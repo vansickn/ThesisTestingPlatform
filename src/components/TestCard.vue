@@ -4,7 +4,15 @@
             <!-- <img class="img" :src="thumbnail1">
         <img class="img" :src="thumbnail2"> -->
         <!-- Want function to ultimately be selectedThumbnail -->
-        <div class="pt-8 w-full pr-10 pl-8">
+        <div class="container flex flex-row justify-end mt-1">
+            <button class="pr-2" @click="shareLink">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+            </button>
+            <button @click="deleteTest" class="pr-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+            </button>
+        </div>
+        <div class="pt-2 w-full pr-10 pl-8">
             <BarChartTest :id="testID"/>
         </div>
         <div class="w-11/12 grid grid-cols-2 gap-2">
@@ -15,7 +23,7 @@
         </div>
         <!-- Eventually will change this to grid-cols-2 in order to have a button to extend the sample size -->
         <div class="w-11/12 grid grid-cols-1 my-2 gap-4 text-sm sm:text-base">
-            <h1 class="bg-gray-100 rounded-xl border-2 border-red-500 text-center px-10 container flex flex-row w-auto"> {{total_votes}} / {{this.sampleSize}} votes cast</h1>
+            <h1 class="bg-gray-100 rounded-xl border-2 border-red-500 text-center px-10 container flex flex-row w-auto text-sm"> {{total_votes}} / {{this.sampleSize}} votes cast</h1>
         </div>
         <!-- need to change click to image instead of whole thumbnail -->
     </div>
@@ -74,6 +82,13 @@ export default {
         },
         calculateTotalVotes(data){
             this.total_votes = data.img_1_votes + data.img_2_votes + data.img_3_votes + data.img_4_votes
+        },
+        shareLink(){
+            this.$router.push('/test/' + this.testID);
+            // Want to add a copy link, going to use vue-clipboard on npm
+        },
+        deleteTest(){
+            alert('This is where the deletion will go, going to implement in a cloud function')
         }
     },
     created(){
