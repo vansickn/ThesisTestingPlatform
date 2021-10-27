@@ -29,7 +29,13 @@ const router = createRouter({
         {
             path: '/mytests',
             component: () => import('../views/MyTests.vue'),
+        },
+        {
+            path: '/test/:testid',
+            component: () => import('../views/Test.vue'),
+            props: true,
         }
+
     ]
 })
 
