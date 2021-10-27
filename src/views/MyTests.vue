@@ -7,6 +7,10 @@
     <!-- <div class="mb-20">
         <TestCard v-for="id in testList" :testID="id" :key="id"/>        
     </div> -->
+    <div v-if="noTests" class="mx-auto flex flex-col gap-5 mt-10">
+        <h1 class="text-3xl">You have no tests!</h1>
+        <button class="bg-red-500 rounded-xl p-4 text-white text-2xl shadow-xl" @click="sendToCreateTest">Create one</button>
+    </div>
     <div class="mb-20 grid lg:grid-cols-2 grid-cols-1 gap-y-4">
         <TestCard v-for="t in testIDList" :key="t" :testID="t"/>
     </div>
@@ -20,6 +24,7 @@ import firebase from 'firebase';
 import TestCard from '../components/TestCard.vue';
 import TestBarChart from '../components/TestBarChart.vue';
 import BarChartTest from '../components/BarChartTest.vue';
+
 
 const db = firebase.firestore();
 
@@ -39,16 +44,21 @@ export default {
         return {
             testIDList: null,
             testList: [],
+            noTests: false
         }
     },
     methods: {
         async generateTestList(){
             await db.collection('users').doc(this.userData.uid).get().then((doc) => {
                 // reverse test list so newest ones are on top
-                this.testIDList = doc.data().testsCreated.reverse()
+                this.testIDList = doc.data().testsCreated.reverse();
+                if(this.testIDList.length == 0){this.noTests = true};
             });
             console.log(this.testIDList);
         },
+        sendToCreateTest(){
+            this.$router.push('/createtest')
+        }
     },
     mounted(){
         this.generateTestList();
