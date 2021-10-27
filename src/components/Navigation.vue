@@ -5,7 +5,7 @@
 <header class="shadow-md bg-gray-100">
     <nav class="container flex justify-center items-center max-w-full">
         <div class="container flex-row my-2 ml-8 sm:ml-1 xs:ml-1">
-            <a class="text-2xl ml-5" href="/">BetterThumbnails</a>
+            <a class="md:text-2xl md:ml-5 ml-3" href="/">BetterThumbnails</a>
         </div>
         <div v-if="!mobile" class="container flex flex-row justify-end bg-white my-2 rounded-lg max-w-xl mr-8 shadow-sm max-h-lg">
             <ul v-show="!mobile" class="container flex flex-row justify-around items-center">
@@ -22,7 +22,8 @@
                 </router-link> 
             </ul>
         </div>
-        <svg class="w-6 h-6 mr-8 focus:none" @click="toggleMobileNav" id='menu-icon' v-show="mobile" aria-hidden="true" focusable="false" data-prefix="far" data-icon="bars" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg>
+        <Coin v-if="user.data != null" v-show="mobile" :coins="coins" class="mr-5 w-9 sm:w-7 h-7 shadow-md" />
+        <svg class="w-6 h-6 mr-4 focus:none" @click="toggleMobileNav" id='menu-icon' v-show="mobile" aria-hidden="true" focusable="false" data-prefix="far" data-icon="bars" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg>
     </nav>
     <!-- <menuIcon @click="toggleMobileNav" class='menu-icon' v-show="mobile" /> -->
 </header>
