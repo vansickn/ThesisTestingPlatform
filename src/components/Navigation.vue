@@ -3,10 +3,9 @@
 <span v-if="loggedIn">{{userData.photo}}</span>
 <img v-if="loggedIn" :src="userData.photo" alt="hey"> -->
 <header class="shadow-md bg-gray-100">
-    <nav class="container flex justify-between max-w-full">
-        <div class="container justify-start flex-row my-2 ml-8 items-center sm:ml-1 xs:ml-1">
-            <button class="rounded-xl bg-red-400 px-6 py-2 mr-3 text-lg md:ml-8">A/B</button>
-            <router-link class="header" to="/">ThumbnailTester</router-link>
+    <nav class="container flex justify-center items-center max-w-full">
+        <div class="container flex-row my-2 ml-8 sm:ml-1 xs:ml-1">
+            <a class="text-2xl ml-5" href="/">BetterThumbnails</a>
         </div>
         <div v-if="!mobile" class="container flex flex-row justify-end bg-white my-2 rounded-lg max-w-xl mr-8 shadow-sm max-h-lg">
             <ul v-show="!mobile" class="container flex flex-row justify-around items-center">
@@ -23,7 +22,7 @@
                 </router-link> 
             </ul>
         </div>
-        <svg class="w-6 h-6 mr-8 mt-5 focus:none" @click="toggleMobileNav" id='menu-icon' v-show="mobile" aria-hidden="true" focusable="false" data-prefix="far" data-icon="bars" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg>
+        <svg class="w-6 h-6 mr-8 focus:none" @click="toggleMobileNav" id='menu-icon' v-show="mobile" aria-hidden="true" focusable="false" data-prefix="far" data-icon="bars" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg>
     </nav>
     <!-- <menuIcon @click="toggleMobileNav" class='menu-icon' v-show="mobile" /> -->
 </header>
