@@ -38,7 +38,6 @@ export default {
             numberOfImages: null,
             image_array: [],
             title_array: [],
-            vote_array: [],
             total_votes: 0,
         }
     },
@@ -55,10 +54,8 @@ export default {
                 this.sampleSize = doc.data().sampleSize;
                 this.numberOfImages = doc.data().numberOfImages;
                 this.title_array = doc.data().title_array;
-                this.vote_array = doc.data().imgVotesArray;
-                console.log(this.vote_array)
                 this.generateThumbnailsFromTestID();
-                this.calculateTotalVotes();
+                this.calculateTotalVotes(doc.data());
             })
         },
         generateThumbnailsFromTestID(){
@@ -75,13 +72,8 @@ export default {
                 })                
             }
         },
-        calculateTotalVotes(){
-            var total = 0;
-            for (let i = 0; i < this.vote_array.length; i++) {
-                total += this.vote_array[i]
-            };
-            this.total_votes = total;
-            console.log(this.total_votes)
+        calculateTotalVotes(data){
+            this.total_votes = data.img_1_votes + data.img_2_votes + data.img_3_votes + data.img_4_votes
         }
     },
     created(){
