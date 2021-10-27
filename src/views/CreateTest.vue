@@ -93,7 +93,6 @@ export default {
                     ref.put(this.img_array[i]).then(snapshot => {
                         console.log(snapshot)
                         console.log("Uploaded file " + this.img_array[i].name)
-                        ready_to_reroute += 1
                     })
                 }
                 db.collection("users").doc(this.user.data.uid).update({
