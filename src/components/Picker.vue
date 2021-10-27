@@ -156,6 +156,10 @@ export default {
 
         // This thumbnail is pretty ugly and hardcoded, can't really find a better way to do this
         selectThumbnail: function (n) {
+            if(this.userData == null){
+                this.currentTest += 1
+                return
+            }
             if(n==1){
                 db.collection("CreatedTests").doc(this.test_array[this.currentTest].id).update({
                     img_1_votes : firebase.firestore.FieldValue.increment(1),
