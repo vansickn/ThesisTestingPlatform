@@ -3,6 +3,20 @@
     <div v-if="showTests" class="sm:w-6/12 w-full grid md:grid-cols-2 grid-cols-1 xs:px-5 mx-auto md:gap-4 mt-10">
         <Thumbnail v-for="n in image_count" :key="n" :image="image_array[n-1] " :title="title_array[n-1]" :userCreated="user_profile_image" :index="n" @onClickedThumbnail="selectThumbnail"/>
     </div>
+
+    <Modal
+            v-model="show_thanks_modal"
+            :close="closeModal"
+        >
+            <div class="bg-gray-200 rounded-lg md:p-10 p-6 w-11/12 sm:w-auto">
+                <h1 class="sm:text-xl text-center">Thanks for Voting!</h1>
+                <h3 class="text-center sm:text-lg text-red-500 pb-4">Sign in to create your own test or vote on more!</h3> 
+            <div class="container flex flex-row justify-center gap-4">
+                <button @click="closeModal" class="bg-gray-300 border-2 border-gray-400 rounded-lg py-1 px-2 shadow-lg transform hover:scale-110 transition duration-300"> No thanks </button>
+                <button @click="confirmedDeletion" class="bg-red-500 border-2 border-red-500 rounded-lg py-1 px-2 text-white shadow-lg transform hover:scale-110 transition duration-300"> Sign in with Google </button>
+            </div>
+            </div>
+    </Modal>
 <!-- going to pass in the user who created the test, and calculate the user photo from here. Could also just calculate that in the home.vue as well and just pass in the photo. Either works -->
 </template>
 
@@ -36,6 +50,7 @@ export default {
             image_count: null,
             user_profile_images: null,
             user_id: null,
+            show_thanks_modal: false,
         }
     },
     created(){
@@ -100,57 +115,63 @@ export default {
         // This thumbnail is pretty ugly and hardcoded, can't really find a better way to do this
         selectThumbnail: function (n) {
             if(this.userData == null){
-                this.currentTest += 1
-                return
+                console.log('not logged in')
             }
-            if(this.userData.uid == this.user_id){
+            else if(this.userData.uid == this.user_id){
                 console.log("You can't vote on your own posts!")
                 return
-            }
-            if(n==1){
-                db.collection("CreatedTests").doc(this.testid).update({
-                    img_1_votes : firebase.firestore.FieldValue.increment(1),
-                    seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
+            }else{
+                if(n==1){
+                    // since i'll eventually allow non-logged in users to vote, need to conditionally do the seenBy: argument
+                    // probably if (user) then this.userData.uid else 'anonymous'
+                    db.collection("CreatedTests").doc(this.testid).update({
+                        img_1_votes : firebase.firestore.FieldValue.increment(1),
+                        seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+                }
+                if(n==2){
+                    db.collection("CreatedTests").doc(this.testid).update({
+                        img_2_votes : firebase.firestore.FieldValue.increment(1),
+                        seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+                }
+                if(n==3){
+                    db.collection("CreatedTests").doc(this.testid).update({
+                        img_3_votes : firebase.firestore.FieldValue.increment(1),
+                        seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+                }
+                if(n==4){
+                    db.collection("CreatedTests").doc(this.testid).update({
+                        img_4_votes : firebase.firestore.FieldValue.increment(1),
+                        seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+                }
+                
+                // conditionally do this as well, if anonymous user than don't do any of this stuff
+                db.collection("users").doc(this.userData.uid).update({
+                    seenTests: firebase.firestore.FieldValue.arrayUnion(this.testid),
+                    coins: firebase.firestore.FieldValue.increment(1),
+                    votesCast: firebase.firestore.FieldValue.increment(1)
                 })
-                .catch(error => {
-                    console.log(error)
-                })
-            }
-            if(n==2){
-                db.collection("CreatedTests").doc(this.testid).update({
-                    img_2_votes : firebase.firestore.FieldValue.increment(1),
-                    seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
-                })
-                .catch(error => {
-                    console.log(error)
-                })
-            }
-            if(n==3){
-                db.collection("CreatedTests").doc(this.testid).update({
-                    img_3_votes : firebase.firestore.FieldValue.increment(1),
-                    seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
-                })
-                .catch(error => {
-                    console.log(error)
-                })
-            }
-            if(n==4){
-                db.collection("CreatedTests").doc(this.testid).update({
-                    img_4_votes : firebase.firestore.FieldValue.increment(1),
-                    seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
-                })
-                .catch(error => {
-                    console.log(error)
-                })
-            }
-            
-            db.collection("users").doc(this.userData.uid).update({
-                seenTests: firebase.firestore.FieldValue.arrayUnion(this.testid),
-                coins: firebase.firestore.FieldValue.increment(1),
-                votesCast: firebase.firestore.FieldValue.increment(1)
-            })
 
-            this.currentTest += 1
+                this.$router.push('/')
+            }
+
+            this.show_thanks_modal = true;
+ 
 
         },
         async getUserCreatedProfilePhoto(userID){
@@ -162,6 +183,9 @@ export default {
         },
         onChangingThumbnails() {
             this.$emit('onChangingThumbnails')
+        },
+        closeModal(){
+            this.show_thanks_modal = false;
         }
 
     }
