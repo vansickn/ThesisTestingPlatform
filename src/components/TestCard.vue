@@ -33,8 +33,9 @@
 import Thumbnail from '../components/Thumbnail.vue';
 import firebase from 'firebase';
 import { mapGetters } from 'vuex';
-import BarChartTest from '../components/BarChartTest.vue'
-import TestCardThumbnail from '../components/TestCardThumbnail.vue'
+import BarChartTest from '../components/BarChartTest.vue';
+import TestCardThumbnail from '../components/TestCardThumbnail.vue';
+
 
 const db = firebase.firestore();
 const storageRef = firebase.storage().ref();
@@ -84,8 +85,13 @@ export default {
             this.total_votes = data.img_1_votes + data.img_2_votes + data.img_3_votes + data.img_4_votes
         },
         shareLink(){
-            this.$router.push('/test/' + this.testID);
-            // Want to add a copy link, going to use vue-clipboard on npm
+            this.$copyText(window.location.origin + '/test/' +this.testID).then(function(e) {
+                alert('Copied!')
+                console.log(e)
+            },function (e){
+                alert('can not copy')
+                console.log(e)
+            });
         },
         deleteTest(){
             alert('This is where the deletion will go, going to implement in a cloud function')
