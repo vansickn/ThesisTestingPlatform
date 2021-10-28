@@ -156,7 +156,13 @@ export default {
 
         // This thumbnail is pretty ugly and hardcoded, can't really find a better way to do this
         selectThumbnail: function (n) {
+            // If user not logged in then cycle test but don't vote
             if(this.userData == null){
+                this.currentTest += 1
+                return
+            }
+            // If user is the same as the test in the user, don't vote just cycle
+            if(this.userData.uid == this.test_array[this.currentTest].id){
                 this.currentTest += 1
                 return
             }
