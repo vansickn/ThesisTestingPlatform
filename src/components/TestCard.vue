@@ -5,6 +5,7 @@
         <img class="img" :src="thumbnail2"> -->
         <!-- Want function to ultimately be selectedThumbnail -->
         <div class="container flex flex-row justify-end mt-1">
+            <h1 v-show="show_copy" class="mr-2 transition duration-200">Copied Link!</h1>
             <button class="pr-2" @click="shareLink">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
             </button>
@@ -48,6 +49,7 @@ export default {
             image_array: [],
             title_array: [],
             total_votes: 0,
+            show_copy: false,
         }
     },
     computed: {
@@ -85,16 +87,19 @@ export default {
             this.total_votes = data.img_1_votes + data.img_2_votes + data.img_3_votes + data.img_4_votes
         },
         shareLink(){
-            this.$copyText(window.location.origin + '/test/' +this.testID).then(function(e) {
-                alert('Copied!')
-                console.log(e)
-            },function (e){
-                alert('can not copy')
-                console.log(e)
+            this.$copyText(window.location.origin + '/test/' +this.testID).then(()=> {
+                console.log("copied")
+                this.show_copy = true;
+                setTimeout(()=>{
+                    this.show_copy = false;
+                },2000)
             });
         },
         deleteTest(){
-            alert('This is where the deletion will go, going to implement in a cloud function')
+            // alert('This is where the deletion will go, going to implement in a cloud function')
+            // this is where the deletion will go, probably work on a cloud function in order to implement this.
+            // Need to delete the test from user created, and also delete it from activeTests and CreatedTests
+            this.$emit("deletedTest",this.testID)
         }
     },
     created(){
