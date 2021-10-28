@@ -7,7 +7,7 @@
     <!-- <div class="mb-20">
         <TestCard v-for="id in testList" :testID="id" :key="id"/>        
     </div> -->
-    <div v-if="noTests" class="mx-auto flex flex-col gap-5 mt-10">
+    <div v-if="testIDList != null && testIDList.length == 0" class="mx-auto flex flex-col gap-5 mt-10">
         <h1 class="text-3xl">You have no tests!</h1>
         <button class="bg-red-500 rounded-xl p-4 text-white text-2xl shadow-xl" @click="sendToCreateTest">Create one</button>
     </div>
