@@ -12,7 +12,7 @@
         <button class="bg-red-500 rounded-xl p-4 text-white text-2xl shadow-xl" @click="sendToCreateTest">Create one</button>
     </div>
     <div class="mb-20 grid lg:grid-cols-2 grid-cols-1 gap-y-4">
-        <TestCard v-for="t in testIDList" :key="t" :testID="t"/>
+        <TestCard v-for="t in testIDList" :key="t" :testID="t" @deletedTest="removeTestFromArray"/>
     </div>
 
 
@@ -58,7 +58,12 @@ export default {
         },
         sendToCreateTest(){
             this.$router.push('/createtest')
-        }
+        },
+        removeTestFromArray(testid){
+            console.log(testid)
+            var index = this.testIDList.indexOf(testid);
+            this.testIDList.splice(index,1);
+        },
     },
     mounted(){
         this.generateTestList();
