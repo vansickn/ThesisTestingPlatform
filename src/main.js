@@ -4,6 +4,7 @@ import router from './router'
 import firebase from 'firebase'
 import store from './store/index'
 import './index.css';
+import VueClipboard from 'vue-clipboard2';
 
 /* code from our Firebase console */
 var firebaseConfig = {
@@ -26,5 +27,6 @@ firebase.auth().onAuthStateChanged(async user => {
 const app = createApp(App).use(store)
 
 app.use(router)
+app.use(VueClipboard)
 
 app.mount('#app')
