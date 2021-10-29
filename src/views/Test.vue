@@ -13,7 +13,7 @@
                 <h3 class="text-center sm:text-lg text-red-500 pb-4">Sign in to create your own test or vote on more!</h3> 
             <div class="container flex flex-row justify-center gap-4">
                 <button @click="closeModal" class="bg-gray-300 border-2 border-gray-400 rounded-lg py-1 px-2 shadow-lg transform hover:scale-110 transition duration-300"> No thanks </button>
-                <button @click="confirmedDeletion" class="bg-red-500 border-2 border-red-500 rounded-lg py-1 px-2 text-white shadow-lg transform hover:scale-110 transition duration-300"> Sign in with Google </button>
+                <button @click="signUpPopup" class="bg-red-500 border-2 border-red-500 rounded-lg py-1 px-2 text-white shadow-lg transform hover:scale-110 transition duration-300"> Sign in with Google </button>
             </div>
             </div>
     </Modal>
@@ -29,6 +29,8 @@ import {reactive} from 'vue';
 
 const db = firebase.firestore();
 var storageRef = firebase.storage().ref();
+
+var provider = new firebase.auth.GoogleAuthProvider();
 
 // Eventually want to send the data about the thumbnail (photo, title, profImage as an object into the thumbnail)
 export default {
@@ -186,7 +188,68 @@ export default {
         },
         closeModal(){
             this.show_thanks_modal = false;
-        }
+        },
+        signUpPopup(){
+            firebase.auth()
+            .signInWithPopup(provider)
+            .then((result) => {
+                // /** @type {firebase.auth.OAuthCredential} */
+                var credential = result.credential;
+
+                // This gives you a Google Access Token. You can use it to access the Google API.
+                var token = credential.accessToken;
+                // The signed-in user info.
+                var user = result.user;
+                // ...
+                this.addUserToFirestore(user)
+                // console.log("Hello!!!!!")
+                // this.listenForCoins(); //this is required for the update on next tick update lifecycle hook. Not sure why but need to leave this in.
+                // this.activeNav = 'Home';
+                this.$router.push('/');
+
+            }).catch((error) => {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // The email of the user's account used.
+                var email = error.email;
+                // The firebase.auth.AuthCredential type that was used.
+                var credential = error.credential;
+                // ...
+                console.log(errorCode)
+            })
+        },
+        async addUserToFirestore(user){
+            this.checkIfUserExists(user.uid).then((res) => {
+                if(res == false){
+                    firebase.firestore().collection("users").doc(user.uid).set({
+                    coins: 0,
+                    testsCreated: [],
+                    paidAccount: false,
+                    email: user.email,
+                    name: user.displayName,
+                    seenTests: [],
+                    photoURL: user.providerData[0].photoURL,
+                    votesCast: 0,
+                })
+                .then(() => {
+                    console.log("User Successfully Created!");
+                })
+                .catch((error) => {
+                    console.error("Error Creating User: ", error);
+                }); 
+                }else{
+                console.log("User Already Exists, welcome back!") 
+                }
+            })
+        },
+        async checkIfUserExists(uid){
+            return await firebase.firestore().collection('users').doc(uid)
+            .get().then(
+            doc => {
+                return doc.exists;
+            })
+        },       
 
     }
 }
