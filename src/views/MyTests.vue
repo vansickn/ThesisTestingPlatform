@@ -12,7 +12,7 @@
         <button class="bg-red-500 rounded-xl p-4 text-white text-2xl shadow-xl" @click="sendToCreateTest">Create one</button>
     </div>
     <div class="mb-20 grid lg:grid-cols-2 grid-cols-1 gap-y-4">
-        <TestCard v-for="t in testIDList" :key="t" :testID="t" @deletedTest="removeTestFromArray"/>
+        <TestCard v-for="t in testIDList" :key="t" :testID="t" @deletedTest="deleteTest"/>
     </div>
 
 
@@ -27,6 +27,7 @@ import BarChartTest from '../components/BarChartTest.vue';
 
 
 const db = firebase.firestore();
+const storageRef = firebase.storage().ref();
 
 // Heres the plan:
 // Create an array of objects with the root of each object as the test ID
@@ -58,6 +59,31 @@ export default {
         },
         sendToCreateTest(){
             this.$router.push('/createtest')
+        },
+        deleteTest(testid,img_names){
+            db.collection("CreatedTests").doc(testid).delete().then(()=>{
+                db.collection("users").doc(this.userData.uid).update({
+                    testsCreated: firebase.firestore.FieldValue.arrayRemove(testid)
+                }).then(()=>{
+                    for (let i = 1; i < img_names.length+1; i++) {
+                        var ref = storageRef.child('tests/'+testid +'/'+ 'img_' + i + '/'+ img_names[i-1])
+                        ref.delete().then(()=>{
+                            // Maybe do some sort of notification on the screen
+                            console.log(img_names[i-1] + " has been successfully deleted")
+                        }).catch((err)=>{
+                            console.log(err)
+                            console.log("Error deleting file")
+                        });   
+                    }
+                    this.removeTestFromArray(testid)
+                }).catch((e)=>{
+                    console.log(e)
+                    console.log("couldn't remove created test from user's test array")
+                })
+
+            }).catch((error)=>{
+                console.log("could not delete test for some reason <3")
+            })
         },
         removeTestFromArray(testid){
             console.log(testid)

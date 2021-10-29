@@ -64,6 +64,7 @@ export default {
             total_votes: 0,
             show_copy: false,
             show_confirm_deletion: false,
+            image_names: [],
         }
     },
     computed: {
@@ -89,11 +90,17 @@ export default {
             for (let i = 0; i < this.numberOfImages; i++) {
                 const image_no = i+1
                 storageRef.child('/tests/' + this.testID + "/img_" + image_no + "/").listAll().then((res) => {
-                    console.log(res)
+
+                    // this block of code is necessary, because if page isn't refreshed the thumbnail won't have been scaled down yet. 
+                    // if someone tries to delete it, the wrong name in the storage ref will be called.
+                    // image_names is so that MyTests knows which direct paths are to the image
+                    if((res.items[0].name).includes('_360x202')){this.image_names[i] = res.items[0].name}
+                    else{var i_n = res.items[0].name.replace('.png','_360x202.png'); this.image_names[i] = i_n}
+
                     res.items[0].getDownloadURL().then(url => {
                         this.image_array[i] = url
-                        console.log(url)
-                    })
+                        // console.log(url)
+                    });
                 })                
             }
         },
@@ -120,8 +127,10 @@ export default {
             this.show_confirm_deletion = false;
         },
         confirmedDeletion(){
-            this.$emit('deletedTest',this.testID);
+            console.log(this.image_names)
+            this.$emit('deletedTest',this.testID,this.image_names);
             this.show_confirm_deletion = false;
+            this.image_names = []
         }
     },
     created(){
