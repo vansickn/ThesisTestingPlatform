@@ -27,5 +27,5 @@ exports.onTestWrite = functions.firestore
                   .doc(context.params.ID).delete();
             }
           });
+      return "Success!";
     });
-return "Success";
