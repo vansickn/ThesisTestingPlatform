@@ -13,6 +13,8 @@ import 'vue-universal-modal/dist/index.css'
 import VueUniversalModal from 'vue-universal-modal'
 
 
+
+
 /* code from our Firebase console */
 var firebaseConfig = {
   apiKey: 'AIzaSyAfJU3-Skg-oqBzwajTPXTvtPXuhi0WeEE',
@@ -33,6 +35,9 @@ firebase.auth().onAuthStateChanged(async user => {
 
 const app = createApp(App).use(store)
 
+// // picker component that I made, that needs to be registered
+// import Picker from './components/Picker.vue';
+
 // use vue router
 app.use(router)
 
@@ -43,5 +48,8 @@ app.use(VueClipboard)
 app.use(VueUniversalModal, {
   teleportTarget: 'body'
 })
+
+// use picker component
+// app.use(Picker)
 
 app.mount('#app')
