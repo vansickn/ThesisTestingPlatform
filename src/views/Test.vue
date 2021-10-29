@@ -223,7 +223,7 @@ export default {
             this.checkIfUserExists(user.uid).then((res) => {
                 if(res == false){
                     firebase.firestore().collection("users").doc(user.uid).set({
-                    coins: 0,
+                    coins: 1,
                     testsCreated: [],
                     paidAccount: false,
                     email: user.email,
