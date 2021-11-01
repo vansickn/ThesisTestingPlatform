@@ -85,79 +85,36 @@ export default {
                 seenBy: [],
                 title_array: this.title_array,
             }).then(docRef => {
-                for (let i = 0; i < this.img_array.length; i++) {
-                    console.log(this.img_array[i])
-                    console.log(this.title_array[i])
-                    const i_no = i+1
-                    var ref = storageRef.child("/tests/" + docRef.id + "/img_" + i_no + "/" + this.img_array[i].name)
-                    ref.put(this.img_array[i]).then(snapshot => {
-                        console.log(snapshot)
-                        console.log("Uploaded file " + this.img_array[i].name)
-                    })
-                }
+                
+                this.sendImagesToStorage(docRef).then(()=>{
+                    this.$router.push('/mytests')
+                })
+
                 db.collection("users").doc(this.user.data.uid).update({
                     testsCreated: firebase.firestore.FieldValue.arrayUnion(docRef.id)}).then(() => {
-                        this.$router.push('/mytests')
+                        console.log('added to users collection')
                     })
-
             })
-            // create test in firestore
-            // loop through the img array and create 
-
-
-
-
-
-
-
-            // need to add regex here for the title
-            // if(document.getElementById("title1").value === "" || document.getElementById("title2").value === ""){
-            //     console.log("Error in Title")
-            //     return
-            // }
-            // console.log("Submitting")
-            // var metadata = {
-            //     contentType: "png",
-            //     user: this.user.data.uid,
-            // }
-            // db.collection("CreatedTests").add({
-            //     plan: this.activePlan,
-            //     sampleSize: this.sampleSize,
-            //     user: this.user.data.uid,
-            //     img1votes: 0,
-            //     img2votes: 0,
-            //     seenBy: [],
-            //     title1: document.getElementById("title1").value,
-            //     title2: document.getElementById("title2").value,
-            //     imageNames: [this.file1.name, this.file2.name]
-            // }).then(docRef => {
-            //     // this needs to be a for-loop for all of the files, neeeeed to make this extensible
-            //     // this is extraordinarily ugly code I am just getting it to work
-            //     console.log(docRef.id)
-            //     var ref1 = storageRef.child("/tests/" + docRef.id + "/" + this.file1.name)
-            //     ref1.put(this.file1,metadata).then(snapshot => {
-            //         console.log(snapshot)
-            //         console.log("uploaded a file")
-            //     })
-            //     var ref2 = storageRef.child("/tests/" + docRef.id + "/" + this.file2.name)
-            //     ref2.put(this.file2,metadata).then(snapshot => {
-            //         console.log(snapshot)
-            //         console.log("uploaded a file")
-            //     })
-            //     db.collection("users").doc(this.user.data.uid).update({
-            //         testsCreated: firebase.firestore.FieldValue.arrayUnion(docRef.id)
-            //     }).then(() => {
-            //         this.$router.push('/mytests')
-            //     })
-            // })
-            // this.$router.push('/account')
         },
         sendToAccountRoute(){
             this.$router.push('/account')
-        }
+        },
+        async sendImagesToStorage(docRef){
+            for (let i = 0; i < this.img_array.length; i++) {
+                console.log(this.img_array[i])
+                console.log(this.title_array[i])
+                const i_no = i+1
+                var ref = storageRef.child("/tests/" + docRef.id + "/img_" + i_no + "/" + this.img_array[i].name)
+                await ref.put(this.img_array[i]).then(snapshot => {
+                    console.log(snapshot)
+                    console.log("Uploaded file " + this.img_array[i].name)
+                })
+            }
+        },
     },
     data() {
         return {
+            show_file_issue: false,
             img_array: [],
             title_array: [],
             numberOfSelectors: 2,
