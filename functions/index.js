@@ -29,3 +29,17 @@ exports.onTestWrite = functions.firestore
           });
       return "Success!";
     });
+
+exports.onTestDelete = functions.firestore
+    .document("CreatedTests/{ID}")
+    .onDelete((snapshot, context) => {
+      admin.firestore().collection("ActiveTests").doc(context.params.ID)
+          .delete()
+          .then(() => {
+            console.log("Successfully Deleted Document in Active Tests");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      return "Test Delete Function has Completed";
+    });
