@@ -24,16 +24,15 @@
         </button>
     </div>
 
-    <h3 v-if="sample_type == 'Random'" class="sm:text-xl text-lg mx-auto mb-10 mt-5 text-center">How large do you want your sample size?</h3>
+    <h3 class="sm:text-xl text-lg mx-auto mb-10 mt-5 text-center">How large do you want your sample size?</h3>
     <div class="grid lg:grid-cols-4 grid-cols-2 gap-10 gap-y-10 mb-5 sm:mx-auto sm:w-9/12 mx-3" v-if="sample_type == 'Random'">
-        <SampleSizeOption v-for="sample in sampleOptions" :key="sample" :input="sample" :activePlan="activePlan" @onUpdatePlan="setActive"/>
+        <SampleSizeOption v-for="sample in sample_options_random" :key="sample" :input="sample" :activePlan="activePlan" @onUpdatePlan="setActive"/>
+    </div>
+    <div class="grid lg:grid-cols-4 grid-cols-2 gap-10 gap-y-10 mb-5 sm:mx-auto sm:w-9/12 mx-3" v-if="sample_type == 'Fans'">
+        <SampleSizeOption v-for="sample in sample_options_fans" :key="sample" :input="sample" :activePlan="activePlan" @onUpdatePlan="setActive"/>
     </div>
 
-    <button v-if="sample_type=='Random'" class="rounded-lg bg-red-500 w-60 mx-auto p-4 text-white shadow-lg transition duration-500 ease-in-out transform hover:scale-110 mt-10 mb-20" @click="submitToFirebase"> Create Test! </button>
-    <button v-if="sample_type=='Fans'" class="rounded-lg bg-red-500 w-60 mx-auto p-4 text-white shadow-lg transition duration-500 ease-in-out transform hover:scale-110 mt-10 mb-20 container flex flex-row justify-center items-center gap-2" @click="submitToFirebase">
-        <h1>Create Test for</h1>
-        <Coin :coins="fan_coin_cost" class="z-10 w-10 h-10 text-lg shadow-md px-4 text-black"/> 
-    </button>
+    <button class="rounded-lg bg-red-500 w-60 mx-auto p-4 text-white shadow-lg transition duration-500 ease-in-out transform hover:scale-110 mt-10 mb-20" @click="submitToFirebase"> Create Test! </button>
     
     <Modal
             v-model="show_sample_information"
@@ -187,7 +186,7 @@ export default {
             verified2: false,
             activePlan: 'Small',
             sampleSize: 25,
-            sampleOptions: [
+            sample_options_random: [
                     {
                         size: "Small",
                         coin_amount: 25,
@@ -208,7 +207,30 @@ export default {
                         coin_amount: 800,
                         sample_size: 1000  
                     }
-                ]
+            ],
+            sample_options_fans: [
+                    {
+                        size: "Small",
+                        coin_amount: 25,
+                        sample_size: 1000
+                    },
+                    {
+                        size: "Medium",
+                        coin_amount: 50,
+                        sample_size: 3000
+                    },
+                    {
+                        size: "Large",
+                        coin_amount: 100,
+                        sample_size: 9000 
+                    },
+                    {
+                        size: "XL",
+                        coin_amount: 200,
+                        sample_size: 'inf'  
+                    }
+            ],
+
         }
     },
   
