@@ -37,10 +37,10 @@ export default {
             console.log(this.activePlan)
         },
         truncateNumber(num){
-            if((num+"") >= 1000){
-                return ((num+"").charAt(0) + 'k')
+            if (num > 999){
+                return ((num/1000)+"")+"k"
             }else{
-                return num
+                return(num+"")
             }
         }
     },
