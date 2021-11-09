@@ -24,7 +24,7 @@
         </button>
     </div>
 
-    <h3 class="sm:text-xl text-lg mx-auto mb-10 mt-5 text-center">How large do you want your sample size?</h3>
+u   <h3 class="sm:text-xl text-lg mx-auto mb-10 mt-5 text-center">How large do you want your sample size?</h3>
     <div class="grid lg:grid-cols-4 grid-cols-2 gap-10 gap-y-10 mb-5 sm:mx-auto sm:w-9/12 mx-3" v-if="sample_type == 'Random'">
         <SampleSizeOption v-for="sample in sample_options_random" :key="sample" :input="sample" :activePlan="activePlan" @onUpdatePlan="setActive"/>
     </div>
@@ -49,6 +49,7 @@
                         <ul class="list-disc list-inside ml-4 sm:ml-8 sm:text-sm text-xs">
                             <li>Less Bias</li>
                             <li>More coins</li>
+                            <li>Random users</li>
                         </ul>
                         <h1 class="text-xs mx-auto text-center bold mt-1">Best for smaller creators</h1>
                     </div>
@@ -60,6 +61,7 @@
                         <ul class="list-disc list-inside ml-4 sm:ml-8 sm:text-sm text-xs">
                             <li>More Bias</li>
                             <li>Less coins</li>
+                            <li>Your fans</li>
                         </ul>
                         <h1 class="text-xs mx-auto text-center bold mt-1">Best for larger creators</h1>
                     </div>
