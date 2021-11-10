@@ -32,7 +32,7 @@ export default {
     props: ['activePlan','input'],
     methods: {
         updateActivePlan(){
-            this.$emit('onUpdatePlan', this.input.size,this.input.sample_size)
+            this.$emit('onUpdatePlan', this.input.size,this.input.sample_size,this.input.coin_amount)
             console.log("Function run")
             console.log(this.activePlan)
         },
