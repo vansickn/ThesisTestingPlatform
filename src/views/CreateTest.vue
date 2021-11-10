@@ -124,11 +124,12 @@ export default {
             console.log(this.img_array)
             console.log(this.title_array)
         },
-        setActive: function(size,coin_amount) {
+        setActive: function(size,sample_size,coin_amount) {
             console.log(size)
             console.log(coin_amount)
             this.activePlan = size
-            this.sampleSize = coin_amount
+            this.sampleSize = sample_size
+            this.coins_to_purchase = coin_amount
             console.log(this.activePlan)
         },
         submitToFirebase: function() {
@@ -158,6 +159,7 @@ export default {
                     user: this.user.data.uid,
                     seenBy: [],
                     title_array: this.title_array,
+                    coins_to_purchase: this.coins_to_purchase,
                 }).then(docRef => {
                     
                     this.sendImagesToStorage(docRef).then(()=>{
@@ -165,9 +167,12 @@ export default {
                     })
     
                     db.collection("users").doc(this.user.data.uid).update({
-                        testsCreated: firebase.firestore.FieldValue.arrayUnion(docRef.id)}).then(() => {
+                        testsCreated: firebase.firestore.FieldValue.arrayUnion(docRef.id),
+                        coins: firebase.firestore.FieldValue.increment(this.coins_to_purchase*-1)
+                        }).then(() => {
                             console.log('added to users collection')
                         })
+
                 })
             }
         },
@@ -208,6 +213,7 @@ export default {
             verified2: false,
             activePlan: 'Small',
             sampleSize: 25,
+            coins_to_purchase: 25,
             sample_options_random: [
                     {
                         size: "Small",
