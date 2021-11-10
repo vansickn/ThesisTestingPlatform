@@ -85,6 +85,34 @@
         </div>
 
     </Modal>
+    <Modal
+            v-model="show_not_enough_coins"
+            :close="closeModal"
+        >
+            <div class="bg-gray-200 rounded-lg md:p-10 p-6 sm:w-auto">
+                <div class="container flex flex-row justify-center items-center gap-3 mx-auto">
+                    <h1 class="sm:text-xl text-lg">You need</h1>
+                    <Coin :coins="coins_to_purchase-user_coins" class="w-8 h-8"/>
+                    <h1 class="sm:text-xl text-lg">coins!</h1>
+                </div>
+                
+                <div class="grid sm:grid-cols-2 grid-cols-1 sm:gap-4 gap-2 mt-4 flex-wrap">
+                    <!-- <button @click="closeModal" class="bg-yellow-300 border-2 border-yellow-400 rounded-lg py-1 px-2 shadow-lg transform hover:scale-110 transition duration-300"> Sponsored video for 75 coins </button>
+                    <button @click="closeModal" class="bg-green-500 border-2 border-green-600 text-white rounded-lg py-1 px-2 shadow-lg transform hover:scale-110 transition duration-300"> $6 for 1000 coins </button> -->
+                    <div class="container flex sm:flex-col flex-row items-center gap-2">
+                        <Coin :coins="75" class="w-10 h-10"/>
+                        <button @click="closeModal" class="bg-yellow-300 border-2 border-yellow-400 rounded-lg py-1 px-2 shadow-lg transform hover:scale-110 transition duration-300">Watch Sponsored video</button> 
+                    </div>
+                    <div class="container flex sm:flex-col flex-row items-center gap-2">
+                        <Coin :coins="1000" class="w-10 h-10"/>
+                        <button @click="closeModal" class="bg-green-500 border-2 border-green-600 text-white rounded-lg py-1 px-2 shadow-lg transform hover:scale-110 transition duration-300"> Premium Membership </button> 
+                    </div>
+                </div>
+                <div class="mx-auto mt-5 container flex flex-row justify-center">
+                <button @click="sendToHome" class="bg-red-500 border-2 border-red-600 text-white rounded-lg p-1 mx-auto shadow-lg">Or, vote on more tests!</button>
+                </div>
+            </div>
+    </Modal>
     
     
 </template>
@@ -144,6 +172,10 @@ export default {
                 console.log("Not enough titles")
                 return
             }
+            else if(this.user_coins < this.coins_to_purchase){
+                this.show_not_enough_coins = true;
+                return
+            }
             else{
                 db.collection("CreatedTests").add({
                     // Have to do it this way because cant increment a vote inside an array
@@ -194,14 +226,25 @@ export default {
         closeModal(){
             this.show_sample_information = false;
             this.show_must_be_logged_in = false;
+            this.show_not_enough_coins = false;
         },
+        async fetchData() {
+            await db.collection("users").doc(this.user.data.uid).get().then(doc => {
+                this.user_coins = doc.data().coins
+                console.log(this.user_coins)
+            }).catch(err=> {console.log(err)})
+        },
+        sendToHome(){
+            this.$router.push('/');
+        }
     },
     data() {
         return {
-            fan_coin_cost: 50,
+            user_coins: null,
             sample_type: 'Random',
             show_sample_information: false,
             show_must_be_logged_in: false,
+            show_not_enough_coins: false,
             img_array: [],
             title_array: [],
             numberOfSelectors: 2,
@@ -261,6 +304,10 @@ export default {
 
         }
     },
+    mounted(){
+        // fetches coin data basically
+        this.fetchData();
+    }
   
 }
 </script>
