@@ -72,6 +72,16 @@
             </div>
             </div>
     </Modal>
+    <Modal
+    v-model="show_must_be_logged_in"
+    :close="closeModal"
+    >
+        <div class="bg-gray-200 rounded-lg md:p-10 p-6 sm:w-auto">
+            <h1 class="text-xl text-center">You must be logged in before submitting tests!</h1>
+            <h3 class="text-lg text-center text-red-500">Use the navigation buttons on the top of the screen to log in!</h3>
+        </div>
+
+    </Modal>
     
     
 </template>
@@ -119,40 +129,44 @@ export default {
             console.log(this.activePlan)
         },
         submitToFirebase: function() {
-
-            if(this.img_array.length < 2){
+            if(this.user.data == null){
+                this.show_must_be_logged_in = true;
+            }
+            else if(this.img_array.length < 2){
                 console.log("Not enough images")
                 return
             }
-            if(this.title_array.length < 2){
+            else if(this.title_array.length < 2){
                 console.log("Not enough titles")
                 return
             }
-            db.collection("CreatedTests").add({
-                // Have to do it this way because cant increment a vote inside an array
-                img_1_votes: 0,
-                img_2_votes: 0,
-                img_3_votes: 0,
-                img_4_votes: 0,
-                totalVotes: 0,
-                numberOfImages: this.numberOfSelectors,
-                sample_type: this.sample_type,
-                plan: this.activePlan,
-                sampleSize: this.sampleSize,
-                user: this.user.data.uid,
-                seenBy: [],
-                title_array: this.title_array,
-            }).then(docRef => {
-                
-                this.sendImagesToStorage(docRef).then(()=>{
-                    this.$router.push('/mytests')
-                })
-
-                db.collection("users").doc(this.user.data.uid).update({
-                    testsCreated: firebase.firestore.FieldValue.arrayUnion(docRef.id)}).then(() => {
-                        console.log('added to users collection')
+            else{
+                db.collection("CreatedTests").add({
+                    // Have to do it this way because cant increment a vote inside an array
+                    img_1_votes: 0,
+                    img_2_votes: 0,
+                    img_3_votes: 0,
+                    img_4_votes: 0,
+                    totalVotes: 0,
+                    numberOfImages: this.numberOfSelectors,
+                    sample_type: this.sample_type,
+                    plan: this.activePlan,
+                    sampleSize: this.sampleSize,
+                    user: this.user.data.uid,
+                    seenBy: [],
+                    title_array: this.title_array,
+                }).then(docRef => {
+                    
+                    this.sendImagesToStorage(docRef).then(()=>{
+                        this.$router.push('/mytests')
                     })
-            })
+    
+                    db.collection("users").doc(this.user.data.uid).update({
+                        testsCreated: firebase.firestore.FieldValue.arrayUnion(docRef.id)}).then(() => {
+                            console.log('added to users collection')
+                        })
+                })
+            }
         },
         sendToAccountRoute(){
             this.$router.push('/account')
@@ -171,6 +185,7 @@ export default {
         },
         closeModal(){
             this.show_sample_information = false;
+            this.show_must_be_logged_in = false;
         },
     },
     data() {
@@ -178,6 +193,7 @@ export default {
             fan_coin_cost: 50,
             sample_type: 'Random',
             show_sample_information: false,
+            show_must_be_logged_in: false,
             img_array: [],
             title_array: [],
             numberOfSelectors: 2,
