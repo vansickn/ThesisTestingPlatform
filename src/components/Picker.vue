@@ -170,6 +170,7 @@ export default {
                 db.collection("CreatedTests").doc(this.test_array[this.currentTest].id).update({
                     img_1_votes : firebase.firestore.FieldValue.increment(1),
                     seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
+                    totalVotes: firebase.firestore.FieldValue.increment(1),
                 })
                 .catch(error => {
                     console.log(error)
@@ -179,6 +180,7 @@ export default {
                 db.collection("CreatedTests").doc(this.test_array[this.currentTest].id).update({
                     img_2_votes : firebase.firestore.FieldValue.increment(1),
                     seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
+                    totalVotes: firebase.firestore.FieldValue.increment(1),
                 })
                 .catch(error => {
                     console.log(error)
@@ -188,6 +190,7 @@ export default {
                 db.collection("CreatedTests").doc(this.test_array[this.currentTest].id).update({
                     img_3_votes : firebase.firestore.FieldValue.increment(1),
                     seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
+                    totalVotes: firebase.firestore.FieldValue.increment(1),
                 })
                 .catch(error => {
                     console.log(error)
@@ -197,6 +200,7 @@ export default {
                 db.collection("CreatedTests").doc(this.test_array[this.currentTest].id).update({
                     img_4_votes : firebase.firestore.FieldValue.increment(1),
                     seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
+                    totalVotes: firebase.firestore.FieldValue.increment(1),
                 })
                 .catch(error => {
                     console.log(error)
@@ -211,23 +215,6 @@ export default {
 
             this.currentTest += 1
 
-        },
-        selectThumbnail2: function () {
-            db.collection("CreatedTests").doc(this.testIDs[this.currentTest].id).update({
-                img2votes: firebase.firestore.FieldValue.increment(1),
-                seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
-            })
-            .then( console.log(this.onChangingThumbnails()))
-            .catch(error => {
-                console.log(error)
-            })
-            console.log(this.userData.uid)
-            db.collection("users").doc(this.userData.uid).update({
-                seenTests: firebase.firestore.FieldValue.arrayUnion(this.testIDs[this.currentTest].id),
-                coins: firebase.firestore.FieldValue.increment(1),
-                votesCast: firebase.firestore.FieldValue.increment(1)
-            })
-            this.setNextThumbnail()
         },
         async getUserCreatedProfilePhoto(userID){
             console.log(userID)
