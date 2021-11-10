@@ -78,7 +78,10 @@
     >
         <div class="bg-gray-200 rounded-lg md:p-10 p-6 sm:w-auto">
             <h1 class="text-xl text-center">You must be logged in before submitting tests!</h1>
-            <h3 class="text-lg text-center text-red-500">Use the navigation buttons on the top of the screen to log in!</h3>
+            <h3 class="text-lg text-center text-red-500">Use the "Log in" button on the top of the screen to log in!</h3>
+            <div class="container flex flex-row justify-center mt-3">
+                <button @click="closeModal" class="bg-gray-300 border-2 border-gray-400 rounded-lg py-1 px-2 shadow-lg transform hover:scale-110 transition duration-300"> OK </button>
+            </div>
         </div>
 
     </Modal>
