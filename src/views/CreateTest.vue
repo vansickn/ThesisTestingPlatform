@@ -24,7 +24,7 @@
         </button>
     </div>
 
-u   <h3 class="sm:text-xl text-lg mx-auto mb-10 mt-5 text-center">How large do you want your sample size?</h3>
+    <h3 class="sm:text-xl text-lg mx-auto mb-10 mt-5 text-center">How large do you want your sample size?</h3>
     <div class="grid lg:grid-cols-4 grid-cols-2 gap-10 gap-y-10 mb-5 sm:mx-auto sm:w-9/12 mx-3" v-if="sample_type == 'Random'">
         <SampleSizeOption v-for="sample in sample_options_random" :key="sample" :input="sample" :activePlan="activePlan" @onUpdatePlan="setActive"/>
     </div>
@@ -136,6 +136,7 @@ export default {
                 img_4_votes: 0,
                 totalVotes: 0,
                 numberOfImages: this.numberOfSelectors,
+                sample_type: this.sample_type,
                 plan: this.activePlan,
                 sampleSize: this.sampleSize,
                 user: this.user.data.uid,
@@ -214,22 +215,22 @@ export default {
                     {
                         size: "Small",
                         coin_amount: 25,
-                        sample_size: 1000
+                        sample_size: 300
                     },
                     {
                         size: "Medium",
                         coin_amount: 50,
-                        sample_size: 3000
+                        sample_size: 1500
                     },
                     {
                         size: "Large",
                         coin_amount: 100,
-                        sample_size: 9000 
+                        sample_size: 5000 
                     },
                     {
                         size: "XL",
                         coin_amount: 200,
-                        sample_size: 'inf'  
+                        sample_size: 15000
                     }
             ],
 
