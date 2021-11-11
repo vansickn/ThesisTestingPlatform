@@ -1,5 +1,5 @@
 <template>
-  <div class="w-11/12 flex mx-auto justify-center items-center flex-wrap border-2 border-red-500 rounded-lg mb-3 flex-col" :class="{'border-green-500 bg-green-500 bg-opacity-20 border-4':active}">
+  <div class="w-11/12 flex mx-auto justify-between items-center flex-wrap border-2 border-red-500 rounded-lg mb-3 flex-col" :class="{'border-green-500 bg-green-500 bg-opacity-20 border-4':active}">
 
             <!-- <img class="img" :src="thumbnail1">
         <img class="img" :src="thumbnail2"> -->
