@@ -90,6 +90,9 @@ export default defineComponent({
       async generateBarObject(){
             db.collection('CreatedTests').doc(this.id).onSnapshot((doc) => {
                 this.barObject = this.createBarObject(doc.data());
+                if (doc.data().totalVotes >= doc.data().sampleSize){
+                  this.$emit('noReactivation')
+                }
             })
         },
         createBarObject(docdata){
