@@ -25,7 +25,7 @@
             </button>
         </div>
         <div class="pt-2 w-full pr-10 pl-8">
-            <BarChartTest :id="testID"/>
+            <BarChartTest :id="testID" @noReactivation="able_to_be_reactivated = false"/>
         </div>
         <div class="w-11/12 grid grid-cols-2 gap-2">
         <!-- v-for TestCard Thumbnail with n in range of numberOfImages, pass in both arrays, use prop of n to determine which index to display -->
@@ -57,7 +57,8 @@
             <div class="bg-gray-200 rounded-lg md:p-10 p-6 w-11/12 sm:w-auto">
                 <h1 class="sm:text-xl text-center mx-auto mb-3">Test Settings</h1>
                 <div class="container flex flex-row justify-center gap-4">
-                    <button @click="deactivateTest" class="bg-gray-300 border-2 border-red-500 rounded-lg py-1 px-2 shadow-lg transform hover:scale-110 transition duration-300">Deactivate Test </button>
+                    <button v-if="active" @click="deactivateTest" class="bg-gray-300 border-2 border-red-500 rounded-lg py-1 px-2 shadow-lg transform hover:scale-110 transition duration-300">Deactivate Test </button>
+                    <button v-if="!active && able_to_be_reactivated" @click="reactivateTest" class="bg-gray-300 border-2 border-green-400 rounded-lg py-1 px-2 shadow-lg transform hover:scale-110 transition duration-300">Reactivate Test </button> 
                     <button @click="deleteTestConfirmation" class="bg-red-500 border-2 border-red-500 rounded-lg py-1 px-2 text-white shadow-lg transform hover:scale-110 transition duration-300">Delete Test </button>
                 </div>
                 <div class="container flex flex-row justify-center gap-4 mt-4">
@@ -93,6 +94,7 @@ export default {
             show_test_settings: false,
             image_names: [],
             sample_type: null,
+            able_to_be_reactivated: true,
         }
     },
     computed: {
@@ -165,6 +167,14 @@ export default {
         deactivateTest(){
             this.$emit('deactivatedTest',this.testID);
             this.closeModal();
+        },
+        reactivateTest(){
+            this.$emit('reactivatedTest',this.testID);
+            this.closeModal();
+        },
+        cannotReactivate(){
+            console.log("HAS BEEN EMITTED")
+            this.able_to_be_reactivated = false;
         }
     },
     created(){
