@@ -113,6 +113,21 @@
                 </div>
             </div>
     </Modal>
+    <Modal
+    v-model="show_more_than_one_active_test"
+    :close="closeModal"
+    >
+        <div class="bg-gray-200 rounded-lg md:p-10 p-6 sm:w-auto">
+            <h1 class="text-xl text-center">You already have one active test!</h1>
+            <h3 class="text-lg text-center text-red-500">Would you like to delete or deactivate it?</h3>
+            <TestCard :testID="user_activeTests[0]" @deletedTest="deleteTest"/>
+            <div class="container flex flex-row justify-center mt-3 gap-2">
+                <button @click="closeModal" class="bg-gray-300 border-2 border-gray-400 rounded-lg py-1 px-2 shadow-lg transform hover:scale-110 transition duration-300"> No Thanks </button>
+                <button @click="deactivateTest" class="bg-red-500 border-2 border-red-600 text-white rounded-lg py-1 px-2 shadow-lg transform hover:scale-110 transition duration-300"> De-Activate Test </button>
+            </div>
+        </div>
+
+    </Modal>
     
     
 </template>
@@ -125,16 +140,18 @@ import { mapGetters, Store } from 'vuex';
 import firebase from 'firebase';
 import ImageSelector from '../components/ImageSelector.vue'
 import Coin from '../components/Coin.vue'
+import TestCard from '../components/TestCard.vue'
 
 const db = firebase.firestore();
 var storageRef = firebase.storage().ref();
 
 export default {
     name: 'CreateTest',
-    components: {Dropzone,SampleSizeOption,ImageSelector,Coin},
+    components: {Dropzone,SampleSizeOption,ImageSelector,Coin,TestCard},
     computed: {
         ...mapGetters({
             user: "user",
+            userData: "userData",
         }),
     },
     methods: {
@@ -164,6 +181,7 @@ export default {
             if(this.user.data == null){
                 this.show_must_be_logged_in = true;
             }
+            // should be this.img_array.length < number of selectors, will change this later
             else if(this.img_array.length < 2){
                 console.log("Not enough images")
                 return
@@ -175,6 +193,9 @@ export default {
             else if(this.user_coins < this.coins_to_purchase){
                 this.show_not_enough_coins = true;
                 return
+            }
+            else if(this.user_activeTests.length >= 1){
+                this.show_more_than_one_active_test = true
             }
             else{
                 db.collection("CreatedTests").add({
@@ -200,7 +221,8 @@ export default {
     
                     db.collection("users").doc(this.user.data.uid).update({
                         testsCreated: firebase.firestore.FieldValue.arrayUnion(docRef.id),
-                        coins: firebase.firestore.FieldValue.increment(this.coins_to_purchase*-1)
+                        coins: firebase.firestore.FieldValue.increment(this.coins_to_purchase*-1),
+                        activeTests: firebase.firestore.FieldValue.arrayUnion(docRef.id),
                         }).then(() => {
                             console.log('added to users collection')
                         })
@@ -227,21 +249,71 @@ export default {
             this.show_sample_information = false;
             this.show_must_be_logged_in = false;
             this.show_not_enough_coins = false;
+            this.show_more_than_one_active_test = false;
         },
         async fetchData() {
             await db.collection("users").doc(this.user.data.uid).get().then(doc => {
-                this.user_coins = doc.data().coins
-                console.log(this.user_coins)
+                this.user_coins = doc.data().coins;
+                this.user_activeTests = doc.data().activeTests;
+                console.log(this.user_activeTests)
             }).catch(err=> {console.log(err)})
         },
         sendToHome(){
             this.$router.push('/');
+        },
+        deleteTest(testid,img_names){
+            db.collection("CreatedTests").doc(testid).delete().then(()=>{
+                db.collection("users").doc(this.userData.uid).update({
+                    testsCreated: firebase.firestore.FieldValue.arrayRemove(testid),
+                    activeTests: firebase.firestore.FieldValue.arrayRemove(testid),
+                }).then(()=>{
+                    for (let i = 1; i < img_names.length+1; i++) {
+                        var ref = storageRef.child('tests/'+testid +'/'+ 'img_' + i + '/'+ img_names[i-1])
+                        ref.delete().then(()=>{
+                            // Maybe do some sort of notification on the screen
+                            console.log(img_names[i-1] + " has been successfully deleted")
+                        }).catch((err)=>{
+                            console.log(err)
+                            console.log("Error deleting file")
+                        });   
+                    }
+                    this.removeTestFromArray(testid)
+                }).catch((e)=>{
+                    console.log(e)
+                    console.log("couldn't remove created test from user's test array")
+                })
+
+            }).catch((error)=>{
+                console.log("could not delete test for some reason <3")
+            })
+        },
+        removeTestFromArray(testid){
+            console.log(testid)
+            var index = this.user_activeTests.indexOf(testid);
+            this.user_activeTests.splice(index,1);
+        },
+        deactivateTest(){
+            // always gonna be the first index of the activeTests, at least in this scenario. Garbage code to the rescue <3
+            // eventually going to need to remove the test from whichever active collection its in. AKA randomSampleTests or fanSampleTests
+            const testid = this.user_activeTests[0]
+            db.collection("users").doc(this.userData.uid).update({
+                activeTests: firebase.firestore.FieldValue.arrayRemove(testid)
+            }).then(()=>{
+                console.log("successfully deactivated test");
+                this.removeTestFromArray(testid);
+                this.closeModal();
+            }).catch(e=>{
+                console.log(e);
+                console.log("Error deactivating the test");
+            })
         }
     },
     data() {
         return {
+            user_activeTests: null,
             user_coins: null,
             sample_type: 'Random',
+            show_more_than_one_active_test: false,
             show_sample_information: false,
             show_must_be_logged_in: false,
             show_not_enough_coins: false,
@@ -305,7 +377,7 @@ export default {
         }
     },
     mounted(){
-        // fetches coin data basically
+        // fetches coin data basically, also active tests
         this.fetchData();
     }
   
@@ -368,6 +440,6 @@ export default {
 //     }
 
     
-
     
+
 // </style>
