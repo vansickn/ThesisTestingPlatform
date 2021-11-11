@@ -95,6 +95,7 @@ export default {
                         });   
                     }
                     this.removeTestFromArray(testid)
+                    this.removeTestFromActiveArray(testid)
                 }).catch((e)=>{
                     console.log(e)
                     console.log("couldn't remove created test from user's test array")
@@ -110,9 +111,12 @@ export default {
             this.testIDList.splice(index,1);
         },
         removeTestFromActiveArray(testid){
-            console.log(testid)
-            var index = this.activeTestList.indexOf(testid);
-            this.activeTestList.splice(index,1);
+            if(!this.activeTestList.includes(testid)){return}
+            else{
+                console.log(testid)
+                var index = this.activeTestList.indexOf(testid);
+                this.activeTestList.splice(index,1);
+            }
         },
         deactivateTest(testid){
             // always gonna be the first index of the activeTests, at least in this scenario. Garbage code to the rescue <3
