@@ -123,7 +123,7 @@
             <TestCard :testID="user_activeTests[0]" @deletedTest="deleteTest"/>
             <div class="container flex flex-row justify-center mt-3 gap-2">
                 <button @click="closeModal" class="bg-gray-300 border-2 border-gray-400 rounded-lg py-1 px-2 shadow-lg transform hover:scale-110 transition duration-300"> No Thanks </button>
-                <button @click="deactivateTest" class="bg-red-500 border-2 border-red-600 text-white rounded-lg py-1 px-2 shadow-lg transform hover:scale-110 transition duration-300"> De-Activate Test </button>
+                <button @click="deactivateTest" class="bg-gray-300 border-2 border-red-500 rounded-lg py-1 px-2 shadow-lg transform hover:scale-110 transition duration-300"> De-Activate Test </button>
             </div>
         </div>
 
