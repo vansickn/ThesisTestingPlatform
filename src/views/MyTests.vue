@@ -63,7 +63,8 @@ export default {
         deleteTest(testid,img_names){
             db.collection("CreatedTests").doc(testid).delete().then(()=>{
                 db.collection("users").doc(this.userData.uid).update({
-                    testsCreated: firebase.firestore.FieldValue.arrayRemove(testid)
+                    testsCreated: firebase.firestore.FieldValue.arrayRemove(testid),
+                    activeTests: firebase.firestore.FieldValue.arrayRemove(testid),
                 }).then(()=>{
                     for (let i = 1; i < img_names.length+1; i++) {
                         var ref = storageRef.child('tests/'+testid +'/'+ 'img_' + i + '/'+ img_names[i-1])
