@@ -12,9 +12,23 @@
         <button class="bg-red-500 rounded-xl p-4 text-white text-2xl shadow-xl" @click="sendToCreateTest">Create one</button>
     </div>
     <div class="mb-20 grid lg:grid-cols-2 grid-cols-1 gap-y-4">
-        <TestCard v-for="t in testIDList" :key="t" :testID="t" :active="activeTestList.includes(t)" @deletedTest="deleteTest" @deactivatedTest="deactivateTest"/>
+        <TestCard v-for="t in testIDList" :key="t" :testID="t" :active="activeTestList.includes(t)" @deletedTest="deleteTest" @deactivatedTest="deactivateTest" @reactivatedTest="reactivateTest"/>
     </div>
+    <Modal
+    v-model="show_more_than_one_active_test"
+    :close="closeModal"
+    >
+        <div class="bg-gray-200 rounded-lg md:p-10 p-6 sm:w-auto">
+            <h1 class="text-xl text-center">You already have one active test!</h1>
+            <h3 class="text-lg text-center text-red-500">Would you like to delete or deactivate it?</h3>
+            <TestCard :testID="activeTestList[0]" @deletedTest="deleteTest"/>
+            <div class="container flex flex-row justify-center mt-3 gap-2">
+                <button @click="closeModal" class="bg-gray-300 border-2 border-gray-400 rounded-lg py-1 px-2 shadow-lg transform hover:scale-110 transition duration-300"> No Thanks </button>
+                <button @click="deactivateTest(activeTestList[0])" class="bg-red-500 border-2 border-red-600 text-white rounded-lg py-1 px-2 shadow-lg transform hover:scale-110 transition duration-300"> De-Activate Test </button>
+            </div>
+        </div>
 
+    </Modal>
 
 </template>
 
@@ -47,6 +61,7 @@ export default {
             testList: [],
             noTests: false,
             activeTestList: null,
+            show_more_than_one_active_test: false,
 
         }
     },
@@ -112,6 +127,29 @@ export default {
                 console.log(e);
                 console.log("Error deactivating the test");
             })
+        },
+        reactivateTest(testid){
+            if(this.activeTestList.length >= 1){
+                this.show_more_than_one_active_test = true;
+                return
+            }else{
+                this.reactivateTestInDB(testid);
+            }
+        },
+        reactivateTestInDB(testid){
+            db.collection("users").doc(this.userData.uid).update({
+             activeTests: firebase.firestore.FieldValue.arrayUnion(testid)
+         }).then(()=>{
+             console.log("successfully reactivated test");
+             this.activeTestList.push(testid)
+             this.closeModal();
+         }).catch(e=>{
+             console.log(e);
+             console.log("Error reactivating the test");
+         }) 
+        },
+        closeModal(){
+            this.show_more_than_one_active_test = false;
         }
     },
     mounted(){
