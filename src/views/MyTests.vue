@@ -12,7 +12,7 @@
         <button class="bg-red-500 rounded-xl p-4 text-white text-2xl shadow-xl" @click="sendToCreateTest">Create one</button>
     </div>
     <div class="mb-20 grid lg:grid-cols-2 grid-cols-1 gap-y-4">
-        <TestCard v-for="t in testIDList" :key="t" :testID="t" @deletedTest="deleteTest"/>
+        <TestCard v-for="t in testIDList" :key="t" :testID="t" :active="activeTestList.includes(t)" @deletedTest="deleteTest" @deactivatedTest="deactivateTest"/>
     </div>
 
 
@@ -45,7 +45,9 @@ export default {
         return {
             testIDList: null,
             testList: [],
-            noTests: false
+            noTests: false,
+            activeTestList: null,
+
         }
     },
     methods: {
@@ -53,6 +55,7 @@ export default {
             await db.collection('users').doc(this.userData.uid).get().then((doc) => {
                 // reverse test list so newest ones are on top
                 this.testIDList = doc.data().testsCreated.reverse();
+                this.activeTestList = doc.data().activeTests;
                 if(this.testIDList.length == 0){this.noTests = true};
             });
             console.log(this.testIDList);
@@ -91,6 +94,25 @@ export default {
             var index = this.testIDList.indexOf(testid);
             this.testIDList.splice(index,1);
         },
+        removeTestFromActiveArray(testid){
+            console.log(testid)
+            var index = this.activeTestList.indexOf(testid);
+            this.activeTestList.splice(index,1);
+        },
+        deactivateTest(testid){
+            // always gonna be the first index of the activeTests, at least in this scenario. Garbage code to the rescue <3
+            // eventually going to need to remove the test from whichever active collection its in. AKA randomSampleTests or fanSampleTests
+            db.collection("users").doc(this.userData.uid).update({
+                activeTests: firebase.firestore.FieldValue.arrayRemove(testid)
+            }).then(()=>{
+                console.log("successfully deactivated test");
+                this.removeTestFromActiveArray(testid);
+                this.closeModal();
+            }).catch(e=>{
+                console.log(e);
+                console.log("Error deactivating the test");
+            })
+        }
     },
     mounted(){
         this.generateTestList();
