@@ -162,7 +162,7 @@ export default {
         },
         confirmedDeletion(){
             console.log(this.image_names)
-            this.$emit('deletedTest',this.testID,this.image_names);
+            this.$emit('deletedTest',this.testID,this.image_names,this.sample_type);
             this.show_confirm_deletion = false;
             this.image_names = []
         },

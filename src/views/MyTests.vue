@@ -80,7 +80,7 @@ export default {
         sendToCreateTest(){
             this.$router.push('/createtest')
         },
-        deleteTest(testid,img_names){
+        deleteTest(testid,img_names,sample_type){
             db.collection("CreatedTests").doc(testid).delete().then(()=>{
                 db.collection("users").doc(this.userData.uid).update({
                     testsCreated: firebase.firestore.FieldValue.arrayRemove(testid),
@@ -98,6 +98,13 @@ export default {
                     }
                     this.removeTestFromArray(testid)
                     this.removeTestFromActiveArray(testid)
+                    deactivateTestFunction({
+                        testid:testid,
+                        sampletype:sample_type,
+                    }).then(res=>{
+                        console.log(res);
+                        console.log("deactivated test");
+                    })
                 }).catch((e)=>{
                     console.log(e)
                     console.log("couldn't remove created test from user's test array")
