@@ -167,11 +167,11 @@ export default {
             this.image_names = []
         },
         deactivateTest(){
-            this.$emit('deactivatedTest',this.testID);
+            this.$emit('deactivatedTest',this.testID,this.sample_type);
             this.closeModal();
         },
         reactivateTest(){
-            this.$emit('reactivatedTest',this.testID);
+            this.$emit('reactivatedTest',this.testID,this.sample_type);
             this.closeModal();
         },
         cannotReactivate(){
