@@ -43,3 +43,71 @@ exports.onTestDelete = functions.firestore
           });
       return "Test Delete Function has Completed";
     });
+
+exports.onTestActivation = functions.https.onCall((data, context) => {
+  const testid = data.testid;
+  const sampletype = data.sampletype;
+  if (sampletype == "Fans") {
+    admin.firestore().collection("CreatedTests").doc(testid)
+        .get().then((doc) => {
+          const docdata = doc.data();
+          admin.firestore().collection("fanSampleTests").doc(testid)
+              .set(docdata);
+          return "Success";
+        }).catch((err) => {
+          console.log(err);
+          return err;
+        });
+  }
+  if (sampletype == "Random") {
+    admin.firestore().collection("CreatedTests").doc(testid)
+        .get().then((doc) => {
+          const docdata = doc.data();
+          admin.firestore().collection("randomSampleTests").doc(testid)
+              .set(docdata);
+          return "Success";
+        }).catch((err) => {
+          console.log(err);
+          return err;
+        });
+  }
+});
+
+exports.onTestDeActivation = functions.https.onCall((data, context) => {
+  const testid = data.testid;
+  const sampletype = data.sampletype;
+  if (sampletype == "Fans") {
+    admin.firestore().collection("fanSampleTests").doc(testid)
+        .get().then((doc) => {
+          const docdata = doc.data();
+          admin.firestore().collection("CreatedTests").doc(testid)
+              .set(docdata);
+          admin.firestore().collection("fanSampleTests").doc(testid)
+              .delete()
+              .then(() => {
+                console.log("successfully deactivated Fan Sample Test");
+              });
+          return "Success";
+        }).catch((err) => {
+          console.log(err);
+          return err;
+        });
+  }
+  if (sampletype == "Random") {
+    admin.firestore().collection("randomSampleTests").doc(testid)
+        .get().then((doc) => {
+          const docdata = doc.data();
+          admin.firestore().collection("CreatedTests").doc(testid)
+              .set(docdata);
+          admin.firestore().collection("randomSampleTests").doc(testid)
+              .delete()
+              .then(() => {
+                console.log("successfully deactivated Random Sample Test");
+              });
+          return "Success";
+        }).catch((err) => {
+          console.log(err);
+          return err;
+        });
+  }
+});
