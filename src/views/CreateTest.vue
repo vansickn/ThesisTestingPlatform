@@ -145,6 +145,8 @@ import TestCard from '../components/TestCard.vue'
 const db = firebase.firestore();
 var storageRef = firebase.storage().ref();
 
+const activateTestFunction = firebase.functions().httpsCallable('onTestActivation');
+
 export default {
     name: 'CreateTest',
     components: {Dropzone,SampleSizeOption,ImageSelector,Coin,TestCard},
@@ -224,6 +226,12 @@ export default {
                         coins: firebase.firestore.FieldValue.increment(this.coins_to_purchase*-1),
                         activeTests: firebase.firestore.FieldValue.arrayUnion(docRef.id),
                         }).then(() => {
+                            activateTestFunction({
+                                testid: docRef.id,
+                                sampletype: this.sample_type,
+                            }).then((res)=>{
+                                console.log(res)
+                            })
                             console.log('added to users collection')
                         })
 
