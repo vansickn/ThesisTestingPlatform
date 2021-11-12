@@ -42,6 +42,8 @@ import BarChartTest from '../components/BarChartTest.vue';
 
 const db = firebase.firestore();
 const storageRef = firebase.storage().ref();
+const activateTestFunction = firebase.functions().httpsCallable('onTestActivation');
+const deactivateTestFunction = firebase.functions().httpsCallable('onTestDeActivation');
 
 // Heres the plan:
 // Create an array of objects with the root of each object as the test ID
@@ -118,12 +120,15 @@ export default {
                 this.activeTestList.splice(index,1);
             }
         },
-        deactivateTest(testid){
+        deactivateTest(testid,sampletype){
             // always gonna be the first index of the activeTests, at least in this scenario. Garbage code to the rescue <3
             // eventually going to need to remove the test from whichever active collection its in. AKA randomSampleTests or fanSampleTests
             db.collection("users").doc(this.userData.uid).update({
                 activeTests: firebase.firestore.FieldValue.arrayRemove(testid)
             }).then(()=>{
+                deactivateTestFunction({testid:testid,sampletype:sampletype}).then(()=>{
+                    console.log("deactivated test")
+                })
                 console.log("successfully deactivated test");
                 this.removeTestFromActiveArray(testid);
                 this.closeModal();
@@ -132,12 +137,18 @@ export default {
                 console.log("Error deactivating the test");
             })
         },
-        reactivateTest(testid){
+        reactivateTest(testid,sampletype){
             if(this.activeTestList.length >= 1){
                 this.show_more_than_one_active_test = true;
                 return
             }else{
                 this.reactivateTestInDB(testid);
+                activateTestFunction({
+                    testid: testid,
+                    sampletype: sampletype,
+                }).then(res=>{
+                    console.log(res.data)
+                })
             }
         },
         reactivateTestInDB(testid){
