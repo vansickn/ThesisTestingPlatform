@@ -128,6 +128,16 @@
         </div>
 
     </Modal>
+    <Modal
+    v-model="show_creating_test"
+    :close="closeModal"
+    >
+        <div class="bg-gray-200 rounded-lg md:p-10 p-6 sm:w-auto">
+            <h1 class="text-xl text-center">Creating your test!</h1>
+            <h2 class="text-xl text-center text-red-500">Do not click away from this window until you are redirected.</h2>
+        </div>
+
+    </Modal>
     
     
 </template>
@@ -201,6 +211,7 @@ export default {
                 this.show_more_than_one_active_test = true
             }
             else{
+                this.show_creating_test = true;
                 db.collection("CreatedTests").add({
                     // Have to do it this way because cant increment a vote inside an array
                     img_1_votes: 0,
@@ -331,6 +342,7 @@ export default {
             show_sample_information: false,
             show_must_be_logged_in: false,
             show_not_enough_coins: false,
+            show_creating_test: false,
             img_array: [],
             title_array: [],
             numberOfSelectors: 2,
