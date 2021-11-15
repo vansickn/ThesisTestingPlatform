@@ -120,10 +120,10 @@
         <div class="bg-gray-200 rounded-lg md:p-10 p-6 sm:w-auto">
             <h1 class="text-xl text-center">You already have one active test!</h1>
             <h3 class="text-lg text-center text-red-500">Would you like to delete or deactivate it?</h3>
-            <TestCard :testID="user_activeTests[0]" @deletedTest="deleteTest" :active="true"/>
+            <TestCard :testID="user_activeTests[0]" @deletedTest="deleteTest" @deactivatedTest="deactivateTest" :active="true"/>
+            <h1 class="text-base text-center">*use the icons on the test card to deactivate or delete the test</h1>
             <div class="container flex flex-row justify-center mt-3 gap-2">
                 <button @click="closeModal" class="bg-gray-300 border-2 border-gray-400 rounded-lg py-1 px-2 shadow-lg transform hover:scale-110 transition duration-300"> No Thanks </button>
-                <button @click="deactivateTest" class="bg-gray-300 border-2 border-red-500 rounded-lg py-1 px-2 shadow-lg transform hover:scale-110 transition duration-300"> De-Activate Test </button>
             </div>
         </div>
 
@@ -146,6 +146,7 @@ const db = firebase.firestore();
 var storageRef = firebase.storage().ref();
 
 const activateTestFunction = firebase.functions().httpsCallable('onTestActivation');
+const deactivateTestFunction = firebase.functions().httpsCallable('onTestDeActivation');
 
 export default {
     name: 'CreateTest',
@@ -300,16 +301,21 @@ export default {
             var index = this.user_activeTests.indexOf(testid);
             this.user_activeTests.splice(index,1);
         },
-        deactivateTest(){
+        deactivateTest(testid,sampletype){
             // always gonna be the first index of the activeTests, at least in this scenario. Garbage code to the rescue <3
             // eventually going to need to remove the test from whichever active collection its in. AKA randomSampleTests or fanSampleTests
-            const testid = this.user_activeTests[0]
             db.collection("users").doc(this.userData.uid).update({
                 activeTests: firebase.firestore.FieldValue.arrayRemove(testid)
             }).then(()=>{
                 console.log("successfully deactivated test");
                 this.removeTestFromArray(testid);
-                this.closeModal();
+                deactivateTestFunction({testid:testid,sampletype:sampletype}).then(()=>{
+                    this.closeModal();
+                    console.log("Successfully deactivated the test")
+                }).catch(err=>{
+                    console.log(err)
+                    console.log("error deactivating the test")
+                })
             }).catch(e=>{
                 console.log(e);
                 console.log("Error deactivating the test");
