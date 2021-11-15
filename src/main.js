@@ -14,7 +14,6 @@ import VueUniversalModal from 'vue-universal-modal'
 
 
 
-
 /* code from our Firebase console */
 var firebaseConfig = {
   apiKey: 'AIzaSyAfJU3-Skg-oqBzwajTPXTvtPXuhi0WeEE',
@@ -37,6 +36,8 @@ const app = createApp(App).use(store)
 
 // // picker component that I made, that needs to be registered
 // import Picker from './components/Picker.vue';
+// importing picker fucks my life up, not gonna figure that out yet
+import Coin from './components/Coin.vue';
 
 // use vue router
 app.use(router)
@@ -51,5 +52,7 @@ app.use(VueUniversalModal, {
 
 // use picker component
 // app.use(Picker)
+// app.component('Picker', Picker);
+app.component('Coin', Coin);
 
-app.mount('#app')
+app.mount('#app');
