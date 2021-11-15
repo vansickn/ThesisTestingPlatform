@@ -197,7 +197,7 @@ export default {
                 this.show_not_enough_coins = true;
                 return
             }
-            else if(this.user_activeTests.length >= 1){
+            else if(this.user_activeTests != null && this.user_activeTests.length >= 1){
                 this.show_more_than_one_active_test = true
             }
             else{
