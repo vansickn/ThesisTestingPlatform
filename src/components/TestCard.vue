@@ -27,7 +27,7 @@
             </button>
         </div>
         <div class="pt-2 w-full pr-10 pl-8">
-            <BarChartTest :id="testID" @noReactivation="able_to_be_reactivated = false"/>
+            <BarChartTest v-if="sample_type != null" :id="testID" :sampletype="sample_type" :active="active" @noReactivation="able_to_be_reactivated = false"/>
         </div>
         <div class="w-11/12 grid grid-cols-2 gap-2">
         <!-- v-for TestCard Thumbnail with n in range of numberOfImages, pass in both arrays, use prop of n to determine which index to display -->
