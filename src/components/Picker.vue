@@ -69,7 +69,8 @@ export default {
                             console.log("Logged in")
                             // This solution works for now, kinda still shitty but works for now
                             this.fetchImages(doc.id, numberOfImages).then((img_array) => {
-                                this.getUserCreatedProfilePhoto(doc.data().user);
+                                // this.getUserCreatedProfilePhoto(doc.data().user); //function no longer needed as it is stored in the created test
+                                this.user_profile_images_array.push(doc.data().user_photo_url);
                                 this.verifyArray(img_array,numberOfImages);
                                 const obj = {
                                     // added to the test_array list as this object
