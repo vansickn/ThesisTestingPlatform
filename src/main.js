@@ -38,6 +38,7 @@ const app = createApp(App).use(store)
 // import Picker from './components/Picker.vue';
 // importing picker fucks my life up, not gonna figure that out yet
 import Coin from './components/Coin.vue';
+import TestCardThumbnail from './components/TestCardThumbnail.vue';
 
 // use vue router
 app.use(router)
@@ -54,5 +55,6 @@ app.use(VueUniversalModal, {
 // app.use(Picker)
 // app.component('Picker', Picker);
 app.component('Coin', Coin);
+app.component('TestCardThumbnail', TestCardThumbnail);
 
 app.mount('#app');
