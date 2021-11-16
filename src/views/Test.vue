@@ -131,6 +131,7 @@ export default {
                     // probably if (user) then this.userData.uid else 'anonymous'
                     db.collection("fanSampleTests").doc(this.testid).update({
                         img_1_votes : firebase.firestore.FieldValue.increment(1),
+                        totalVotes: firebase.firestore.FieldValue.increment(1),
                     })
                     .catch(error => {
                         console.log(error)
@@ -139,6 +140,7 @@ export default {
                 if(n==2){
                     db.collection("fanSampleTests").doc(this.testid).update({
                         img_2_votes : firebase.firestore.FieldValue.increment(1),
+                        totalVotes: firebase.firestore.FieldValue.increment(1),
                     })
                     .catch(error => {
                         console.log(error)
@@ -147,6 +149,7 @@ export default {
                 if(n==3){
                     db.collection("fanSampleTests").doc(this.testid).update({
                         img_3_votes : firebase.firestore.FieldValue.increment(1),
+                        totalVotes: firebase.firestore.FieldValue.increment(1),
                     })
                     .catch(error => {
                         console.log(error)
@@ -155,6 +158,7 @@ export default {
                 if(n==4){
                     db.collection("fanSampleTests").doc(this.testid).update({
                         img_4_votes : firebase.firestore.FieldValue.increment(1),
+                        totalVotes: firebase.firestore.FieldValue.increment(1),
                     })
                     .catch(error => {
                         console.log(error)
@@ -171,6 +175,7 @@ export default {
                     db.collection("fanSampleTests").doc(this.testid).update({
                         img_1_votes : firebase.firestore.FieldValue.increment(1),
                         seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
+                        totalVotes: firebase.firestore.FieldValue.increment(1),
                     })
                     .catch(error => {
                         console.log(error)
@@ -180,6 +185,7 @@ export default {
                     db.collection("fanSampleTests").doc(this.testid).update({
                         img_2_votes : firebase.firestore.FieldValue.increment(1),
                         seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
+                        totalVotes: firebase.firestore.FieldValue.increment(1),
                     })
                     .catch(error => {
                         console.log(error)
@@ -189,6 +195,7 @@ export default {
                     db.collection("fanSampleTests").doc(this.testid).update({
                         img_3_votes : firebase.firestore.FieldValue.increment(1),
                         seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
+                        totalVotes: firebase.firestore.FieldValue.increment(1),
                     })
                     .catch(error => {
                         console.log(error)
@@ -198,6 +205,7 @@ export default {
                     db.collection("fanSampleTests").doc(this.testid).update({
                         img_4_votes : firebase.firestore.FieldValue.increment(1),
                         seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
+                        totalVotes: firebase.firestore.FieldValue.increment(1),
                     })
                     .catch(error => {
                         console.log(error)
