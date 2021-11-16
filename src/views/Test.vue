@@ -56,7 +56,7 @@ export default {
             title_array: [],
             showTests: true,
             image_count: null,
-            user_profile_images: null,
+            user_profile_image: null,
             user_id: null,
             show_thanks_modal: false,
             show_no_test: false,
@@ -79,7 +79,8 @@ export default {
                 this.image_count = doc.data().numberOfImages;
                 this.user_id = doc.data().user;
                 this.fetchImages(this.testid,this.image_count);
-                this.getUserCreatedProfilePhoto(doc.data().user);
+                // this.getUserCreatedProfilePhoto(doc.data().user); //function no longer needed, one less read call!
+                this.user_profile_image = doc.data().user_photo_url;
 
             }).catch(err => {
                 console.log("Error: " + err);
