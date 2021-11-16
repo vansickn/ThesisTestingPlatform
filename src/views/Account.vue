@@ -8,7 +8,7 @@
 
     <div class="grid grid-cols-2 lg:max-w-7xl max-w-full gap-5 md:grid-cols-4">
         <ActiveTestCard :number="testsCreatedNumber" :text="correctS(testsCreatedNumber,'total test')"/>
-        <ActiveTestCard number="1" :text="correctS(1,'active test')" color="green" />
+        <ActiveTestCard :number="activeTests" :text="correctS(activeTests,'active test')" color="green" />
         <ActiveTestCard :number="truncateNumber(votesCast)" :text="correctS(votesCast,'vote')+' cast'" color="blue"/>
         <ActiveTestCard :number="truncateNumber(coins)" :text="correctS(coins,'coin')" color="yellow"/>
     </div>
@@ -75,7 +75,7 @@ export default {
             coins: null,
             votesCast: null,
             testsCreatedNumber: null,
-            activeTests: 1 //this will eventually be something that is queried, but for right now I have no system in place to determine active tests vs completed tests
+            activeTests: null,
         }
     },
     computed: {
@@ -98,7 +98,7 @@ export default {
                 this.coins = doc.data().coins
                 this.votesCast = doc.data().votesCast
                 this.testsCreatedNumber = doc.data().testsCreated.length
-                console.log(doc.data().testsCreated)
+                this.activeTests = doc.data().activeTests.length
             }).catch(err=> {console.log(err)})
         },
         correctS(number,string){
