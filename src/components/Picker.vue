@@ -1,21 +1,8 @@
 <template>
 
     <div v-if="showTests" class="sm:w-6/12 w-full grid md:grid-cols-2 grid-cols-1 xs:px-5 mx-auto md:gap-4">
-            <!-- <img class="img" :src="thumbnail1">
-        <img class="img" :src="thumbnail2"> -->
-        <!-- Want function to ultimately be selectedThumbnail -->
-        <!-- <Thumbnail @onClickedThumbnail="selectThumbnail1" :image="thumbnail1" :userCreated="userCreatedPhoto" :title="title1" class="mx-5"/>
-        <Thumbnail @onClickedThumbnail="selectThumbnail2" :image="thumbnail2" :userCreated="userCreatedPhoto" :title="title2" class="mx-5"/> -->
-        <!-- need to change click to image instead of whole thumbnail -->
-
-        <!-- New system for the thumbnails -->
-        <!-- v-for on thumbnail, data given by array similar to how it works in mytests -->
-        <!-- need the img_array to be reactive since it takes so long -->
-
         <!-- Might create a seperate component for the actual tester aspect of this, because the reliability of the images loading is very suspect -->
-
         <Thumbnail v-for="n in test_array[currentTest].imageCount" :key="n" :image="test_array[currentTest].img_array[n-1] " :title="test_array[currentTest].title_array[n-1]" :userCreated="user_profile_images_array[currentTest]" :index="n" @onClickedThumbnail="selectThumbnail"/>
-
     </div>
 <!-- going to pass in the user who created the test, and calculate the user photo from here. Could also just calculate that in the home.vue as well and just pass in the photo. Either works -->
 </template>
@@ -63,9 +50,8 @@ export default {
         async testList() {
             // TODO : Restrict viewing tests for people who have already seen the test, look into new ways i can model the data to handle that functionality
             // TODO : paginate respoonses, only take like the first 5, and then when some threshold is met, load the next 5
-            await db.collection('ActiveTests').get().then(querySnapshot => {
+            await db.collection('randomSampleTests').get().then(querySnapshot => {
                 querySnapshot.forEach((doc) => {
-
                     // doc.data() is never undefined for query doc snapshots
                     console.log(doc.id, " => ", doc.data());
                     // console.log("" + this.user.data.uid)
@@ -116,7 +102,7 @@ export default {
                 });
             }).catch(err => {
                 console.log("Error: " + err)
-                console.log(this.testIDs)
+                console.log(this.test_array)
             })
             console.log(this.test_array)
             // this.setNextThumbnail();
@@ -129,6 +115,7 @@ export default {
             var img_array = []
             for (let i = 0; i < numberOfImages; i++) {
                 // for each image in test
+                console.log("images loop")
                 const image_no = i+1
                 await storageRef.child('/tests/'+ testid + '/img_' + image_no + "/").listAll().then((res) => {
                     // console.log(res);
@@ -167,7 +154,7 @@ export default {
                 return
             }
             if(n==1){
-                db.collection("CreatedTests").doc(this.test_array[this.currentTest].id).update({
+                db.collection("randomSampleTests").doc(this.test_array[this.currentTest].id).update({
                     img_1_votes : firebase.firestore.FieldValue.increment(1),
                     seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
                     totalVotes: firebase.firestore.FieldValue.increment(1),
@@ -177,7 +164,7 @@ export default {
                 })
             }
             if(n==2){
-                db.collection("CreatedTests").doc(this.test_array[this.currentTest].id).update({
+                db.collection("randomSampleTests").doc(this.test_array[this.currentTest].id).update({
                     img_2_votes : firebase.firestore.FieldValue.increment(1),
                     seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
                     totalVotes: firebase.firestore.FieldValue.increment(1),
@@ -187,7 +174,7 @@ export default {
                 })
             }
             if(n==3){
-                db.collection("CreatedTests").doc(this.test_array[this.currentTest].id).update({
+                db.collection("randomSampleTests").doc(this.test_array[this.currentTest].id).update({
                     img_3_votes : firebase.firestore.FieldValue.increment(1),
                     seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
                     totalVotes: firebase.firestore.FieldValue.increment(1),
@@ -197,7 +184,7 @@ export default {
                 })
             }
             if(n==4){
-                db.collection("CreatedTests").doc(this.test_array[this.currentTest].id).update({
+                db.collection("randomSampleTests").doc(this.test_array[this.currentTest].id).update({
                     img_4_votes : firebase.firestore.FieldValue.increment(1),
                     seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
                     totalVotes: firebase.firestore.FieldValue.increment(1),
