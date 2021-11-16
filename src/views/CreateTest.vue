@@ -227,6 +227,7 @@ export default {
                     seenBy: [],
                     title_array: this.title_array,
                     coins_to_purchase: this.coins_to_purchase,
+                    user_photo_url: this.user_profile_photo,
                 }).then(docRef => {
                     
                     this.sendImagesToStorage(docRef).then(()=>{
@@ -275,6 +276,8 @@ export default {
             await db.collection("users").doc(this.user.data.uid).get().then(doc => {
                 this.user_coins = doc.data().coins;
                 this.user_activeTests = doc.data().activeTests;
+                this.user_profile_photo = doc.data().photoURL;
+                console.log(this.user_profile_photo)
                 console.log(this.user_activeTests)
             }).catch(err=> {console.log(err)})
         },
