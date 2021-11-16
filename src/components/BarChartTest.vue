@@ -23,7 +23,7 @@ const purple_outside = "#8B5CF6";
 
 export default defineComponent({
   name: 'Home',
-  props: ['id'],
+  props: ['id','sampletype','active'],
   components: { BarChart },
   setup() {
     var testData = {
@@ -88,15 +88,61 @@ export default defineComponent({
   },
   methods: {
       async generateBarObject(){
+          if(this.active){
+            if(this.sampletype == 'Fans'){
+              console.log('active fans')
+              var unsubscribe = db.collection('fanSampleTests').doc(this.id).onSnapshot((doc)=>{
+                if(doc.data() == null){
+                  if(this.active){
+                    console.log("this is fucked.");
+                  }else{
+                    console.log("There is no longer data in the listener, unsubscribing now");
+                    unsubscribe();
+                    return
+                  }
+                  return
+                }
+                this.barObject = this.createBarObject(doc.data());
+                if(doc.data().totalVotes >= doc.data().sampleSize){
+                  this.$emit('noReactivation')
+                }
+              })
+            }
+            if(this.sampletype == 'Random'){
+              var unsubscribe = db.collection('randomSampleTests').doc(this.id).onSnapshot((doc)=>{
+                if(doc.data() == null){
+                  if(this.active){
+                    console.log("this is fucked.");
+                  }else{
+                    console.log("There is no longer data in the listener, unsubscribing now");
+                    unsubscribe();
+                    return
+                  }
+                  return
+                }
+                this.barObject = this.createBarObject(doc.data());
+                if(doc.data().totalVotes >= doc.data().sampleSize){
+                  this.$emit('noReactivation')
+                }
+              })
+            }
+          }else{
             db.collection('CreatedTests').doc(this.id).onSnapshot((doc) => {
                 this.barObject = this.createBarObject(doc.data());
                 if (doc.data().totalVotes >= doc.data().sampleSize){
                   this.$emit('noReactivation')
                 }
             })
+          }
+          
+          
         },
         createBarObject(docdata){
             // console.log(docdata)
+            if(docdata == null){
+              console.log("docdata has gone missing <3")
+              return
+            }
             console.log(docdata);
             console.log(docdata.imgVotesArray);
             // var votesArray = this.convertToPercentage(docdata.imgVotesArray);
@@ -142,7 +188,9 @@ export default defineComponent({
   },
   created(){
       console.log("Created");
-      console.log(this.id)
+      console.log(this.id);
+      console.log(this.sampletype);
+      console.log(this.active);
       this.generateBarObject();
       console.log(BarChart)
       // BarChart.plugins.default = {
@@ -151,5 +199,10 @@ export default defineComponent({
       //   }
       // }
   },
+  watch: {
+    active: function(val,oldval){
+      this.generateBarObject();
+    }
+  }
 });
 </script>
