@@ -3,16 +3,22 @@
     <div v-if="showTests" class="sm:w-6/12 w-full grid md:grid-cols-2 grid-cols-1 xs:px-5 mx-auto md:gap-4 mt-10">
         <Thumbnail v-for="n in image_count" :key="n" :image="image_array[n-1] " :title="title_array[n-1]" :userCreated="user_profile_image" :index="n" @onClickedThumbnail="selectThumbnail"/>
     </div>
+    <div v-if="show_no_test" class="container flex flex-col items-center">
+        <h1 class="mx-auto text-center text-5xl">Sorry!</h1>
+        <h1 class="mx-auto text-center text-2xl mt-5">This test is processing, or no longer active.</h1>
+        <button @click="sendToHome" class="mt-5 bg-red-500 border-2 border-red-600 text-white shadow-lg p-5 rounded-xl transition duration-500 transform hover:scale-110 w-52">Vote on other tests</button>
+        
+    </div>
 
     <Modal
             v-model="show_thanks_modal"
-            :close="closeModal"
+            
         >
             <div class="bg-gray-200 rounded-lg md:p-10 p-6 w-11/12 sm:w-auto">
                 <h1 class="sm:text-xl text-center">Thanks for Voting!</h1>
                 <h3 class="text-center sm:text-lg text-red-500 pb-4">Sign in to create your own test or vote on more!</h3> 
             <div class="container flex flex-row justify-center gap-4">
-                <button @click="closeModal" class="bg-gray-300 border-2 border-gray-400 rounded-lg py-1 px-2 shadow-lg transform hover:scale-110 transition duration-300"> No thanks </button>
+                <button @click="sendToHome" class="bg-gray-300 border-2 border-gray-400 rounded-lg py-1 px-2 shadow-lg transform hover:scale-110 transition duration-300"> No thanks </button>
                 <button @click="signUpPopup" class="bg-red-500 border-2 border-red-500 rounded-lg py-1 px-2 text-white shadow-lg transform hover:scale-110 transition duration-300"> Sign in with Google </button>
             </div>
             </div>
@@ -53,6 +59,7 @@ export default {
             user_profile_images: null,
             user_id: null,
             show_thanks_modal: false,
+            show_no_test: false,
         }
     },
     created(){
@@ -67,7 +74,7 @@ export default {
         async testList() {
             // TODO : Restrict viewing tests for people who have already seen the test, look into new ways i can model the data to handle that functionality
             // TODO : paginate respoonses, only take like the first 5, and then when some threshold is met, load the next 5
-            await db.collection('CreatedTests').doc(this.testid).get().then(doc => {
+            await db.collection('fanSampleTests').doc(this.testid).get().then(doc => {
                 this.title_array = doc.data().title_array;
                 this.image_count = doc.data().numberOfImages;
                 this.user_id = doc.data().user;
@@ -75,8 +82,9 @@ export default {
                 this.getUserCreatedProfilePhoto(doc.data().user);
 
             }).catch(err => {
-                console.log("Error: " + err)
-                console.log(this.testIDs)
+                console.log("Error: " + err);
+                console.log(this.testIDs);
+                this.show_no_test = true;
             })
             console.log(this.test_array)
             // this.setNextThumbnail();
@@ -118,6 +126,40 @@ export default {
         selectThumbnail: function (n) {
             if(this.userData == null){
                 console.log('not logged in')
+                if(n==1){
+                    // since i'll eventually allow non-logged in users to vote, need to conditionally do the seenBy: argument
+                    // probably if (user) then this.userData.uid else 'anonymous'
+                    db.collection("fanSampleTests").doc(this.testid).update({
+                        img_1_votes : firebase.firestore.FieldValue.increment(1),
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+                }
+                if(n==2){
+                    db.collection("fanSampleTests").doc(this.testid).update({
+                        img_2_votes : firebase.firestore.FieldValue.increment(1),
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+                }
+                if(n==3){
+                    db.collection("fanSampleTests").doc(this.testid).update({
+                        img_3_votes : firebase.firestore.FieldValue.increment(1),
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+                }
+                if(n==4){
+                    db.collection("fanSampleTests").doc(this.testid).update({
+                        img_4_votes : firebase.firestore.FieldValue.increment(1),
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+                }
             }
             else if(this.userData.uid == this.user_id){
                 console.log("You can't vote on your own posts!")
@@ -126,7 +168,7 @@ export default {
                 if(n==1){
                     // since i'll eventually allow non-logged in users to vote, need to conditionally do the seenBy: argument
                     // probably if (user) then this.userData.uid else 'anonymous'
-                    db.collection("CreatedTests").doc(this.testid).update({
+                    db.collection("fanSampleTests").doc(this.testid).update({
                         img_1_votes : firebase.firestore.FieldValue.increment(1),
                         seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
                     })
@@ -135,7 +177,7 @@ export default {
                     })
                 }
                 if(n==2){
-                    db.collection("CreatedTests").doc(this.testid).update({
+                    db.collection("fanSampleTests").doc(this.testid).update({
                         img_2_votes : firebase.firestore.FieldValue.increment(1),
                         seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
                     })
@@ -144,7 +186,7 @@ export default {
                     })
                 }
                 if(n==3){
-                    db.collection("CreatedTests").doc(this.testid).update({
+                    db.collection("fanSampleTests").doc(this.testid).update({
                         img_3_votes : firebase.firestore.FieldValue.increment(1),
                         seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
                     })
@@ -153,7 +195,7 @@ export default {
                     })
                 }
                 if(n==4){
-                    db.collection("CreatedTests").doc(this.testid).update({
+                    db.collection("fanSampleTests").doc(this.testid).update({
                         img_4_votes : firebase.firestore.FieldValue.increment(1),
                         seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
                     })
@@ -182,9 +224,6 @@ export default {
                 console.log(doc.data().photoURL);
                 this.user_profile_image = doc.data().photoURL;
             });
-        },
-        onChangingThumbnails() {
-            this.$emit('onChangingThumbnails')
         },
         closeModal(){
             this.show_thanks_modal = false;
@@ -249,6 +288,9 @@ export default {
             doc => {
                 return doc.exists;
             })
+        },
+        sendToHome(){
+            this.$router.push('/');
         },       
 
     }
