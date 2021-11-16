@@ -94,7 +94,7 @@ export default defineComponent({
               var unsubscribe = db.collection('fanSampleTests').doc(this.id).onSnapshot((doc)=>{
                 if(doc.data() == null){
                   if(this.active){
-                    console.log("this is fucked.");
+                    console.log("variable still says active");
                   }else{
                     console.log("There is no longer data in the listener, unsubscribing now");
                     unsubscribe();
