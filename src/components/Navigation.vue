@@ -10,12 +10,12 @@
         <div v-if="!mobile" class="container flex flex-row justify-end bg-white my-2 rounded-lg max-w-xl mr-8 shadow-sm max-h-lg">
             <ul v-show="!mobile" class="container flex flex-row justify-around items-center">
 
-                <router-link @click="toggleActiveNav('Home')" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" :class="{'bg-red-500 text-white': activeNav == 'Home'}" to="/">Home</router-link> 
-                <router-link @click="toggleActiveNav('WhyTest')" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" :class="{'bg-red-500 text-white': activeNav == 'WhyTest'}" to="#">Why Test?</router-link>
-                <router-link @click="toggleActiveNav('CreateTest')" v-if="loggedIn" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" :class="{'bg-red-500 text-white': activeNav == 'CreateTest'}" to="/createtest">Create Test</router-link>
+                <router-link @click="toggleActiveNav('Home')" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" active-class="bg-red-500 text-white" to="/">Home</router-link> 
+                <router-link @click="toggleActiveNav('WhyTest')" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="#">Why Test?</router-link>
+                <router-link @click="toggleActiveNav('CreateTest')" v-if="loggedIn" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" active-class="bg-red-500 text-white" to="/createtest">Create Test</router-link>
                 <button @click="signInWithGoogle" v-if="!loggedIn" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/register">Login With Google </button> 
-                <router-link @click="toggleActiveNav('MyTests')" v-if="loggedIn" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" :class="{'bg-red-500 text-white': activeNav == 'MyTests'}" to="/mytests">My Tests</router-link>      
-                <router-link @click="toggleActiveNav('Account')" v-if="loggedIn" class = "container h-full flex justify-around items-around p-3 hover:bg-red-500  rounded-lg transition duration-500 ease-in-out transform" :class="{'bg-red-500': activeNav == 'Account'}" to="/account">
+                <router-link @click="toggleActiveNav('MyTests')" v-if="loggedIn" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" active-class="bg-red-500 text-white" to="/mytests">My Tests</router-link>      
+                <router-link @click="toggleActiveNav('Account')" v-if="loggedIn" class = "container h-full flex justify-around items-around p-3 hover:bg-red-500  rounded-lg transition duration-500 ease-in-out transform" active-class="bg-red-500" to="/account">
                 <Coin v-if="user.data != null" :coins="coins" @change="listenForCoins" class="z-10 fixed w-7 h-7 mt-1 ml-6"/>
                 <img :src="userData.photo" alt="" srcset="" class="rounded-full w-10 border-2 fixed -mt-2 mr-3">
                 
@@ -33,11 +33,11 @@
                     <img :src="userData.photo" alt="" srcset="" class="rounded-full w-12 h-12 border-2">
                     <Coin v-if="user.data != null" :coins="coins" @change="listenForCoins" class="w-12 h-12"/>
                 </router-link>
-                <router-link @click="toggleMobileNav('Home')" class = "container mb-2 mt-2 w-2/3 flex justify-center items-center p-3 bg-white opacity-100 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/" >Home</router-link> 
+                <router-link @click="toggleMobileNav('Home')" class = "container mb-2 mt-2 w-2/3 flex justify-center items-center p-3 bg-white opacity-100 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" active-class="bg-red-500 text-white" to="/" >Home</router-link> 
                 <router-link @click="toggleMobileNav('WhyTest')" class = "container mb-2 w-2/3 flex justify-center items-center p-3 bg-white hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="#" >Why Test?</router-link>
-                <router-link @click="toggleMobileNav('CreateTest')" v-if="loggedIn" class = "container mb-2 w-2/3 flex justify-center items-center p-3 bg-white hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/createtest">Create Test</router-link>
+                <router-link @click="toggleMobileNav('CreateTest')" v-if="loggedIn" class = "container mb-2 w-2/3 flex justify-center items-center p-3 bg-white hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" active-class="bg-red-500 text-white" to="/createtest">Create Test</router-link>
                 <button @click="signInWithGoogle" v-if="!loggedIn" class = "container mb-2 w-2/3 flex justify-center items-center p-3 bg-white hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/register">Login With Google </button> 
-                <router-link @click="toggleMobileNav('MyTests')" v-if="loggedIn" class = "container mb-2 w-2/3 flex justify-center items-center p-3 bg-white hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/myTests">My Tests</router-link>      
+                <router-link @click="toggleMobileNav('MyTests')" v-if="loggedIn" class = "container mb-2 w-2/3 flex justify-center items-center p-3 bg-white hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" active-class="bg-red-500 text-white" to="/myTests">My Tests</router-link>      
                 
         </ul>
     </transition>
@@ -72,8 +72,6 @@ export default {
             mobileNav: null,
             windowWidth: null,
             coins: 0,
-            // profPic: null,
-            activeNav: this.$route.fullPath,
         };
     },
     computed:{
@@ -109,10 +107,6 @@ export default {
         })
     },
     methods: {
-        toggleActiveNav(e){
-            this.activeNav = e
-            console.log(this.activeNav)
-        },
         checkScreen() {
             this.windowWidth = window.innerWidth;
             if (this.windowWidth < 1115){
