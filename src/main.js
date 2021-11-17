@@ -32,13 +32,17 @@ firebase.auth().onAuthStateChanged(async user => {
   store.dispatch("fetchUser", user)
 })
 
-const app = createApp(App).use(store)
+const app = createApp(App).use(store);
+
+
+// app.use(firebase);
 
 // // picker component that I made, that needs to be registered
 // import Picker from './components/Picker.vue';
 // importing picker fucks my life up, not gonna figure that out yet
 import Coin from './components/Coin.vue';
 import TestCardThumbnail from './components/TestCardThumbnail.vue';
+// import BarChartTest from './components/BarChartTest.vue';
 
 // use vue router
 app.use(router)
@@ -51,10 +55,12 @@ app.use(VueUniversalModal, {
   teleportTarget: 'body'
 })
 
+
 // use picker component
 // app.use(Picker)
 // app.component('Picker', Picker);
 app.component('Coin', Coin);
 app.component('TestCardThumbnail', TestCardThumbnail);
+// app.component('BarChartTest', BarChartTest);
 
 app.mount('#app');
