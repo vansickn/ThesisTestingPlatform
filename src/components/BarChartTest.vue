@@ -102,6 +102,7 @@ export default defineComponent({
                   }
                   return
                 }
+                this.$emit("snapshotUpdate",doc.data())
                 this.barObject = this.createBarObject(doc.data());
                 if(doc.data().totalVotes >= doc.data().sampleSize){
                   this.$emit('noReactivation')
@@ -120,18 +121,13 @@ export default defineComponent({
                   }
                   return
                 }
+                this.$emit("snapshotUpdate",doc.data())
                 this.barObject = this.createBarObject(doc.data());
-                if(doc.data().totalVotes >= doc.data().sampleSize){
-                  this.$emit('noReactivation')
-                }
               })
             }
           }else{
             db.collection('CreatedTests').doc(this.id).onSnapshot((doc) => {
                 this.barObject = this.createBarObject(doc.data());
-                if (doc.data().totalVotes >= doc.data().sampleSize){
-                  this.$emit('noReactivation')
-                }
             })
           }
           

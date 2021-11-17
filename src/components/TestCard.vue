@@ -27,7 +27,7 @@
             </button>
         </div>
         <div class="pt-2 w-full pr-10 pl-8">
-            <BarChartTest v-if="sample_type != null" :id="testID" :sampletype="sample_type" :active="active" @noReactivation="able_to_be_reactivated = false"/>
+            <BarChartTest v-if="sample_type != null" :id="testID" :sampletype="sample_type" :active="active" @snapshotUpdate="calculateTotalVotes"/>
         </div>
         <div class="w-11/12 grid grid-cols-2 gap-2">
         <!-- v-for TestCard Thumbnail with n in range of numberOfImages, pass in both arrays, use prop of n to determine which index to display -->
@@ -138,7 +138,10 @@ export default {
             }
         },
         calculateTotalVotes(data){
-            this.total_votes = data.img_1_votes + data.img_2_votes + data.img_3_votes + data.img_4_votes
+            this.total_votes = data.img_1_votes + data.img_2_votes + data.img_3_votes + data.img_4_votes;
+            if(this.total_votes >= data.sampleSize){
+                this.able_to_be_reactivated = false;
+            }
         },
         shareLink(){
             this.$copyText(window.location.origin + '/test/' +this.testID).then(()=> {
@@ -173,11 +176,7 @@ export default {
         reactivateTest(){
             this.$emit('reactivatedTest',this.testID,this.sample_type);
             this.closeModal();
-        },
-        cannotReactivate(){
-            console.log("HAS BEEN EMITTED")
-            this.able_to_be_reactivated = false;
-        }
+        }, 
     },
     created(){
         this.generateTestData();
