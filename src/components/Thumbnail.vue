@@ -2,7 +2,7 @@
 <!-- Div container, flex column, first item is image, second item is another div with flex row, aligned to left -->
     <div class="w-auto h-auto container mb-5 flex-col">
         <div class="bg-gray-300">
-        <img v-show="!show_image" class="shadow-xl transition duration-300 ease-in-out transform md:hover:scale-105 filter md:hover:brightness-105 select-none animate-pulse" src="src/assets/loadingthumbnail2.png" alt="hey">
+        <img v-show="!show_image" class="shadow-xl transition duration-300 ease-in-out transform md:hover:scale-105 filter md:hover:brightness-105 select-none animate-pulse" src="/src/assets/loadingthumbnail2.png" alt="hey">
         <!-- <div class="w-360 h-202 bg-gray-300 border-2 border-gray-400">loading</div> -->
         <img v-show="show_image" class= 'shadow-xl transition duration-300 ease-in-out transform md:hover:scale-105 filter md:hover:brightness-105 select-none' @click="clickedThumbnail" @mouseover="hover = true" @mouseleave="hover = false" :src="image" @load="loadImage" 
         :class="{
