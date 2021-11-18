@@ -2,9 +2,9 @@
 <!-- Div container, flex column, first item is image, second item is another div with flex row, aligned to left -->
     <div class="w-auto h-auto container mb-5 flex-col">
         <div class="bg-gray-300">
-        <img v-show="!show_image" class="shadow-xl transition duration-300 ease-in-out transform md:hover:scale-105 filter md:hover:brightness-105 select-none animate-pulse" src="/src/assets/loadingthumbnail2.png" alt="hey">
+        <img v-show="!isLoaded" class="shadow-xl transition duration-300 ease-in-out transform md:hover:scale-105 filter md:hover:brightness-105 select-none animate-pulse" src="/src/assets/loadingthumbnail2.png" alt="hey">
         <!-- <div class="w-360 h-202 bg-gray-300 border-2 border-gray-400">loading</div> -->
-        <img v-show="show_image" class= 'shadow-xl transition duration-300 ease-in-out transform md:hover:scale-105 filter md:hover:brightness-105 select-none' @click="clickedThumbnail" @mouseover="hover = true" @mouseleave="hover = false" :src="image" @load="loadImage" 
+        <img v-show="isLoaded" class= 'shadow-xl transition duration-300 ease-in-out transform md:hover:scale-105 filter md:hover:brightness-105 select-none' @click="clickedThumbnail" @mouseover="hover = true" @mouseleave="hover = false" :src="image" @load="loadImage" 
         :class="{
             'hover': hover,
             'border-4 border-red-500 rounded-md': border == 'red',
@@ -58,14 +58,14 @@ export default {
     },
     watch: {
         testid: function(val){
-            this.show_image = false;
+            this.isLoaded = false;
             this.fetchImage();
             console.log(val)
         }
     },
     methods: {
         clickedThumbnail(){
-            if(!this.show_image){
+            if(!this.isLoaded){
                 return
             }else{
                 this.$emit('onClickedThumbnail',this.index)
@@ -84,12 +84,6 @@ export default {
             await storageRef.child('tests/'+this.testid+'/img_'+this.index+'/').listAll().then((res)=>{
                 res.items[0].getDownloadURL().then(url => {
                     this.image = url;
-                    // setTimeout(function(){
-                    //     this.show_image = true;
-                    // },200)
-                    setTimeout(()=>{this.show_image = true;},250)
-                    // this.show_image = true;
-                    console.log(this.image)
                 }).catch(e=>{
                     console.log(e)
                     console.log("Error <3")
