@@ -434,6 +434,7 @@ module.exports = {
       screen: '100vh',
       360: '360px',
       240: '240px',
+      202: '202px',
       144: '144px',
     }),
     inset: (theme, { negative }) => ({
