@@ -1,7 +1,8 @@
 <template>
 <!-- Div container, flex column, first item is image, second item is another div with flex row, aligned to left -->
     <div class="w-auto h-auto container mb-5 flex-col">
-        <img class= 'shadow-xl transition duration-300 ease-in-out transform md:hover:scale-105 filter md:hover:brightness-105 select-none' @click="clickedThumbnail" @mouseover="hover = true" @mouseleave="hover = false" :src="image" @load="loadImage" 
+        <img v-show="!show_image" class="shadow-xl max-w-360 transition duration-300 ease-in-out transform md:hover:scale-105 filter md:hover:brightness-105 select-none" src="src/assets/tempThumbnails/ChessThumbnail.png" alt="hey">
+        <img v-show="show_image" class= 'shadow-xl transition duration-300 ease-in-out transform md:hover:scale-105 filter md:hover:brightness-105 select-none' @click="clickedThumbnail" @mouseover="hover = true" @mouseleave="hover = false" :src="image" @load="loadImage" 
         :class="{
             'hover': hover,
             'border-4 border-red-500 rounded-md': border == 'red',
@@ -10,7 +11,6 @@
         <div class="container flex-row flex"> 
             <img :src="userCreated" class="bg-red-100 md:w-10 md:h-10 rounded-full mt-3 w-8 h-8 mb-0">
             <span class="md:ml-5 ml-3 mt-3 text-sm md:text-base"> {{title}}</span>
-            
         </div>
         
     </div>
@@ -21,10 +21,13 @@
 
 <script>
 import {mapGetters} from 'vuex';
+import firebase from 'firebase';
+
+var storageRef = firebase.storage().ref();
 
 export default {
     name: 'thumbnail',
-    props: ['image','userCreated','title', 'border','index'],
+    props: ['userCreated','title', 'border','index','testid','currentTest'],
     computed: {
         ...mapGetters({
             userData: 'userData',
@@ -36,6 +39,8 @@ export default {
             hover: false,
             isLoaded: false,
             userPhotoLoaded: false,
+            image: null,
+            show_image: false,
         } 
     },
     created(){
@@ -46,11 +51,12 @@ export default {
     mounted(){
         console.log("mounted")
         console.log(this.userCreated)
+        this.fetchImage();
     },
     watch: {
-        image: function(){
-            console.log("changed")
-            console.log(this.image)
+        testid: function(val){
+            this.fetchImage();
+            console.log(val)
         }
     },
     methods: {
@@ -65,7 +71,20 @@ export default {
             if(color == 'red'){
                 return {'border-4 border-red-500 rounded-md':border != null};
             }
+        },
+        async fetchImage(){
+            await storageRef.child('tests/'+this.testid+'/img_'+this.index+'/').listAll().then((res)=>{
+                res.items[0].getDownloadURL().then(url => {
+                    this.image = url;
+                    this.show_image = true;
+                    console.log(this.image)
+                }).catch(e=>{
+                    console.log(e)
+                    console.log("Error <3")
+                })
+            })
         }
+
     }
 }
 </script>

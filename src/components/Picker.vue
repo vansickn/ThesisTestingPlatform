@@ -1,21 +1,21 @@
 <template>
-
-    <div v-if="showTests" class="sm:w-6/12 w-full grid md:grid-cols-2 grid-cols-1 xs:px-5 mx-auto md:gap-4">
+    <!-- the showTests is VERY IMPORTANT DO NOT DELETE! not sure why but it fucks up my life with the navigation and I have no idea why. -->
+    <div v-if="showTests" class="sm:w-6/12 w-full grid md:grid-cols-2 grid-cols-1 xs:px-5 mx-auto md:gap-4"> 
         <!-- Might create a seperate component for the actual tester aspect of this, because the reliability of the images loading is very suspect -->
-        <Thumbnail v-for="n in test_array[currentTest].imageCount" :key="n" :image="test_array[currentTest].img_array[n-1] " :title="test_array[currentTest].title_array[n-1]" :userCreated="user_profile_images_array[currentTest]" :index="n" @onClickedThumbnail="selectThumbnail"/>
+        <Thumbnail v-for="n in test_array[currentTest].imageCount" :key="n" :testid="test_array[currentTest].id" :title="test_array[currentTest].title_array[n-1]" :userCreated="test_array[currentTest].profile_img" :index="n" @onClickedThumbnail="selectThumbnail"/>
     </div>
 <!-- going to pass in the user who created the test, and calculate the user photo from here. Could also just calculate that in the home.vue as well and just pass in the photo. Either works -->
 </template>
 
 
 <script>
-import Thumbnail from '../components/Thumbnail.vue';
 import firebase from 'firebase';
 import { mapGetters} from 'vuex';
 import {reactive} from 'vue';
+import Thumbnail from '../components/Thumbnail.vue';
 
 const db = firebase.firestore();
-var storageRef = firebase.storage().ref();
+// var storageRef = firebase.storage().ref();
 
 // Eventually want to send the data about the thumbnail (photo, title, profImage as an object into the thumbnail)
 export default {
@@ -30,10 +30,7 @@ export default {
         return {
             currentTest: 0,
             userCreatedPhoto: null,
-            title0: null,
-            title2: null,
             test_array: [], //array of objects
-            image_array: [],
             showTests: false,
             user_profile_images_array: [],
         }
@@ -59,7 +56,7 @@ export default {
                     const numberOfImages = doc.data().numberOfImages;
                     const title_array = doc.data().title_array;
                     const sampleSize = doc.data().sampleSize;
-                    const img_array = []
+                    const profile_img = doc.data().user_photo_url;
 
                     // Checks if the user created it, if they did they will not see it
                     // only if theyre logged in though, if not they can see it
@@ -68,37 +65,30 @@ export default {
                         if("" + this.userData.uid != doc.data().user){
                             console.log("Logged in")
                             // This solution works for now, kinda still shitty but works for now
-                            this.fetchImages(doc.id, numberOfImages).then((img_array) => {
-                                // this.getUserCreatedProfilePhoto(doc.data().user); //function no longer needed as it is stored in the created test
-                                this.user_profile_images_array.push(doc.data().user_photo_url);
-                                this.verifyArray(img_array,numberOfImages);
-                                const obj = {
-                                    // added to the test_array list as this object
-                                    id: doc.id,
-                                    imageCount: numberOfImages,
-                                    title_array: title_array,
-                                    sampleSize: sampleSize,
-                                    img_array: img_array,
-                                }
-                                this.test_array.push(obj);
-                            });
+                            const obj = {
+                                // added to the test_array list as this object
+                                id: doc.id,
+                                imageCount: numberOfImages,
+                                title_array: title_array,
+                                sampleSize: sampleSize,
+                                profile_img: profile_img,
+                            }
+                            this.test_array.push(obj);
+                            this.showTests = true;
                         }
                     }else{
                         console.log("Not logged in")
                         console.log(doc.id)
-                        this.fetchImages(doc.id, numberOfImages).then((img_array) => {
-                                this.verifyArray(img_array,numberOfImages);
-                                this.getUserCreatedProfilePhoto(doc.data().user)
-                                const obj = {
-                                    // added to the test_array list as this object
-                                    id: doc.id,
-                                    imageCount: numberOfImages,
-                                    title_array: title_array,
-                                    sampleSize: sampleSize,
-                                    img_array: img_array,
-                                }
-                                this.test_array.push(obj);
-                            })
+                        const obj = {
+                            // added to the test_array list as this object
+                            id: doc.id,
+                            imageCount: numberOfImages,
+                            title_array: title_array,
+                            sampleSize: sampleSize,
+                            profile_img: profile_img,
+                        }
+                        this.test_array.push(obj);
+                        this.showTests = true;
                     }
                 });
             }).catch(err => {
@@ -108,38 +98,6 @@ export default {
             console.log(this.test_array)
             // this.setNextThumbnail();
             // this.fetchImages();
-        },
-
-        async fetchImages(testid, numberOfImages){
-            console.log(testid)
-            console.log(numberOfImages)
-            var img_array = []
-            for (let i = 0; i < numberOfImages; i++) {
-                // for each image in test
-                console.log("images loop")
-                const image_no = i+1
-                await storageRef.child('/tests/'+ testid + '/img_' + image_no + "/").listAll().then((res) => {
-                    // console.log(res);
-                    res.items[0].getDownloadURL().then(url => {
-                        img_array[i] = url
-                        // console.log(url)
-                    })
-                })
-            }
-            console.log(img_array)
-            return img_array;
-        },
-        async verifyArray(img_array,number){
-            if(img_array.length == number){
-                console.log("verified")
-                console.log(img_array)
-                this.showTests = true;
-            }else{
-                setTimeout(()=>{
-                    console.log("not verified")
-                    return this.verifyArray(img_array,number)
-                },50)
-            }
         },
 
         // This thumbnail is pretty ugly and hardcoded, can't really find a better way to do this
