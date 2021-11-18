@@ -532,6 +532,7 @@ module.exports = {
       lg: '32rem',
       xl: '36rem',
       640: '640px',
+      360: '360px',
       '2xl': '42rem',
       '3xl': '48rem',
       '4xl': '56rem',
