@@ -1672,7 +1672,7 @@
   dependencies:
     "delegate" "^3.1.2"
 
-"google-auth-library@^7.0.0", "google-auth-library@^7.6.1", "google-auth-library@^7.9.2":
+"google-auth-library@^7.0.0", "google-auth-library@^7.0.2", "google-auth-library@^7.6.1", "google-auth-library@^7.9.2":
   "integrity" "sha512-nQxgM1ZopUMcpMnu95kOSzI+9tJl4YDOZJomSTBGlRLpxfBopdwto7WvzoI87HuN0nQqVETgOsHi/C/po1rppA=="
   "resolved" "https://registry.npmjs.org/google-auth-library/-/google-auth-library-7.10.1.tgz"
   "version" "7.10.1"
@@ -1712,6 +1712,26 @@
   "version" "3.1.2"
   dependencies:
     "node-forge" "^0.10.0"
+
+"googleapis-common@^5.0.2":
+  "integrity" "sha512-o2dgoW4x4fLIAN+IVAOccz3mEH8Lj1LP9c9BSSvkNJEn+U7UZh0WSr4fdH08x5VH7+sstIpd1lOYFZD0g7j4pw=="
+  "resolved" "https://registry.npmjs.org/googleapis-common/-/googleapis-common-5.0.5.tgz"
+  "version" "5.0.5"
+  dependencies:
+    "extend" "^3.0.2"
+    "gaxios" "^4.0.0"
+    "google-auth-library" "^7.0.2"
+    "qs" "^6.7.0"
+    "url-template" "^2.0.8"
+    "uuid" "^8.0.0"
+
+"googleapis@^91.0.0":
+  "integrity" "sha512-iHqXZwgYam0g8n0Yyi+YHx8kgwT+H5O4k3fe0LB1JhWRp1dSKYu+ShY4PQbW584zLOE4kK3LHf2B+x1THx+ZPQ=="
+  "resolved" "https://registry.npmjs.org/googleapis/-/googleapis-91.0.0.tgz"
+  "version" "91.0.0"
+  dependencies:
+    "google-auth-library" "^7.0.2"
+    "googleapis-common" "^5.0.2"
 
 "graceful-fs@^4.1.2", "graceful-fs@^4.1.6", "graceful-fs@^4.2.0":
   "integrity" "sha512-qkIilPUYcNhJpd33n0GBXTB1MMPp14TxEsEs0pTrsSVucApsYzW5V+Q8Qxhik6KU3evy+qkAAowTByymK0avdg=="
@@ -2646,6 +2666,13 @@
   "resolved" "https://registry.npmjs.org/q/-/q-1.5.1.tgz"
   "version" "1.5.1"
 
+"qs@^6.7.0":
+  "integrity" "sha512-M528Hph6wsSVOBiYUnGf+K/7w0hNshs/duGsNXPUCLH5XAqjEtiPGwNONLV0tBH8NoGb0mvD5JubnUTrujKDTg=="
+  "resolved" "https://registry.npmjs.org/qs/-/qs-6.10.1.tgz"
+  "version" "6.10.1"
+  dependencies:
+    "side-channel" "^1.0.4"
+
 "queue-microtask@^1.2.2":
   "integrity" "sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A=="
   "resolved" "https://registry.npmjs.org/queue-microtask/-/queue-microtask-1.2.3.tgz"
@@ -3057,6 +3084,11 @@
   "integrity" "sha1-j97XMk7G6IoP+LkF58CYzcCG1UQ="
   "resolved" "https://registry.npmjs.org/unquote/-/unquote-1.1.1.tgz"
   "version" "1.1.1"
+
+"url-template@^2.0.8":
+  "integrity" "sha1-/FZaPMy/93MMd19WQflVV5FDnyE="
+  "resolved" "https://registry.npmjs.org/url-template/-/url-template-2.0.8.tgz"
+  "version" "2.0.8"
 
 "util-deprecate@^1.0.1", "util-deprecate@^1.0.2":
   "integrity" "sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8="

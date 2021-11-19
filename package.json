@@ -12,6 +12,7 @@
     "es6-promise": "^4.2.8",
     "firebase": "^8.6.5",
     "firebase-admin": "^10.0.0",
+    "googleapis": "^91.0.0",
     "vue": "^3.2.2",
     "vue-chart-3": "^0.5.8",
     "vue-chartjs": "^3.5.1",
