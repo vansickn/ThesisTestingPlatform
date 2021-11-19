@@ -119,3 +119,21 @@ exports.onTestDeActivation = functions
             });
       }
     });
+exports.youtubeSignIn = functions.https.onCall((data, context) => {
+  const {google} = require("googleapis");
+  let id = "887536811640-9n7276g4oafevop5adma6l7pqu2612c1";
+  id += ".apps.googleusercontent.com";
+  const oauth2Client = new google.auth.OAuth2(
+      id,
+      "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",
+      "http://localhost:3000/mytests"
+  );
+  const scopes = [
+    "https://www.googleapis.com/auth/yt-analytics.readonly",
+  ];
+  const url = oauth2Client.generateAuthUrl({
+    access_type: "offline",
+    scope: scopes,
+  });
+  return url;
+});
