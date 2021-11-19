@@ -207,7 +207,7 @@ export default {
                 this.show_not_enough_coins = true;
                 return
             }
-            else if(this.user_activeTests != null && this.user_activeTests.length >= 1){
+            else if(this.user_activeTests != null && this.user_activeTests.length >= 1 && !this.paidAccount){
                 this.show_more_than_one_active_test = true
             }
             else{
@@ -273,12 +273,15 @@ export default {
             this.show_more_than_one_active_test = false;
         },
         async fetchData() {
-            await db.collection("users").doc(this.user.data.uid).get().then(doc => {
+            await db.collection("users").doc(this.user.data.uid).get().then((doc) => {
+                this.paidAccount = doc.data().paidAccount;
                 this.user_coins = doc.data().coins;
                 this.user_activeTests = doc.data().activeTests;
                 this.user_profile_photo = doc.data().photoURL;
                 console.log(this.user_profile_photo)
                 console.log(this.user_activeTests)
+                console.log('hey')
+                console.log(this.user_coins)
             }).catch(err=> {console.log(err)})
         },
         sendToHome(){
@@ -338,6 +341,7 @@ export default {
     },
     data() {
         return {
+            paidAccount: null,
             user_activeTests: null,
             user_coins: null,
             sample_type: 'Random',
