@@ -1,4 +1,5 @@
 <template>
+    <button @click="ytsignin">call ytsignin</button>
 
     <div class="container flex flex-row md:ml-10 md:my-10 ml-5 my-5 items-center max-w-full">
         <img :src="userData.photo" alt="Hey?" srcset="" class="rounded-full lg:w-20 lg:h-20 md:w-16 md:h-16 w-10 h-10  border-2 border-black md:mr-10 mr-5 select-none">
@@ -63,7 +64,7 @@ import UpgradeCard from '../components/UpgradeCard.vue'
 
 
 const db = firebase.firestore();
-
+const youtubeSignInFunction = firebase.functions().httpsCallable('youtubeSignIn');
 
 
 
@@ -118,6 +119,13 @@ export default {
         round(value, precision) {
             var multiplier = Math.pow(10, precision || 0);
             return Math.round(value * multiplier) / multiplier;
+        },
+        ytsignin(){
+            youtubeSignInFunction({}).then(res=>{
+                console.log(res);
+                console.log(res.data);
+                window.location.replace(res.data);
+            })
         }
     }
 
