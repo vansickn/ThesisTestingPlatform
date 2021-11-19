@@ -133,8 +133,10 @@
     :close="closeModal"
     >
         <div class="bg-gray-200 rounded-lg md:p-10 p-6 sm:w-auto">
+            <img class="w-12 h-12 animate-spin mx-auto" src="https://img.icons8.com/material-outlined/96/000000/spinner-frame-4.png"/>
             <h1 class="text-xl text-center">Creating your test!</h1>
             <h2 class="text-xl text-center text-red-500">Do not click away from this window until you are redirected.</h2>
+
         </div>
 
     </Modal>
