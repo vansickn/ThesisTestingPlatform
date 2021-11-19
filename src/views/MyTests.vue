@@ -64,6 +64,7 @@ export default {
             noTests: false,
             activeTestList: null,
             show_more_than_one_active_test: false,
+            paidAccount: false,
 
         }
     },
@@ -71,6 +72,7 @@ export default {
         async generateTestList(){
             await db.collection('users').doc(this.userData.uid).get().then((doc) => {
                 // reverse test list so newest ones are on top
+                this.paidAccount = doc.data().paidAccount;
                 this.testIDList = doc.data().testsCreated.reverse();
                 this.activeTestList = doc.data().activeTests;
                 if(this.testIDList.length == 0){this.noTests = true};
@@ -145,7 +147,7 @@ export default {
             })
         },
         reactivateTest(testid,sampletype){
-            if(this.activeTestList.length >= 1){
+            if(this.activeTestList.length >= 1 && !this.paidAccount){
                 this.show_more_than_one_active_test = true;
                 return
             }else{
