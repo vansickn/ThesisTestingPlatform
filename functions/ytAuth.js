@@ -1,14 +1,12 @@
 const functions = require("firebase-functions");
 const {google} = require("googleapis");
 const admin = require("firebase-admin");
-
-let id = "887536811640-9n7276g4oafevop5adma6l7pqu2612c1";
-id += ".apps.googleusercontent.com";
+const credentials = require('./credentials');
 
 const oauth2Client = new google.auth.OAuth2(
-    id,
-    "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",
-    "http://localhost:3000/account"
+    credentials.credentials.clientID,
+    credentials.credentials.secret,
+    "http://localhost:3000/account",
 );
 const scopes = [
   "https://www.googleapis.com/auth/yt-analytics.readonly",
