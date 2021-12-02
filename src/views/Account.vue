@@ -133,11 +133,16 @@ export default {
                 console.log('userdata is null');
                 return
             }
+            if(this.savedTokens){
+                console.log('already saved tokens to database');
+                return
+            }
             const url = new URL(window.location);
             console.log(url);
             const code = url.searchParams.get('code');
             if(code != null){
                 saveTokens({code,userID}).then(()=>{
+                    this.savedTokens = true;
                     console.log('successfully saved to database')
                 })
             }
