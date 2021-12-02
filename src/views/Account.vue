@@ -65,6 +65,7 @@ import UpgradeCard from '../components/UpgradeCard.vue'
 
 const db = firebase.firestore();
 const youtubeSignInFunction = firebase.functions().httpsCallable('youtubeSignIn');
+const saveTokens = firebase.functions().httpsCallable('saveTokens');
 
 
 
@@ -126,8 +127,49 @@ export default {
                 console.log(res.data);
                 window.location.replace(res.data);
             })
+        },
+        saveYoutubeTokens(userID){
+            if(userID == null){
+                console.log('userdata is null');
+                return
+            }
+            const url = new URL(window.location);
+            console.log(url);
+            const code = url.searchParams.get('code');
+            if(code != null){
+                saveTokens({code,userID}).then(()=>{
+                    console.log('successfully saved to database')
+                })
+            }
+        },
+    },
+    watch:{
+        // Terrible way to do this, it's calling the function like 5 times and fucking shit up
+        userData: function(oldval,newval){
+            console.log(oldval);
+            console.log(newval);
+            // need to find a way to only call this once
+            this.saveYoutubeTokens(newval)
         }
-    }
+    },
+    // async mounted(){
+    //     // // error check here if the person hasn't accessed their youtube account yet
+    //     // const url = new URL(window.location);
+    //     // console.log(url);
+    //     // const code = url.searchParams.get('code');
+    //     // var userID = this.userData.uid;
+    //     // console.log(userID);
+    //     // console.log(code);
+    //     // // Maybe make this a callable cloud function instead, need to figure out how to pass this through
+    //     // if(code != null){
+    //     //     await fetch('https://us-central1-abtesting-fb780.cloudfunctions.net/onYTAuth',{body:{
+    //     //         code,
+    //     //         userID
+    //     //     }})
+    //     // }
+    //     // if the code is not null, then send to the firebase function with the parameters of the code and the userID of the person logged in.
+    //     // this will save it to the tokens database.
+    // }
 
 }
 </script>
