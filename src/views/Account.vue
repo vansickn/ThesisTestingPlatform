@@ -1,4 +1,5 @@
 <template>
+    <button @click="ytsignin">call ytsignin</button>
 
     <div class="container flex flex-row md:ml-10 md:my-10 ml-5 my-5 items-center max-w-full">
         <img :src="userData.photo" alt="Hey?" srcset="" class="rounded-full lg:w-20 lg:h-20 md:w-16 md:h-16 w-10 h-10  border-2 border-black md:mr-10 mr-5 select-none">
@@ -63,7 +64,8 @@ import UpgradeCard from '../components/UpgradeCard.vue'
 
 
 const db = firebase.firestore();
-
+const youtubeSignInFunction = firebase.functions().httpsCallable('youtubeSignIn');
+const saveTokens = firebase.functions().httpsCallable('saveTokens');
 
 
 
@@ -118,8 +120,61 @@ export default {
         round(value, precision) {
             var multiplier = Math.pow(10, precision || 0);
             return Math.round(value * multiplier) / multiplier;
+        },
+        ytsignin(){
+            youtubeSignInFunction({}).then(res=>{
+                console.log(res);
+                console.log(res.data);
+                window.location.replace(res.data);
+            })
+        },
+        saveYoutubeTokens(userID){
+            if(userID == null){
+                console.log('userdata is null');
+                return
+            }
+            if(this.savedTokens){
+                console.log('already saved tokens to database');
+                return
+            }
+            const url = new URL(window.location);
+            console.log(url);
+            const code = url.searchParams.get('code');
+            if(code != null){
+                saveTokens({code,userID}).then(()=>{
+                    this.savedTokens = true;
+                    console.log('successfully saved to database')
+                })
+            }
+        },
+    },
+    watch:{
+        // Terrible way to do this, it's calling the function like 5 times and fucking shit up
+        userData: function(oldval,newval){
+            console.log(oldval);
+            console.log(newval);
+            // need to find a way to only call this once
+            this.saveYoutubeTokens(newval)
         }
-    }
+    },
+    // async mounted(){
+    //     // // error check here if the person hasn't accessed their youtube account yet
+    //     // const url = new URL(window.location);
+    //     // console.log(url);
+    //     // const code = url.searchParams.get('code');
+    //     // var userID = this.userData.uid;
+    //     // console.log(userID);
+    //     // console.log(code);
+    //     // // Maybe make this a callable cloud function instead, need to figure out how to pass this through
+    //     // if(code != null){
+    //     //     await fetch('https://us-central1-abtesting-fb780.cloudfunctions.net/onYTAuth',{body:{
+    //     //         code,
+    //     //         userID
+    //     //     }})
+    //     // }
+    //     // if the code is not null, then send to the firebase function with the parameters of the code and the userID of the person logged in.
+    //     // this will save it to the tokens database.
+    // }
 
 }
 </script>
