@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "abtesting-fb780"
-  }
+    "default": "abtesting-fb780",
+    "thesisplatform": "thesistestingplatform"
+  },
+  "targets": {}
 }
