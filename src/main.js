@@ -9,8 +9,10 @@ import './index.css';
 import VueClipboard from 'vue-clipboard2';
 
 // universal modal package
-import 'vue-universal-modal/dist/index.css'
-import VueUniversalModal from 'vue-universal-modal'
+import 'vue-universal-modal/dist/index.css';
+import VueUniversalModal from 'vue-universal-modal';
+
+import firebaseConfig from '../keys.js';
 
 /*
 // Import the functions you need from the SDKs you need
@@ -21,31 +23,14 @@ import { getAnalytics } from "firebase/analytics";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyDTbKpqu2RT7zdDKhXqkIerm8cQxiQdORM",
-  authDomain: "thesistestingplatform.firebaseapp.com",
-  projectId: "thesistestingplatform",
-  storageBucket: "thesistestingplatform.appspot.com",
-  messagingSenderId: "127770164075",
-  appId: "1:127770164075:web:d18ad95f61b32d815faa2e",
-  measurementId: "G-LN23WRDF8Q"
-};
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 */
 
-/* code from our Firebase console */
-var firebaseConfig = {
-  apiKey: "AIzaSyDTbKpqu2RT7zdDKhXqkIerm8cQxiQdORM",
-  authDomain: "thesistestingplatform.firebaseapp.com",
-  projectId: "thesistestingplatform",
-  storageBucket: "thesistestingplatform.appspot.com",
-  messagingSenderId: "127770164075",
-  appId: "1:127770164075:web:d18ad95f61b32d815faa2e",
-  measurementId: "G-LN23WRDF8Q"
-}
+
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
