@@ -1,7 +1,26 @@
 <template>
     <!-- the showTests is VERY IMPORTANT DO NOT DELETE! not sure why but it fucks up my life with the navigation and I have no idea why. -->
-    <div v-if="showTests" class="sm:w-6/12 w-full grid md:grid-cols-2 grid-cols-1 xs:px-5 mx-auto md:gap-4"> 
+    <div v-if="showTests" v-show="showPrompt" class="container flex flex-col justify-center items-center w-full mb-10 mt-5">
+        <h1 class="text-3xl">Prompt:</h1>
+        <span class="text-lg w-5-/12 mb-4 text-center">{{test_array[currentTest].prompt}}</span>
+        
+        <div class="w-auto pr-10 border-2 border-red-500 container flex flex-row gap-1 mb-2">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
+            <h1>How to learn a new skill</h1>
+        </div>
+
+        <button class="bg-red-500 rounded-xl px-5 text-white shadow-lg" @click="showPrompt = false">search</button>
+        <h1 class="text-xs">*click this</h1>
+    </div>
+
+    <div v-show="!showPrompt" class="w-auto pr-10 border-2 border-red-500 container flex flex-row gap-1 mb-2 mt-4">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
+            <h1>How to learn a new skill</h1>
+    </div>
+    <div v-if="showTests" v-show="!showPrompt" class="sm:w-6/12 w-full grid md:grid-cols-2 grid-cols-1 xs:px-5 mx-auto md:gap-4"> 
         <!-- Might create a seperate component for the actual tester aspect of this, because the reliability of the images loading is very suspect -->
+
+    
         <Thumbnail v-for="n in test_array[currentTest].imageCount" :key="n" :testid="test_array[currentTest].id" :title="test_array[currentTest].title_array[n-1]" :userCreated="test_array[currentTest].profile_img" :index="n" @onClickedThumbnail="selectThumbnail"/>
     </div>
 <!-- going to pass in the user who created the test, and calculate the user photo from here. Could also just calculate that in the home.vue as well and just pass in the photo. Either works -->
@@ -33,6 +52,7 @@ export default {
             test_array: [], //array of objects
             showTests: false,
             user_profile_images_array: [],
+            showPrompt: true,
         }
     },
     created(){
@@ -47,7 +67,7 @@ export default {
         async testList() {
             // TODO : Restrict viewing tests for people who have already seen the test, look into new ways i can model the data to handle that functionality
             // TODO : paginate respoonses, only take like the first 5, and then when some threshold is met, load the next 5
-            await db.collection('randomSampleTests').get().then(querySnapshot => {
+            await db.collection('Tests').get().then(querySnapshot => {
                 querySnapshot.forEach((doc) => {
                     // doc.data() is never undefined for query doc snapshots
                     console.log(doc.id, " => ", doc.data());
@@ -55,41 +75,19 @@ export default {
                     // console.log(doc.data().user)
                     const numberOfImages = doc.data().numberOfImages;
                     const title_array = doc.data().title_array;
-                    const sampleSize = doc.data().sampleSize;
                     const profile_img = doc.data().user_photo_url;
+                    const prompt = doc.data().prompt;
 
-                    // Checks if the user created it, if they did they will not see it
-                    // only if theyre logged in though, if not they can see it
-                    if(this.userData != null){
-                        console.log("Userdata is not null")
-                        if("" + this.userData.uid != doc.data().user){
-                            console.log("Logged in")
-                            // This solution works for now, kinda still shitty but works for now
-                            const obj = {
-                                // added to the test_array list as this object
-                                id: doc.id,
-                                imageCount: numberOfImages,
-                                title_array: title_array,
-                                sampleSize: sampleSize,
-                                profile_img: profile_img,
-                            }
-                            this.test_array.push(obj);
-                            this.showTests = true;
-                        }
-                    }else{
-                        console.log("Not logged in")
-                        console.log(doc.id)
-                        const obj = {
-                            // added to the test_array list as this object
-                            id: doc.id,
-                            imageCount: numberOfImages,
-                            title_array: title_array,
-                            sampleSize: sampleSize,
-                            profile_img: profile_img,
-                        }
-                        this.test_array.push(obj);
-                        this.showTests = true;
+                    const obj = {
+                        // added to the test_array list as this object
+                        id: doc.id,
+                        imageCount: numberOfImages,
+                        title_array: title_array,
+                        profile_img: profile_img,
+                        prompt: prompt,
                     }
+                    this.test_array.push(obj);
+                    this.showTests = true;
                 });
             }).catch(err => {
                 console.log("Error: " + err)
@@ -113,7 +111,7 @@ export default {
                 return
             }
             if(n==1){
-                db.collection("randomSampleTests").doc(this.test_array[this.currentTest].id).update({
+                db.collection("Tests").doc(this.test_array[this.currentTest].id).update({
                     img_1_votes : firebase.firestore.FieldValue.increment(1),
                     seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
                     totalVotes: firebase.firestore.FieldValue.increment(1),
@@ -123,7 +121,7 @@ export default {
                 })
             }
             if(n==2){
-                db.collection("randomSampleTests").doc(this.test_array[this.currentTest].id).update({
+                db.collection("Tests").doc(this.test_array[this.currentTest].id).update({
                     img_2_votes : firebase.firestore.FieldValue.increment(1),
                     seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
                     totalVotes: firebase.firestore.FieldValue.increment(1),
@@ -133,7 +131,7 @@ export default {
                 })
             }
             if(n==3){
-                db.collection("randomSampleTests").doc(this.test_array[this.currentTest].id).update({
+                db.collection("Tests").doc(this.test_array[this.currentTest].id).update({
                     img_3_votes : firebase.firestore.FieldValue.increment(1),
                     seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
                     totalVotes: firebase.firestore.FieldValue.increment(1),
@@ -143,8 +141,28 @@ export default {
                 })
             }
             if(n==4){
-                db.collection("randomSampleTests").doc(this.test_array[this.currentTest].id).update({
+                db.collection("Tests").doc(this.test_array[this.currentTest].id).update({
                     img_4_votes : firebase.firestore.FieldValue.increment(1),
+                    seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
+                    totalVotes: firebase.firestore.FieldValue.increment(1),
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            }
+            if(n==5){
+                db.collection("Tests").doc(this.test_array[this.currentTest].id).update({
+                    img_5_votes : firebase.firestore.FieldValue.increment(1),
+                    seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
+                    totalVotes: firebase.firestore.FieldValue.increment(1),
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            }
+            if(n==6){
+                db.collection("Tests").doc(this.test_array[this.currentTest].id).update({
+                    img_6_votes : firebase.firestore.FieldValue.increment(1),
                     seenBy: firebase.firestore.FieldValue.arrayUnion(this.userData.uid),
                     totalVotes: firebase.firestore.FieldValue.increment(1),
                 })
@@ -155,11 +173,11 @@ export default {
             
             db.collection("users").doc(this.userData.uid).update({
                 seenTests: firebase.firestore.FieldValue.arrayUnion(this.test_array[this.currentTest].id),
-                coins: firebase.firestore.FieldValue.increment(1),
                 votesCast: firebase.firestore.FieldValue.increment(1)
             })
 
-            this.currentTest += 1
+            this.currentTest += 1;
+            this.showPrompt = true;
 
         },
         async getUserCreatedProfilePhoto(userID){
