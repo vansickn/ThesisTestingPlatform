@@ -7,22 +7,16 @@
         <div class="container flex-row my-2 ml-8 sm:ml-1 xs:ml-1">
             <a class="md:text-2xl md:ml-5 ml-3" href="/">BetterThumbnails</a>
         </div>
-        <div v-if="!mobile" class="container flex flex-row justify-end bg-white my-2 rounded-lg max-w-xl mr-8 shadow-sm max-h-lg">
+        <div v-if="!mobile" class="container flex flex-row justify-end bg-white my-2 rounded-lg w-3/12 mr-8 shadow-sm max-h-lg">
             <ul v-show="!mobile" class="container flex flex-row justify-around items-center">
 
                 <router-link class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" active-class="bg-red-500 text-white" to="/">Home</router-link> 
-                <router-link class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="#">Why Test?</router-link>
-                <router-link v-if="loggedIn" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" active-class="bg-red-500 text-white" to="/createtest">Create Test</router-link>
                 <button @click="signInWithGoogle" v-if="!loggedIn" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/register">Login With Google </button> 
-                <router-link v-if="loggedIn" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" active-class="bg-red-500 text-white" to="/mytests">My Tests</router-link>      
-                <router-link v-if="loggedIn" class = "container h-full flex justify-around items-around p-3 hover:bg-red-500  rounded-lg transition duration-500 ease-in-out transform" active-class="bg-red-500" to="/account">
-                <Coin v-if="user.data != null" :coins="coins" @change="listenForCoins" class="z-10 fixed w-7 h-7 mt-1 ml-6"/>
-                <img :src="userData.photo" alt="" srcset="" class="rounded-full w-10 border-2 fixed -mt-2 mr-3">
-                
-                </router-link> 
+                <div v-if="loggedIn" class = "container h-full flex justify-around items-around p-3 hover:bg-red-500  rounded-lg transition duration-500 ease-in-out transform" active-class="bg-red-500" to="/account">
+                    <img :src="userData.photo" alt="" srcset="" class="rounded-full w-10 border-2 fixed -mt-2 mr-3">
+                </div> 
             </ul>
         </div>
-        <Coin v-if="user.data != null" v-show="mobile" :coins="coins" class="mr-5 w-9 sm:w-7 h-7 shadow-md" />
         <svg class="w-6 h-6 mr-4 focus:none" @click="toggleMobileNav" id='menu-icon' v-show="mobile" aria-hidden="true" focusable="false" data-prefix="far" data-icon="bars" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg>
     </nav>
     <!-- <menuIcon @click="toggleMobileNav" class='menu-icon' v-show="mobile" /> -->
@@ -31,13 +25,9 @@
        <ul class="container bg-gray-200 w-9/12 h-full absolute flex flex-col bg-opacity-90 z-30 rounded-r-xl" v-show="mobileNav">
                 <router-link @click="toggleMobileNav" v-if="loggedIn" class = "container w-2/3 flex justify-around items-center mt-2 p-3 hover:bg-red-500 rounded-lg transition duration-500 ease-in-out transform" to="/account">
                     <img :src="userData.photo" alt="" srcset="" class="rounded-full w-12 h-12 border-2">
-                    <Coin v-if="user.data != null" :coins="coins" @change="listenForCoins" class="w-12 h-12"/>
                 </router-link>
                 <router-link @click="toggleMobileNav" class = "container mb-2 mt-2 w-2/3 flex justify-center items-center p-3 bg-white opacity-100 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" active-class="bg-red-500 text-white" to="/" >Home</router-link> 
-                <router-link @click="toggleMobileNav" class = "container mb-2 w-2/3 flex justify-center items-center p-3 bg-white hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="#" >Why Test?</router-link>
-                <router-link @click="toggleMobileNav" v-if="loggedIn" class = "container mb-2 w-2/3 flex justify-center items-center p-3 bg-white hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" active-class="bg-red-500 text-white" to="/createtest">Create Test</router-link>
                 <button @click="signInWithGoogle" v-if="!loggedIn" class = "container mb-2 w-2/3 flex justify-center items-center p-3 bg-white hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/register">Login With Google </button> 
-                <router-link @click="toggleMobileNav" v-if="loggedIn" class = "container mb-2 w-2/3 flex justify-center items-center p-3 bg-white hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" active-class="bg-red-500 text-white" to="/myTests">My Tests</router-link>      
                 
         </ul>
     </transition>
@@ -128,17 +118,6 @@ export default {
                 console.log(doc.data())
             })
         },
-        // getProfilePicture(){
-        //     var user = firebase.auth().currentUser;
-        //     console.log(user)
-
-        //     if (user != null) {
-        //     user.providerData.forEach(profile => {
-        //         this.profPic = profile.photoURL;
-        //         console.log("Loaded Profile Picture")
-        //     }); //this will give you all the urls once there is user data
-        //     }
-        // },
         signInWithGoogle(){
             firebase.auth()
             .signInWithPopup(provider)
@@ -173,14 +152,8 @@ export default {
             this.checkIfUserExists(user.uid).then((res) => {
                 if(res == false){
                     firebase.firestore().collection("users").doc(user.uid).set({
-                    coins: 0,
-                    testsCreated: [],
-                    paidAccount: false,
-                    email: user.email,
-                    name: user.displayName,
-                    seenTests: [],
                     photoURL: user.providerData[0].photoURL,
-                    votesCast: 0,
+                    testsCreated: [],
                 })
                 .then(() => {
                     console.log("User Successfully Created!");
