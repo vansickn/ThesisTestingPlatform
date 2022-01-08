@@ -4,6 +4,10 @@ const router = createRouter({
     routes: [
         {
             path: '/',
+            component: () => import('../views/Welcome.vue')
+        },
+        {
+            path: '/thesistest',
             component: () => import('../views/Home.vue')
         },
         {
@@ -40,7 +44,8 @@ const router = createRouter({
             props: true,
         }
 
-    ]
+    ],
+    mode: 'history',
 })
 
 export default router
