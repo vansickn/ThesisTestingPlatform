@@ -4,18 +4,18 @@
         <h1 class="text-3xl">Prompt:</h1>
         <span class="text-lg w-5-/12 mb-4 text-center">{{test_array[currentTest].prompt}}</span>
         
-        <div class="w-auto pr-10 border-2 border-red-500 container flex flex-row gap-1 mb-2">
+        <div class="w-auto pr-10 border-2 border-red-500 container flex flex-row gap-1 mb-2 rounded-xl">
             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
-            <h1>How to learn a new skill</h1>
+            <h1>{{test_array[currentTest].ytsearch}}</h1>
         </div>
 
         <button class="bg-red-500 rounded-xl px-5 text-white shadow-lg" @click="showPrompt = false">search</button>
         <h1 class="text-xs">*click this</h1>
     </div>
 
-    <div v-show="!showPrompt" class="w-auto pr-10 border-2 border-red-500 container flex flex-row gap-1 mb-2 mt-4">
+    <div v-show="!showPrompt" class="w-auto pr-10 border-2 border-red-500 container flex flex-row gap-1 mb-3 mt-4 rounded-xl">
             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
-            <h1>How to learn a new skill</h1>
+            <h1>{{test_array[currentTest].ytsearch}}</h1>
     </div>
     <div v-if="showTests" v-show="!showPrompt" class="sm:w-6/12 w-full grid md:grid-cols-2 grid-cols-1 xs:px-5 mx-auto md:gap-4"> 
         <!-- Might create a seperate component for the actual tester aspect of this, because the reliability of the images loading is very suspect -->
@@ -77,6 +77,7 @@ export default {
                     const title_array = doc.data().title_array;
                     const profile_img = doc.data().user_photo_url;
                     const prompt = doc.data().prompt;
+                    const ytsearch = doc.data().ytsearch;
 
                     const obj = {
                         // added to the test_array list as this object
@@ -85,6 +86,7 @@ export default {
                         title_array: title_array,
                         profile_img: profile_img,
                         prompt: prompt,
+                        ytsearch: ytsearch,
                     }
                     this.test_array.push(obj);
                     this.showTests = true;
