@@ -5,7 +5,7 @@
 <header class="shadow-md bg-gray-100">
     <nav class="container flex justify-center items-center max-w-full">
         <div class="container flex-row my-2 ml-8 sm:ml-1 xs:ml-1">
-            <a class="md:text-2xl md:ml-5 ml-3" href="/">BetterThumbnails</a>
+            <a class="md:text-2xl md:ml-5 ml-3" href="/">YouTube Testing Platform</a>
         </div>
         <div v-if="!mobile" class="container flex flex-row justify-end bg-white my-2 rounded-lg w-3/12 mr-8 shadow-sm max-h-lg">
             <ul v-show="!mobile" class="container flex flex-row justify-around items-center">
@@ -157,6 +157,7 @@ export default {
                 })
                 .then(() => {
                     console.log("User Successfully Created!");
+                    this.$router.push('/startsurvey');
                 })
                 .catch((error) => {
                     console.error("Error Creating User: ", error);
