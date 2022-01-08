@@ -7,10 +7,10 @@
         <div class="container flex-row my-2 ml-8 sm:ml-1 xs:ml-1">
             <a class="md:text-2xl md:ml-5 ml-3" href="/">YouTube Testing Platform</a>
         </div>
-        <div v-if="!mobile" class="container flex flex-row justify-end bg-white my-2 rounded-lg w-3/12 mr-8 shadow-sm max-h-lg">
-            <ul v-show="!mobile" class="container flex flex-row justify-around items-center">
+        <div v-if="!mobile" class="container flex flex-row justify-end bg-white my-2 rounded-lg w-2/12 mr-8 shadow-sm max-h-lg">
+            <ul v-show="!mobile" class="container flex flex-row justify-around items-center h-12">
 
-                <router-link class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" active-class="bg-red-500 text-white" to="/">Home</router-link> 
+                <!-- <router-link class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" active-class="bg-red-500 text-white" to="/">Begin Test</router-link>  -->
                 <button @click="signInWithGoogle" v-if="!loggedIn" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/register">Login With Google </button> 
                 <div v-if="loggedIn" class = "container h-full flex justify-around items-around p-3 hover:bg-red-500  rounded-lg transition duration-500 ease-in-out transform" active-class="bg-red-500" to="/account">
                     <img :src="userData.photo" alt="" srcset="" class="rounded-full w-10 border-2 fixed -mt-2 mr-3">
@@ -26,7 +26,7 @@
                 <router-link @click="toggleMobileNav" v-if="loggedIn" class = "container w-2/3 flex justify-around items-center mt-2 p-3 hover:bg-red-500 rounded-lg transition duration-500 ease-in-out transform" to="/account">
                     <img :src="userData.photo" alt="" srcset="" class="rounded-full w-12 h-12 border-2">
                 </router-link>
-                <router-link @click="toggleMobileNav" class = "container mb-2 mt-2 w-2/3 flex justify-center items-center p-3 bg-white opacity-100 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" active-class="bg-red-500 text-white" to="/" >Home</router-link> 
+                <!-- <router-link @click="toggleMobileNav" class = "container mb-2 mt-2 w-2/3 flex justify-center items-center p-3 bg-white opacity-100 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" active-class="bg-red-500 text-white" to="/" >Testing Page</router-link>  -->
                 <button @click="signInWithGoogle" v-if="!loggedIn" class = "container mb-2 w-2/3 flex justify-center items-center p-3 bg-white hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/register">Login With Google </button> 
                 
         </ul>
@@ -163,7 +163,8 @@ export default {
                     console.error("Error Creating User: ", error);
                 }); 
                 }else{
-                console.log("User Already Exists, welcome back!") 
+                    console.log("User Already Exists, welcome back!");
+                    this.$router.push('/thesistest')
                 }
             })
         },
