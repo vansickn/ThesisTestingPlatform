@@ -26,12 +26,15 @@
 <!-- going to pass in the user who created the test, and calculate the user photo from here. Could also just calculate that in the home.vue as well and just pass in the photo. Either works -->
 </template>
 
+<script setup>
+import Thumbnail from '../components/Thumbnail.vue'
+</script>
 
 <script>
 import firebase from 'firebase';
 import { mapGetters} from 'vuex';
 import {reactive} from 'vue';
-import Thumbnail from '../components/Thumbnail.vue';
+// import Thumbnail from '../components/Thumbnail.vue';
 
 const db = firebase.firestore();
 // var storageRef = firebase.storage().ref();

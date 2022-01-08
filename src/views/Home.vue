@@ -1,9 +1,14 @@
 <template>
   <Picker/>
-<!-- // :class="{'transition duration-100 opacity-0': animate}" -->
+<!-- // :class="{'transition duration-1 text-xl00 opacity-0': animate}" -->
 </template>
-<script>
+
+<script setup>
 import Picker from '../components/Picker.vue';
+</script>
+
+<script>
+// import Picker from '../components/Picker.vue';
 import firebase from 'firebase';
 import { mapGetters } from 'vuex';
 
@@ -26,7 +31,6 @@ name: "home",
       user: 'user'
     })
   },
-  mounted() {},
   methods: {
     setAnimation(){
       console.log("Setting animation")
@@ -47,9 +51,8 @@ name: "home",
       sayHello().then((result)=>{
           console.log(result.data)
       });
-    }
+    },
   },
-  watch: {},
 }
 </script>
 
