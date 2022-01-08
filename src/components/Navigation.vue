@@ -12,9 +12,9 @@
 
                 <!-- <router-link class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" active-class="bg-red-500 text-white" to="/">Begin Test</router-link>  -->
                 <button @click="signInWithGoogle" v-if="!loggedIn" class = "container flex justify-center items-center p-3 hover:bg-red-500 hover:text-white rounded-lg transition duration-500 ease-in-out transform" to="/register">Login With Google </button> 
-                <div v-if="loggedIn" class = "container h-full flex justify-around items-around p-3 hover:bg-red-500  rounded-lg transition duration-500 ease-in-out transform" active-class="bg-red-500" to="/account">
+                <router-link v-if="loggedIn" class = "container h-full flex justify-around items-around p-3 hover:bg-red-500  rounded-lg transition duration-500 ease-in-out transform" active-class="bg-red-500" to="/account">
                     <img :src="userData.photo" alt="" srcset="" class="rounded-full w-10 border-2 fixed -mt-2 mr-3">
-                </div> 
+                </router-link> 
             </ul>
         </div>
         <svg class="w-6 h-6 mr-4 focus:none" @click="toggleMobileNav" id='menu-icon' v-show="mobile" aria-hidden="true" focusable="false" data-prefix="far" data-icon="bars" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg>
