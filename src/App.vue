@@ -13,6 +13,7 @@ import firebase from 'firebase'
 import { useRouter } from 'vue-router'
 import store from './store/index'
 import {mapGetters} from 'vuex'
+// import Picker from './components/Picker.vue';
 
 const router = useRouter()
 
