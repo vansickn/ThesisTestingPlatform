@@ -21,7 +21,7 @@
         <!-- Might create a seperate component for the actual tester aspect of this, because the reliability of the images loading is very suspect -->
 
     
-        <Thumbnail v-for="n in test_array[currentTest].imageCount" :key="n" :testid="test_array[currentTest].id" :title="test_array[currentTest].title_array[n-1]" :userCreated="test_array[currentTest].profile_img" :index="n" @onClickedThumbnail="selectThumbnail"/>
+        <Thumbnail v-for="n in test_array[currentTest].imageCount" :key="n" :testid="test_array[currentTest].id" :title="test_array[currentTest].title_array[n-1]" :userCreated="test_array[currentTest].profile_img" :index="test_array[currentTest].randomizedIndex[n-1]" @onClickedThumbnail="selectThumbnail"/>
     </div>
 <!-- going to pass in the user who created the test, and calculate the user photo from here. Could also just calculate that in the home.vue as well and just pass in the photo. Either works -->
 </template>
@@ -76,11 +76,13 @@ export default {
                     console.log(doc.id, " => ", doc.data());
                     // console.log("" + this.user.data.uid)
                     // console.log(doc.data().user)
+                    const totalVotes = doc.data().totalVotes;
                     const numberOfImages = doc.data().numberOfImages;
                     const title_array = doc.data().title_array;
                     const profile_img = doc.data().user_photo_url;
                     const prompt = doc.data().prompt;
                     const ytsearch = doc.data().ytsearch;
+                    const randomizedIndex = this.psuedoScramble(totalVotes,numberOfImages);
 
                     const obj = {
                         // added to the test_array list as this object
@@ -90,6 +92,7 @@ export default {
                         profile_img: profile_img,
                         prompt: prompt,
                         ytsearch: ytsearch,
+                        randomizedIndex: randomizedIndex,
                     }
                     this.test_array.push(obj);
                     this.showTests = true;
@@ -102,6 +105,51 @@ export default {
             // this.setNextThumbnail();
             // this.fetchImages();
         },
+
+        psuedoScramble(totalVotes,numberOfImages){
+            console.log(totalVotes);
+            let arr = []
+            for (let i = 1; i <= numberOfImages; i+=1){
+                arr.push(i) 
+            }
+            this.leftRotate(arr,totalVotes,numberOfImages);
+            console.log(arr)
+            return arr;
+            // console.log((totalVotes + numberOfImages)%numberOfImages);
+        },
+
+        gcd(a, b){
+            if (b == 0){
+                return a;
+            }
+            else{
+                return this.gcd(b, a % b);
+            }
+        },
+        leftRotate(arr, d, n){
+            /* To handle if d >= n */
+            d = d % n;
+            let g_c_d = this.gcd(d, n);
+            for (let i = 0; i < g_c_d; i++) {
+                /* move i-th values of blocks */
+                let temp = arr[i];
+                let j = i;
+
+                while (1) {
+                    let k = j + d;
+                    if (k >= n)
+                        k = k - n;
+
+                    if (k == i)
+                        break;
+
+                    arr[j] = arr[k];
+                    j = k;
+                }
+                arr[j] = temp;
+            }
+        },
+
 
         // This thumbnail is pretty ugly and hardcoded, can't really find a better way to do this
         selectThumbnail: function (n) {
