@@ -57,7 +57,7 @@ export default {
                 youtubeEntertainment:document.querySelector("#YTentertainment").value,
             }).then(()=> {
                 console.log("Saved to users collection")
-                this.$router.push("/")
+                this.$router.push("/thesistest")
             })
         }
     },
