@@ -32,7 +32,7 @@ const router = createRouter({
         },
         {
             path: '/startsurvey',
-            component: () => import('../views/startsurvey.vue'),
+            component: () => import('../views/StartSurvey.vue'),
         },
         {
             path: '/test/:testid',
