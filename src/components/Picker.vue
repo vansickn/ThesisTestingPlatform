@@ -21,7 +21,7 @@
         <!-- Might create a seperate component for the actual tester aspect of this, because the reliability of the images loading is very suspect -->
 
     
-        <Thumbnail v-for="n in test_array[currentTest].imageCount" :key="n" :testid="test_array[currentTest].id" :title="test_array[currentTest].title_array[n-1]" :userCreated="test_array[currentTest].profile_img" :index="test_array[currentTest].randomizedIndex[n-1]" @onClickedThumbnail="selectThumbnail"/>
+        <Thumbnail v-for="n in test_array[currentTest].imageCount" :key="n" :testid="test_array[currentTest].id" :title="test_array[currentTest].ytsearch" :userCreated="test_array[currentTest].profile_img" :index="test_array[currentTest].randomizedIndex[n-1]" @onClickedThumbnail="selectThumbnail"/>
     </div>
 <!-- going to pass in the user who created the test, and calculate the user photo from here. Could also just calculate that in the home.vue as well and just pass in the photo. Either works -->
 </template>
@@ -225,7 +225,8 @@ export default {
             }
             
             db.collection("users").doc(this.userData.uid).update({
-                seenTests: firebase.firestore.FieldValue.arrayUnion(this.test_array[this.currentTest].id),
+                // seenTests: firebase.firestore.FieldValue.arrayUnion(this.test_array[this.currentTest].id),
+                seenTests: firebase.firestore.FieldValue.arrayUnion({test:this.test_array[this.currentTest].id , selected: n}),
                 votesCast: firebase.firestore.FieldValue.increment(1)
             })
 
