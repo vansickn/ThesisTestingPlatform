@@ -39,6 +39,10 @@ const router = createRouter({
             component: () => import('../views/StartSurvey.vue'),
         },
         {
+            path: '/endsurvey',
+            component: () => import('../views/EndSurvey.vue'),
+        },
+        {
             path: '/test/:testid',
             component: () => import('../views/Test.vue'),
             props: true,
