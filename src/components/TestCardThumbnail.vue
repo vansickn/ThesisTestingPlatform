@@ -1,6 +1,6 @@
 <template>
 <!-- Div container, flex column, first item is image, second item is another div with flex row, aligned to left -->
-    <div class="md:w-11/12 container flex-col">
+    <div class="">
         <img v-show="!isLoaded" class="animate-pulse" src="/src/assets/loadingthumbnail2.png" alt="">
         <img v-show="isLoaded" class= 'shadow-xl transition duration-300 ease-in-out transform md:hover:scale-105 filter md:hover:brightness-105 select-none' @click="clickedThumbnail" @mouseover="hover = true" @mouseleave="hover = false" :src="image" @load="loadImage" 
         :class="{
