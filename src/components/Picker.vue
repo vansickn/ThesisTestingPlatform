@@ -9,7 +9,7 @@
             <h1>{{test_array[currentTest].ytsearch}}</h1>
         </div>
 
-        <button class="bg-red-500 rounded-xl px-5 text-white shadow-lg" @click="showPrompt = false">search</button>
+        <button class="bg-red-500 rounded-xl px-5 text-white shadow-lg" @click="toggleShowPrompt()">search</button>
         <h1 class="text-xs">*click this</h1>
     </div>
 
@@ -56,6 +56,8 @@ export default {
             showTests: false,
             user_profile_images_array: [],
             showPrompt: true,
+            startTime: null,
+            pickedTime: null,
         }
     },
     created(){
@@ -150,10 +152,23 @@ export default {
             }
         },
 
+        toggleShowPrompt(){
+            this.showPrompt = false;
+            this.startTime = Date.now();
+        },
+
 
         // This thumbnail is pretty ugly and hardcoded, can't really find a better way to do this
         selectThumbnail: function (n) {
             // If user not logged in then cycle test but don't vote
+
+            this.pickedTime = Date.now();
+            let secondsToChoose = (this.pickedTime - this.startTime)/1000;
+
+            console.log(this.startTime)
+            console.log(this.pickedTime)
+            console.log(secondsToChoose);
+
             if(this.userData == null){
                 this.currentTest += 1
                 return
@@ -226,12 +241,14 @@ export default {
             
             db.collection("users").doc(this.userData.uid).update({
                 // seenTests: firebase.firestore.FieldValue.arrayUnion(this.test_array[this.currentTest].id),
-                seenTests: firebase.firestore.FieldValue.arrayUnion({test:this.test_array[this.currentTest].id , selected: n, positionState:this.test_array[this.currentTest].randomizedIndex}),
+                seenTests: firebase.firestore.FieldValue.arrayUnion({test:this.test_array[this.currentTest].id , selected: n, positionState:this.test_array[this.currentTest].randomizedIndex, time_to_choose: secondsToChoose}),
                 votesCast: firebase.firestore.FieldValue.increment(1)
             })
 
             this.currentTest += 1;
             this.showPrompt = true;
+            this.startTime = null;
+            this.pickedTime = null;
 
         },
         async getUserCreatedProfilePhoto(userID){
