@@ -26,7 +26,7 @@ import {mapGetters} from 'vuex';
 
 export default {
     name: 'thumbnail',
-    props: ['image','title', 'index','testid'],
+    props: ['image','title', 'index','testid','border'],
     computed: {
         ...mapGetters({
             userData: 'userData',

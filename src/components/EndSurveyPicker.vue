@@ -1,8 +1,12 @@
 <template>
-    <div class="container flex flex-col items-center">
-        <h1 class="text-2xl">You Chose:</h1>
+    <div class="container flex flex-col items-center min-w-full">
+        <!-- <h1 class="text-2xl">You Chose:</h1>
             <TestCardThumbnail :image="selected_image" class="mb-5"/>
         <div class="grid grid-cols-5 justify-items-center gap-3" v-if="this.showImages">
+            <TestCardThumbnail v-for="n in non_selected_image_array" :key="n" :image="n"/>
+        </div> -->
+        <div class="sm:w-6/12 w-full grid md:grid-cols-2 grid-cols-1 xs:px-5 mx-auto md:gap-6">
+            <TestCardThumbnail :image="selected_image" class="border-red-500 border-4"/>
             <TestCardThumbnail v-for="n in non_selected_image_array" :key="n" :image="n"/>
         </div>
         <div class="container flex flex-col mt-5 items-start">
