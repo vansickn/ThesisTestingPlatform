@@ -11,14 +11,18 @@
             participation!
         </span>
 
-        <button class="bg-red-500 text-white p-5 mt-10 w-40 rounded-xl shadow-lg mx-auto">I consent</button>
+        <button @click="sendToStartSurvey" class="bg-red-500 text-white p-5 mt-10 w-40 rounded-xl shadow-lg mx-auto">I consent</button>
 
     </div>
 </template>
 
 <script>
 export default {
-
+    methods: {
+        sendToStartSurvey(){
+            this.$router.push('/startsurvey');
+        }
+    }
 }
 </script>
 

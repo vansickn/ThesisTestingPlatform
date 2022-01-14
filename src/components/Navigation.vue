@@ -161,7 +161,7 @@ export default {
                         email: user.email,
                     })
                     console.log("User Successfully Created!");
-                    this.$router.push('/startsurvey');
+                    this.$router.push('/consent');
                 })
                 .catch((error) => {
                     console.error("Error Creating User: ", error);
