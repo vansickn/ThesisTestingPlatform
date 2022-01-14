@@ -156,6 +156,10 @@ export default {
                     testsCreated: [],
                 })
                 .then(() => {
+                    firebase.firestore().collection("privateUserInformation").doc(user.uid).set({
+                        name: user.displayName,
+                        email: user.email,
+                    })
                     console.log("User Successfully Created!");
                     this.$router.push('/startsurvey');
                 })
