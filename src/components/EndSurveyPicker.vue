@@ -10,7 +10,7 @@
             <TestCardThumbnail v-for="n in non_selected_image_array" :key="n" :image="n"/>
         </div>
         <div class="container flex flex-col mt-5 items-start">
-            <label class="mx-auto text-xl mb-2" for="title">Why did you chose this thumbnail?</label>
+            <label class="mx-auto text-xl mb-2" for="title">Why did you choose this thumbnail?</label>
             <textarea required v-model="whyChooseVideo" type="textarea" @change="updateTextValue" placeholder="What made you decide to click on this YouTube video?" name="title" id="title" class="pl-3 mx-auto w-11/12 border-gray-100 border-2  rounded-lg focus:border-red-500 focus:outline-none shadow-md h-20 transition duration 500" cols=2></textarea>
         </div>
 

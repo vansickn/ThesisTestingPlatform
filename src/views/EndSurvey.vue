@@ -1,7 +1,7 @@
 <template>
   <div class="container flex flex-col items-center mt-3">
       <h1 class="text-3xl">Thank you for participating in the experiment!</h1>
-      <span class="text-lg">Before you go, please answer the following ending survey</span>
+      <span class="text-lg">Before you go, please help us understand why you made the choices you did.</span>
       <!-- {{seenTests[0]['selected']}} -->
       <div class="container flex flex-col gap-5 items-center mb-5" v-if="showTests">
         <EndSurveyPicker v-for="n in seenTests.length" :key="n" :numberOfImages="6" :selectedIndex="selectedImageIndicies[n-1]" :testid="seenTests[n-1]" @onUpdatingText="updateResponses"/>
