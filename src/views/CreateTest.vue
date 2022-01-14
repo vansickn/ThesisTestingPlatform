@@ -2,7 +2,7 @@
     <h1 class="mx-auto py-5 text-2xl"> Upload your files</h1>    
 
     <div class="w-full flex mx-auto justify-center items-center flex-wrap">
-        <ImageSelector v-for="n in numberOfSelectors" :key="n" :image_no="n" @onImageVerification="onVerifiedImage" @onTitleChange="updateTitle"/>
+        <ImageSelector v-for="n in numberOfSelectors" :key="n" :image_no="n" @onImageVerification="onVerifiedImage" @onTitleChange="updateTitle" @onTypeChange="updateType"/>
     </div>
 
     <div class=" border-2 border-red-500 w-11/12 mx-auto focus:outline-none">
@@ -53,6 +53,13 @@ export default {
             console.log(this.img_array)
             console.log(this.title_array)
         },
+        updateType(type, image_no){
+            console.log(type);
+            console.log(image_no);
+            this.thumbnail_type_array[image_no-1] = type;
+
+            console.log(this.thumbnail_type_array);
+        },
         setActive: function(size,sample_size,coin_amount) {
             console.log(size)
             console.log(coin_amount)
@@ -98,6 +105,7 @@ export default {
                     user: this.user.data.uid,
                     seenBy: [],
                     title_array: this.title_array,
+                    type_array: this.thumbnail_type_array,
                     user_photo_url: this.user_profile_photo,
                     prompt: document.querySelector("#prompt").value,
                     ytsearch: document.querySelector("#ytsearch").value,
