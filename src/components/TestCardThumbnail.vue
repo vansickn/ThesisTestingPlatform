@@ -45,8 +45,8 @@ export default {
     },
     methods: {
         clickedThumbnail(){
-            this.$emit('onClickedThumbnail')
-            this.isLoaded = false;
+            // this.$emit('onClickedThumbnail')
+            // this.isLoaded = false;
         },
         loadImage(){
             this.isLoaded = true;
