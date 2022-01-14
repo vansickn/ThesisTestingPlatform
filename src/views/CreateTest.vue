@@ -169,6 +169,7 @@ export default {
             activePlan: 'Small',
             sampleSize: 25,
             coins_to_purchase: 25,
+            thumbnail_type_array:[],
 
         }
     },
