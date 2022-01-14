@@ -226,7 +226,7 @@ export default {
             
             db.collection("users").doc(this.userData.uid).update({
                 // seenTests: firebase.firestore.FieldValue.arrayUnion(this.test_array[this.currentTest].id),
-                seenTests: firebase.firestore.FieldValue.arrayUnion({test:this.test_array[this.currentTest].id , selected: n}),
+                seenTests: firebase.firestore.FieldValue.arrayUnion({test:this.test_array[this.currentTest].id , selected: n, positionState:this.test_array[this.currentTest].randomizedIndex}),
                 votesCast: firebase.firestore.FieldValue.increment(1)
             })
 
