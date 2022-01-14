@@ -17,7 +17,7 @@
             <input class="pl-3 w-40 border-gray-100 border-2  rounded-lg focus:border-red-500 focus:outline-none shadow-md mx-5 transition duration 500" type="number" name="college" id="college">
         </div>
         <div class="container flex flex-row justify-center mx-auto gap-3 mt-5">
-            <h1 class="text-base">Hours Spent on Internet for tasks each week </h1>
+            <h1 class="text-base">Hours Spent on Internet for non-entertainment tasks each week </h1>
             <input class="pl-3 w-40 border-gray-100 border-2  rounded-lg focus:border-red-500 focus:outline-none shadow-md mx-5 transition duration 500" type="number" name="tasks" id="tasks">
         </div>
         <div class="container flex flex-row justify-center mx-auto gap-3 mt-5">
@@ -25,7 +25,7 @@
             <input class="pl-3 w-40 border-gray-100 border-2  rounded-lg focus:border-red-500 focus:outline-none shadow-md mx-5 transition duration 500" type="number" name="entertainment" id="entertainment">
         </div>
         <div class="container flex flex-row justify-center mx-auto gap-3 mt-5">
-            <h1 class="text-base">Hours Spent on YouTube for tasks each week </h1>
+            <h1 class="text-base">Hours Spent on YouTube for non-entertainment tasks each week </h1>
             <input class="pl-3 w-40 border-gray-100 border-2  rounded-lg focus:border-red-500 focus:outline-none shadow-md mx-5 transition duration 500" type="number" name="YTtasks" id="YTtasks">
         </div>
         <div class="container flex flex-row justify-center mx-auto gap-3 mt-5">
