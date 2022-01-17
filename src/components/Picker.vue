@@ -72,13 +72,10 @@ export default {
         async testList() {
             // TODO : Restrict viewing tests for people who have already seen the test, look into new ways i can model the data to handle that functionality
             // TODO : paginate respoonses, only take like the first 5, and then when some threshold is met, load the next 5
-            await db.collection('Tests').get().then(querySnapshot => {
-                querySnapshot.forEach((doc) => {
-                    // doc.data() is never undefined for query doc snapshots
-                    console.log(doc.id, " => ", doc.data());
-                    // console.log("" + this.user.data.uid)
-                    // console.log(doc.data().user)
-                    const totalVotes = doc.data().totalVotes;
+
+            // Sample Search gets found and pushed to test array first
+            await db.collection('Tests').doc('Aouq7tEHh7ILYG3w4zpY').get().then(doc => {
+                const totalVotes = doc.data().totalVotes;
                     const numberOfImages = doc.data().numberOfImages;
                     const title_array = doc.data().title_array;
                     const profile_img = doc.data().user_photo_url;
@@ -98,6 +95,37 @@ export default {
                     }
                     this.test_array.push(obj);
                     this.showTests = true;
+            })
+
+            await db.collection('Tests').get().then(querySnapshot => {
+                querySnapshot.forEach((doc) => {
+                    // if it's not the sample search
+                    if(doc.id != 'Aouq7tEHh7ILYG3w4zpY'){
+                        // doc.data() is never undefined for query doc snapshots
+                        console.log(doc.id, " => ", doc.data());
+                        // console.log("" + this.user.data.uid)
+                        // console.log(doc.data().user)
+                        const totalVotes = doc.data().totalVotes;
+                        const numberOfImages = doc.data().numberOfImages;
+                        const title_array = doc.data().title_array;
+                        const profile_img = doc.data().user_photo_url;
+                        const prompt = doc.data().prompt;
+                        const ytsearch = doc.data().ytsearch;
+                        const randomizedIndex = this.psuedoScramble(totalVotes,numberOfImages);
+    
+                        const obj = {
+                            // added to the test_array list as this object
+                            id: doc.id,
+                            imageCount: numberOfImages,
+                            title_array: title_array,
+                            profile_img: profile_img,
+                            prompt: prompt,
+                            ytsearch: ytsearch,
+                            randomizedIndex: randomizedIndex,
+                        }
+                        this.test_array.push(obj);
+                        this.showTests = true;
+                    }
                 });
             }).catch(err => {
                 console.log("Error: " + err)
