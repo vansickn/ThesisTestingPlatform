@@ -14,6 +14,10 @@
                     <svg class="w-10 h-10" :class="{'text-red-500':noFace == true}" @click="toggleTypeValue('noFace')" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
                 </button>
             </div>
+            <div class="container flex flex-row">
+                <input required  class="" v-model="faceism" type="text" @change="updateFaceismValue" placeholder="Enter Faceism Ratio" name="faceism" id="faceism">
+                <input required  class="" v-model="symmetry" type="text" @change="updateSymmetry" placeholder="Enter Facial Symmetry Ratio" name="symmetry" id="symmetry">
+            </div>
     </div> 
 
     <Modal
@@ -81,6 +85,16 @@ export default {
         updateTextValue(){
             // whenever the text is changed, emits the value to the parent container
             this.$emit("onTitleChange",this.textValue,this.image_no)
+        },
+        updateFaceismValue(){
+            // whenever the text is changed, emits the value to the parent container
+            console.log('updating Faceism')
+            this.$emit("onFaceismChange",this.faceism,this.image_no)
+        },
+        updateSymmetry(){
+            // whenever the text is changed, emits the value to the parent container
+            console.log("updating symmetry")
+            this.$emit("onSymmetryChange",this.symmetry,this.image_no)
         },
         toggleTypeValue(type){
             if(type == 'happy'){

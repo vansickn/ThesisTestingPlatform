@@ -2,7 +2,7 @@
     <h1 class="mx-auto py-5 text-2xl"> Upload your files</h1>    
 
     <div class="w-full flex mx-auto justify-center items-center flex-wrap">
-        <ImageSelector v-for="n in numberOfSelectors" :key="n" :image_no="n" @onImageVerification="onVerifiedImage" @onTitleChange="updateTitle" @onTypeChange="updateType"/>
+        <ImageSelector v-for="n in numberOfSelectors" :key="n" :image_no="n" @onImageVerification="onVerifiedImage" @onTitleChange="updateTitle" @onTypeChange="updateType" @onFaceismChange="updateFaceism" @onSymmetryChange="updateSymmetry"/>
     </div>
 
     <div class=" border-2 border-red-500 w-11/12 mx-auto focus:outline-none">
@@ -60,6 +60,18 @@ export default {
 
             console.log(this.thumbnail_type_array);
         },
+        updateFaceism(val, image_no){
+            this.faceism_array[image_no-1] = val
+            console.log(val)
+            console.log("faceism")
+            console.log(this.faceism_array)
+        },
+        updateSymmetry(val, image_no){
+            this.symmetry_array[image_no-1] = val
+            console.log(val)
+            console.log("symmetry")
+            console.log(this.symmetry_array)
+        },
         setActive: function(size,sample_size,coin_amount) {
             console.log(size)
             console.log(coin_amount)
@@ -109,6 +121,8 @@ export default {
                     user_photo_url: this.user_profile_photo,
                     prompt: document.querySelector("#prompt").value,
                     ytsearch: document.querySelector("#ytsearch").value,
+                    faceism_array: this.faceism_array,
+                    symmetry_array: this.symmetry_array,
                 }).then(docRef => {
                     
                     this.sendImagesToStorage(docRef).then(()=>{
@@ -178,6 +192,8 @@ export default {
             sampleSize: 25,
             coins_to_purchase: 25,
             thumbnail_type_array:[],
+            faceism_array: [],
+            symmetry_array: [],
 
         }
     },
