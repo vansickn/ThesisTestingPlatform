@@ -132,8 +132,27 @@ export default {
                 console.log(this.test_array)
             })
             console.log(this.test_array)
+            this.shuffleExceptFirst(this.test_array);
             // this.setNextThumbnail();
             // this.fetchImages();
+        },
+        shuffleExceptFirst(array) {
+            let currentIndex = array.length,  randomIndex;
+            console.log(this.test_array[0])
+            // While there remain elements to shuffle...
+            while (currentIndex > 1) {
+                console.log(currentIndex)
+                // Pick a remaining element...
+                randomIndex = Math.floor(Math.random() * currentIndex)+1;
+                currentIndex--;
+
+                // And swap it with the current element.
+                [array[currentIndex], array[randomIndex]] = [
+                array[randomIndex], array[currentIndex]];
+            }
+
+            console.log(array)
+            return array;
         },
 
         psuedoScramble(totalVotes,numberOfImages){
