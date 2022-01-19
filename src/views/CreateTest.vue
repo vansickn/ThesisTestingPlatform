@@ -1,5 +1,6 @@
 <template>
-    <h1 class="mx-auto py-5 text-2xl"> Upload your files</h1>    
+    <h1 class="mx-auto py-5 text-2xl"> Upload your files!</h1>    
+    {{userData.displayName}}
 
     <div class="w-full flex mx-auto justify-center items-center flex-wrap">
         <ImageSelector v-for="n in numberOfSelectors" :key="n" :image_no="n" @onImageVerification="onVerifiedImage" @onTitleChange="updateTitle" @onTypeChange="updateType" @onFaceismChange="updateFaceism" @onSymmetryChange="updateSymmetry"/>
