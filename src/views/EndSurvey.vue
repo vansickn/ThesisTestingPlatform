@@ -47,7 +47,11 @@ export default {
         },
         submitToFirebase(){
             let responsesArray = []
-            for (let i = 0; i < this.seenTests.length; i++) {
+            for (let i = 1; i < this.seenTests.length; i++) {
+                if(this.responses[this.seenTests[i]] == null){
+                    alert("Please fill out the required fields!")
+                    return
+                }
                 responsesArray.push({test:this.seenTests[i],response:this.responses[this.seenTests[i]]});
             }
             // storing the response in the user's data. Probably should store it in the Tests as well
