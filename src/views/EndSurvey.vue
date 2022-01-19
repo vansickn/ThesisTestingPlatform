@@ -64,6 +64,7 @@ export default {
                     responses: firebase.firestore.FieldValue.arrayUnion(responsesArray[i].response)
                 }).then(()=>{
                     console.log("Successfully added response to the test document")
+                    this.$router.push('/thankyou');
                 }).catch(err=>{
                     console.log("There was an error adding the response to the test document" + err)
                 })

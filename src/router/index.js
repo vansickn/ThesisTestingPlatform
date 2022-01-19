@@ -46,7 +46,10 @@ const router = createRouter({
             path: '/consent',
             component: () => import('../views/ConsentForm.vue'),
         },
-
+        {
+            path: '/thankyou',
+            component: () => import('../views/ThankYou.vue'),
+        },
         {
             path: '/test/:testid',
             component: () => import('../views/Test.vue'),
