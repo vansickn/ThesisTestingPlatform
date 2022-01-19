@@ -278,6 +278,10 @@ export default {
             this.startTime = null;
             this.pickedTime = null;
 
+            if(this.currentTest == 7){
+                this.$router.push('/endsurvey')
+            }
+
         },
         async getUserCreatedProfilePhoto(userID){
             console.log(userID)
