@@ -32,7 +32,7 @@ export default {
         async fetchData(){
             await db.collection('users').doc(this.userData.uid).get().then((doc)=>{
                 // this.seenTests = doc.data().seenTests
-                for (let i = 0; i < doc.data().seenTests.length; i++) {
+                for (let i = 1; i < doc.data().seenTests.length; i++) {
                     this.seenTests.push(doc.data().seenTests[i]['test']);
                     this.selectedImageIndicies.push(doc.data().seenTests[i]['selected'])
                     // console.log(doc.data().seenTests[i])
