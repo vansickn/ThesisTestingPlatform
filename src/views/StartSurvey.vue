@@ -47,18 +47,22 @@ export default {
 
     methods:{
         startTest(){
-            db.collection("users").doc(this.userData.uid).update({
-                age:document.querySelector("#age").value,
-                gender:document.querySelector("#gender").value,
-                college:document.querySelector("#college").value,
-                internetTasks:document.querySelector("#tasks").value,
-                internetEntertainment:document.querySelector("#entertainment").value,
-                youtubeTasks:document.querySelector("#YTtasks").value,
-                youtubeEntertainment:document.querySelector("#YTentertainment").value,
-            }).then(()=> {
-                console.log("Saved to users collection")
-                this.$router.push("/thesistest")
-            })
+            if(document.querySelector("#age").value.length == 0 || document.querySelector("#gender").value.length == 0 || document.querySelector("#college").value.length == 0 || document.querySelector("#tasks").value.length == 0 || document.querySelector("#entertainment").value.length == 0 || document.querySelector("#YTtasks").value.length == 0 || document.querySelector("#YTentertainment").value.length == 0){
+                alert("Please Fill out the required fields!")
+            }else{
+                db.collection("users").doc(this.userData.uid).update({
+                    age:document.querySelector("#age").value,
+                    gender:document.querySelector("#gender").value,
+                    college:document.querySelector("#college").value,
+                    internetTasks:document.querySelector("#tasks").value,
+                    internetEntertainment:document.querySelector("#entertainment").value,
+                    youtubeTasks:document.querySelector("#YTtasks").value,
+                    youtubeEntertainment:document.querySelector("#YTentertainment").value,
+                }).then(()=> {
+                    console.log("Saved to users collection")
+                    this.$router.push("/thesistest")
+                })
+            }
         }
     },
     computed: {
