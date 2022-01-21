@@ -7,7 +7,7 @@
             consent for the recording of the zoom session associated with this interview. The experimenter will not use my data in any form
             other than for analysis, and will not share data to any other party. Additionally, if at any time I want to retract my data, I can
             do so by emailing the interviewer at <a class="font-bold">vansickn@union.edu</a>. At the end of the experiment, I consent to be 
-            sent a post-experiment debreif, explaining the purpose of the study and it's findings. The experimenter thanks you for your
+            sent a post-experiment debrief, explaining the purpose of the study and its findings. The experimenter thanks you for your
             participation!
         </span>
 
