@@ -11,7 +11,7 @@
         </div>
         <div class="sm:w-6/12 w-full grid md:grid-cols-2 grid-cols-1 xs:px-5 mx-auto md:gap-6">
             <!-- <TestCardThumbnail :image="selected_image" class="border-red-500 border-4"/> -->
-            <TestCardThumbnail v-for="n in image_array" :key="n" :image="n" :class="{'border-red-500 border-4':n == selected}"/>
+            <TestCardThumbnail v-for="n in image_array.length" :key="n" :image="image_array[n-1]" :class="{'border-4 border-red-500': position[n-1] == selectedIndex}"/>
         </div>
         <div class="container flex flex-col mt-5 items-start mb-20">
             <label class="mx-auto text-xl mb-2" for="title">Why did you choose this thumbnail?</label>
@@ -38,7 +38,6 @@ export default {
             image_array: [],
             showImages: false,
             search: null,
-            selected: null,
         }
     },
 
@@ -51,28 +50,11 @@ export default {
                     res.items[0].getDownloadURL().then(url => {
                         console.log(this.position)
                         this.image_array[i] = url
-                        // console.log(url)
-                        if(img_no == this.selectedIndex){
-                            this.selected = url
-                        }
-                        // console.log("HEYYYYYYYYYYY")
                     }).catch(e=>{
                         console.log(e)
                         console.log("Error <3")
                     })
                 })   
-                // if(img_no != this.selectedIndex){
-                // }else{
-                //    await storageRef.child('tests/'+this.testid+'/img_'+img_no+'/').listAll().then((res)=>{
-                //         res.items[0].getDownloadURL().then(url => {
-                //             this.selected_image = url;
-                //         }).catch(e=>{
-                //             console.log(e)
-                //             console.log("Error <3")
-                //         })
-                //     })    
-                // }
-                
             }            
 
         },
