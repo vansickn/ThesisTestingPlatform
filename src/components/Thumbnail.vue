@@ -12,7 +12,8 @@
             }">
         </div>
         <div class="container flex-row flex"> 
-            <img :src="userCreated" class="bg-red-100 md:w-10 md:h-10 rounded-full mt-3 w-8 h-8 mb-0">
+            <!-- <img :src="userCreated" class="bg-red-100 md:w-10 md:h-10 rounded-full mt-3 w-8 h-8 mb-0"> -->
+            <svg class="w-8 h-8 mt-3 border-black border-2 rounded-full" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
             <span class="md:ml-5 ml-3 mt-3 text-sm md:text-base"> {{title}}</span>
         </div>
         
