@@ -24,6 +24,40 @@
         <Thumbnail v-for="n in test_array[currentTest].imageCount" :key="n" :testid="test_array[currentTest].id" :title="test_array[currentTest].ytsearch" :userCreated="test_array[currentTest].profile_img" :index="test_array[currentTest].randomizedIndex[n-1]" @onClickedThumbnail="selectThumbnail"/>
     </div>
 <!-- going to pass in the user who created the test, and calculate the user photo from here. Could also just calculate that in the home.vue as well and just pass in the photo. Either works -->
+
+   <Modal
+            v-model="user_input_continue"
+            :close="closeModal"
+        >
+            <div class="bg-gray-200 rounded-lg md:p-10 p-6 w-auto">
+                <div v-if="currentTest == 0">
+                    <h1 class="text-xl font-bold text-center mx-auto">Welcome to the test! As a reminder, we are not testing you, we are only testing our experiment. </h1>
+                    <h1 class="text-lg w-10/12 mx-auto mt-3 mb-3">You will be shown a prompt, and the goal is to put yourself into the headspace of the prompt. These prompts will explain to you that you are looking for an answer to something on YouTube.
+                        Your objective is to click on the YouTube video which you would most likely click on given the information of the prompt. If you have any questions, feel free to ask the interviewer before we start.
+                        Otherwise, you will first be shown a sample prompt and selection of videos, and you must click on the video which you would most realistically choose. Then, after the sample you will be shown up to 10 searches, in the same fashion as the sample test.
+                    </h1>
+                    <h1 class="font-bold text-xl mx-auto text-center mb-5">To begin, and view the sample test, click continue below.</h1>
+                </div>
+                <div v-if="currentTest == 1">
+                    <h1 class="text-xl font-bold text-center mx-auto"> Great! Now the real searches will be shown to you. </h1>
+                    <h1 class="text-lg w-10/12 mx-auto mt-3 mb-3 text-center"> Once again, if you have any questions, feel free to ask the interviewer.
+                    </h1>
+                    <h1 class="font-bold text-xl mx-auto text-center mb-5">Click continue to go on to the experiment.</h1>
+                </div>
+                <div v-if="currentTest > 1">
+                    <h1 class="text-xl font-bold text-center mx-auto mb-5"> Great! Click the button to continue, or anywhere outside of this modal. </h1>
+                </div>
+
+
+
+
+
+            <div class="container flex flex-row justify-center gap-4">
+                <button @click="closeModal" class="bg-red-500 text-white rounded-lg py-1 px-2 shadow-lg transform hover:scale-110 transition duration-300"> Continue </button>
+            </div>
+            </div>
+    </Modal>
+
 </template>
 
 <script setup>
@@ -58,6 +92,7 @@ export default {
             showPrompt: true,
             startTime: null,
             pickedTime: null,
+            user_input_continue: true,
         }
     },
     created(){
@@ -203,6 +238,9 @@ export default {
             this.showPrompt = false;
             this.startTime = Date.now();
         },
+        closeModal(){
+            this.user_input_continue = false;
+        },
 
 
         // This thumbnail is pretty ugly and hardcoded, can't really find a better way to do this
@@ -296,6 +334,7 @@ export default {
             this.showPrompt = true;
             this.startTime = null;
             this.pickedTime = null;
+            this.user_input_continue = true;
 
             if(this.currentTest == 7){
                 this.$router.push('/endsurvey')
