@@ -3,7 +3,7 @@
       <h1 class="text-3xl">Thank you for participating in the experiment!</h1>
       <span class="text-lg mb-10">Before you go, please help us understand why you made the choices you did.</span>
       <!-- {{seenTests[0]['selected']}} -->
-      <div class="container flex flex-col gap-5 items-center mb-5" v-if="showTests">
+      <div class="container flex flex-col gap-5 items-center mb-5">
         <EndSurveyPicker v-for="n in seenTests.length" :key="n" :numberOfImages="6" :selectedIndex="selectedImageIndicies[n-1]" :testid="seenTests[n-1]" :position="position_state[n-1]" @onUpdatingText="updateResponses"/>
         <button class="rounded-xl bg-red-500 shadow-xl p-5 text-white cursor-pointer" @click="submitToFirebase">Submit</button>
       </div>
@@ -85,6 +85,7 @@ export default {
     },
     mounted(){
         // this.fetchData();
+        this.fetchData();
         console.log("mounted endsurvey")
     },
     watch: {
