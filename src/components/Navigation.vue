@@ -156,6 +156,9 @@ export default {
                     testsCreated: [],
                 })
                 .then(() => {
+                    firebase.firestore().collection("totalInformation").doc('counter').update({
+                        numberOfSignups: firebase.firestore.FieldValue.increment(1),
+                    })
                     firebase.firestore().collection("privateUserInformation").doc(user.uid).set({
                         name: user.displayName,
                         email: user.email,
