@@ -106,9 +106,11 @@ export default {
             pickedTime: null,
             user_input_continue: true,
             continue_to_end_survey: false,
+            number_of_signups: null,
         }
     },
     created(){
+        this.fetchNumberOfSignups();
         this.testList();
     },
     mounted(){
@@ -185,22 +187,31 @@ export default {
             // this.fetchImages();
         },
         shuffleExceptFirst(array) {
-            let currentIndex = array.length,  randomIndex;
-            console.log(this.test_array[0])
-            // While there remain elements to shuffle...
-            while (currentIndex > 1) {
-                console.log(currentIndex)
-                // Pick a remaining element...
-                randomIndex = Math.floor(Math.random() * currentIndex)+1;
-                currentIndex--;
+            // changing this to shift index by number of total signups
+            // BEFORE - THIS SCRAMBLED ALL OF THE TESTS AT RANDOM
+            // let currentIndex = array.length,  randomIndex;
+            // console.log(this.test_array[0])
+            // // While there remain elements to shuffle...
+            // while (currentIndex > 1) {
+            //     console.log(currentIndex)
+            //     // Pick a remaining element...
+            //     randomIndex = Math.floor(Math.random() * currentIndex)+1;
+            //     currentIndex--;
 
-                // And swap it with the current element.
-                [array[currentIndex], array[randomIndex]] = [
-                array[randomIndex], array[currentIndex]];
-            }
+            //     // And swap it with the current element.
+            //     [array[currentIndex], array[randomIndex]] = [
+            //     array[randomIndex], array[currentIndex]];
+            // }
 
-            console.log(array)
-            return array;
+            // console.log(array)
+            // return array;
+            let sample_test = array.slice(0,1);
+            let rest_of_array = array.slice(1,array.length-1);
+            this.leftRotate(rest_of_array, this.number_of_signups,rest_of_array.length);
+            // Add the two arrays back together
+            this.test_array = sample_test.concat(rest_of_array)
+            console.log(this.test_array);
+
         },
 
         psuedoScramble(totalVotes,numberOfImages){
@@ -253,6 +264,11 @@ export default {
         },
         closeModal(){
             this.user_input_continue = false;
+        },
+        fetchNumberOfSignups(){
+            db.collection("totalInformation").doc('counter').get().then((doc) => {
+                this.number_of_signups = doc.data().numberOfSignups;
+            })
         },
 
 
@@ -340,7 +356,8 @@ export default {
             db.collection("users").doc(this.userData.uid).update({
                 // seenTests: firebase.firestore.FieldValue.arrayUnion(this.test_array[this.currentTest].id),
                 seenTests: firebase.firestore.FieldValue.arrayUnion({test:this.test_array[this.currentTest].id , selected: n, positionState:this.test_array[this.currentTest].randomizedIndex, time_to_choose: secondsToChoose}),
-                votesCast: firebase.firestore.FieldValue.increment(1)
+                votesCast: firebase.firestore.FieldValue.increment(1),
+                testOrder: this.test_array,
             })
 
             this.currentTest += 1;
