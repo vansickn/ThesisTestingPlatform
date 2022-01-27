@@ -13,7 +13,7 @@
         <h1 class="text-xs">*click this</h1>
     </div>
 
-    <div v-show="!showPrompt" class="w-auto pr-10 border-2 border-red-500 container flex flex-row gap-1 mb-3 mt-4 rounded-xl">
+    <div v-show="!showPrompt" v-if="showTests" class="w-auto pr-10 border-2 border-red-500 container flex flex-row gap-1 mb-3 mt-4 rounded-xl">
             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
             <h1>{{test_array[currentTest].ytsearch}}</h1>
     </div>
@@ -45,15 +45,27 @@
                     <h1 class="font-bold text-xl mx-auto text-center mb-5">Click continue to go on to the experiment.</h1>
                 </div>
                 <div v-if="currentTest > 1">
-                    <h1 class="text-xl font-bold text-center mx-auto mb-5"> Great! Click the button to continue, or anywhere outside of this modal. </h1>
+                    <h1 class="text-xl font-bold text-center mx-auto mb-5"> Great! Click the button to continue</h1>
                 </div>
-
-
-
-
-
             <div class="container flex flex-row justify-center gap-4">
                 <button @click="closeModal" class="bg-red-500 text-white rounded-lg py-1 px-2 shadow-lg transform hover:scale-110 transition duration-300"> Continue </button>
+                
+            </div>
+            </div>
+    </Modal>
+
+    <Modal
+            v-model="continue_to_end_survey"
+            :close="null"
+        >
+            <div class="bg-gray-200 rounded-lg md:p-10 p-6 w-auto">
+                <div>
+                    <h1 class="text-xl font-bold text-center mx-auto">Fantastic work! </h1>
+                    <h1 class="font-bold text-xl mx-auto text-center mb-5">To continue to the end survey, please click the button below</h1>
+                </div>
+            <div class="container flex flex-row justify-center gap-4">
+                <button @click="sendToEndSurvey" class="bg-red-500 text-white rounded-lg py-1 px-2 shadow-lg transform hover:scale-110 transition duration-300"> Continue </button>
+                
             </div>
             </div>
     </Modal>
@@ -93,6 +105,7 @@ export default {
             startTime: null,
             pickedTime: null,
             user_input_continue: true,
+            continue_to_end_survey: false,
         }
     },
     created(){
@@ -336,10 +349,16 @@ export default {
             this.pickedTime = null;
             this.user_input_continue = true;
 
-            if(this.currentTest == 7){
-                this.$router.push('/endsurvey')
+            if(this.currentTest+1 > this.test_array.length){
+                this.showPrompt = false;
+                this.showTests = false;
+                this.continue_to_end_survey = true;
             }
 
+
+        },
+        sendToEndSurvey(){
+            this.$router.push('/endsurvey');
         },
         async getUserCreatedProfilePhoto(userID){
             console.log(userID)
