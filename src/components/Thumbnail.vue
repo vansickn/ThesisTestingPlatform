@@ -4,7 +4,7 @@
         <div>
         <img v-show="!isLoaded" class="shadow-xl transition duration-300 ease-in-out transform md:hover:scale-105 filter md:hover:brightness-105 select-none animate-pulse" src="/src/assets/loadingthumbnail2.png" alt="hey">
         <!-- <div class="w-360 h-202 bg-gray-300 border-2 border-gray-400">loading</div> -->
-        <img v-show="isLoaded" class= 'shadow-xl transition duration-300 ease-in-out transform md:hover:scale-105 filter md:hover:brightness-105 select-none' @click="clickedThumbnail" @mouseover="hover = true" @mouseleave="hover = false" :src="image" @load="loadImage" 
+        <img v-show="isLoaded" class= 'shadow-xl transition duration-300 ease-in-out transform md:hover:scale-105 filter md:hover:brightness-105 select-none max-h-202' @click="clickedThumbnail" @mouseover="hover = true" @mouseleave="hover = false" :src="image" @load="loadImage" 
         :class="{
             'hover': hover,
             'border-4 border-red-500 rounded-md': border == 'red',
